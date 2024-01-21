@@ -58,8 +58,8 @@ bool areEqual = type1 == type2; // true
 Keep in mind:
 
 ```csharp
-cache.GetType("System.String"); <-- this is going to be as slow as regular Reflection
-cache.GetType("System.String"); <-- this will be very, very fast because the first call was cached
+cache.GetType("System.String"); // <-- this is going to be as slow as regular Reflection
+cache.GetType("System.String"); // <-- this will be very, very fast because the first call was cached
 ```
 
 ### ⚠️ Important ⚠️
@@ -69,8 +69,8 @@ Be mindful of the "cache chain". Use the `Cached` methods and types until you ne
 There are two methods for most operations like this:
 
 ```charp
-Type typeofString = cache.GetType("System.String"); <-- Caches but stops the cache chain
-CachedType cachedStringType = cache.GetCachedType("System.String"); <-- Caches and continues the cache chain
+Type typeofString = cache.GetType("System.String"); // <-- Caches but stops the cache chain
+CachedType cachedStringType = cache.GetCachedType("System.String"); // <-- Caches and continues the cache chain
 ```
 
 
@@ -81,15 +81,15 @@ CachedType cachedStringType = cache.GetCachedType("System.String"); <-- Caches a
 ```csharp
 CachedType cachedStringType = cache.GetCachedType("System.String");
 CachedMethod cachedMethodInfo = cachedStringType.GetCachedMethod("Intern");
-ParameterInfo?[] parameterInfos = cachedMethodInfo.GetParameters(); < -- This will be cached for future use, and subsequent use will be fast
+ParameterInfo?[] parameterInfos = cachedMethodInfo.GetParameters(); // < -- This will be cached for future use, and subsequent use will be fast
 ```
 
 ❌ Bad: 
 
 ```csharp
 CachedType cachedStringType = cache.GetCachedType("System.String");
-MethodInfo methodInfo = cachedStringType.GetMethod("Intern"); <-- Uh oh, resolved to a non-cached Reflection type
-ParameterInfo?[] parameterInfos = methodInfo.GetParameters(); <-- This won't be cached and repeated calls will be slow
+MethodInfo methodInfo = cachedStringType.GetMethod("Intern"); // <-- Uh oh, resolved to a non-cached Reflection type
+ParameterInfo?[] parameterInfos = methodInfo.GetParameters(); // <-- This won't be cached and repeated calls will be slow
 ```
 
 ### Notes
