@@ -58,8 +58,8 @@ bool areEqual = type1 == type2; // true
 Keep in mind:
 
 ```csharp
-cache.GetType("System.String"); // <-- this is going to be as slow as regular Reflection
-cache.GetType("System.String"); // <-- this will be very, very fast because the first call was cached
+cache.GetType("System.String"); // <-- as slow as regular Reflection
+cache.GetType("System.String"); // <-- very fast because the first call was cached
 ```
 
 ### ⚠️ Important ⚠️
@@ -70,7 +70,7 @@ There are two methods for most operations like this:
 
 ```csharp
 Type typeofString = cache.GetType("System.String"); // <-- Caches, stops the cache chain
-CachedType cachedType = cache.GetCachedType("System.String"); // <-- Caches, continues the cache chain
+CachedType type = cache.GetCachedType("System.String"); // <-- Caches, continues the cache chain
 ```
 
 
@@ -81,7 +81,7 @@ CachedType cachedType = cache.GetCachedType("System.String"); // <-- Caches, con
 ```csharp
 CachedType cachedType = cache.GetCachedType("System.String");
 CachedMethod cachedMethodInfo = cachedType.GetCachedMethod("Intern");
-ParameterInfo?[] parameters = cachedMethodInfo.GetParameters(); // < -- Cached, and subsequent use will be fast
+ParameterInfo?[] parameters = cachedMethodInfo.GetParameters(); // < -- Parameters are now cached
 ```
 
 ❌ Bad: 
@@ -89,7 +89,7 @@ ParameterInfo?[] parameters = cachedMethodInfo.GetParameters(); // < -- Cached, 
 ```csharp
 CachedType cachedType = cache.GetCachedType("System.String");
 MethodInfo methodInfo = cachedType.GetMethod("Intern"); // <-- Uh oh, a non-cached Reflection type
-ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- Not cached and repeated calls will be slow
+ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- Not cached, repeat calls are slow
 ```
 
 ### Notes
