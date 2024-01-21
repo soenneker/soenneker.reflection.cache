@@ -68,9 +68,9 @@ Be mindful of the "cache chain". Use the `Cached` methods and types until you ne
 
 There are two methods for most operations like this:
 
-```charp
-Type typeofString = cache.GetType("System.String"); // <-- Caches but stops the cache chain
-CachedType cachedStringType = cache.GetCachedType("System.String"); // <-- Caches and continues the cache chain
+```csharp
+Type typeofString = cache.GetType("System.String"); // <-- Caches, stops the cache chain
+CachedType cachedType = cache.GetCachedType("System.String"); // <-- Caches, continues the cache chain
 ```
 
 
@@ -79,17 +79,17 @@ CachedType cachedStringType = cache.GetCachedType("System.String"); // <-- Cache
 ✅ Good:
 
 ```csharp
-CachedType cachedStringType = cache.GetCachedType("System.String");
-CachedMethod cachedMethodInfo = cachedStringType.GetCachedMethod("Intern");
-ParameterInfo?[] parameterInfos = cachedMethodInfo.GetParameters(); // < -- This will be cached for future use, and subsequent use will be fast
+CachedType cachedType = cache.GetCachedType("System.String");
+CachedMethod cachedMethodInfo = cachedType.GetCachedMethod("Intern");
+ParameterInfo?[] parameters = cachedMethodInfo.GetParameters(); // < -- Cached, and subsequent use will be fast
 ```
 
 ❌ Bad: 
 
 ```csharp
-CachedType cachedStringType = cache.GetCachedType("System.String");
-MethodInfo methodInfo = cachedStringType.GetMethod("Intern"); // <-- Uh oh, resolved to a non-cached Reflection type
-ParameterInfo?[] parameterInfos = methodInfo.GetParameters(); // <-- This won't be cached and repeated calls will be slow
+CachedType cachedType = cache.GetCachedType("System.String");
+MethodInfo methodInfo = cachedType.GetMethod("Intern"); // <-- Uh oh, a non-cached Reflection type
+ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- Not cached and repeated calls will be slow
 ```
 
 ### Notes
