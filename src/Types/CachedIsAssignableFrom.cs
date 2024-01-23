@@ -8,15 +8,13 @@ namespace Soenneker.Reflection.Cache.Types;
 public class CachedIsAssignableFrom : ICachedIsAssignableFrom
 {
     // Does not need worry about concurrency because the underlying call is fast and there aren't ref types being used
-    private readonly Dictionary<int, bool> _cachedDict;
+    private readonly Dictionary<int, bool> _cachedDict = [];
 
     private readonly CachedType _cachedType;
 
     public CachedIsAssignableFrom(CachedType cachedType)
     {
         _cachedType = cachedType;
-
-        _cachedDict = new Dictionary<int, bool>();
     }
 
     public bool IsAssignableFrom(Type derivedType)
@@ -24,7 +22,7 @@ public class CachedIsAssignableFrom : ICachedIsAssignableFrom
         if (_cachedType.Type == null)
             return false;
 
-        int key = _cachedType.GetCacheKey()!.Value + derivedType.GetHashCode();
+        int key = _cachedType.CacheKey.GetValueOrDefault() + derivedType.GetHashCode();
 
         if (_cachedDict.TryGetValue(key, out bool from))
             return from;

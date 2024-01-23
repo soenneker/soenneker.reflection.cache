@@ -13,24 +13,23 @@ public class CachedInterfaces : ICachedInterfaces
 
     private readonly CachedType _cachedType;
 
-    public CachedInterfaces(CachedType cachedType)
+    public CachedInterfaces(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
-
-        _cachedDict = new Lazy<Dictionary<int, CachedType?>>(SetDict, true);
-        _cachedArray = new Lazy<CachedType[]>(SetArray, true);
+        _cachedDict = new Lazy<Dictionary<int, CachedType?>>(SetDict, threadSafe);
+        _cachedArray = new Lazy<CachedType[]>(SetArray, threadSafe);
     }
 
     public CachedType GetCachedInterface(string typeName)
     {
-        _cachedDict.Value.TryGetValue(typeName.GetHashCode(), out CachedType? result);
+        int hashCode = typeName.GetHashCode();
 
-        if (result == null)
-        {
-            Type? type = _cachedType.Type!.GetInterface(typeName);
-            result = new CachedType(type);
-            _cachedDict.Value[typeName.GetHashCode()] = result;
-        }
+        if (_cachedDict.Value.TryGetValue(hashCode, out CachedType? result))
+            return result!;
+
+        Type? type = _cachedType.Type!.GetInterface(typeName);
+        result = new CachedType(type);
+        _cachedDict.Value[hashCode] = result;
 
         return result;
     }
@@ -43,23 +42,25 @@ public class CachedInterfaces : ICachedInterfaces
     private Dictionary<int, CachedType?> SetDict()
     {
         var dict = new Dictionary<int, CachedType?>();
-        Type[] interfaces = _cachedType.Type!.GetInterfaces();
 
-        // If the array is already populated, build the dictionary from the array
         if (_cachedArray.IsValueCreated)
         {
-            foreach (CachedType cachedType in _cachedArray.Value)
+            CachedType[]? cachedArrayValue = _cachedArray.Value;
+
+            for (var i = 0; i < cachedArrayValue.Length; i++)
             {
+                CachedType cachedType = cachedArrayValue[i];
                 int key = cachedType.Type!.FullName!.GetHashCode();
                 dict[key] = cachedType;
             }
         }
         else
         {
-            // If the array is not populated, build the dictionary directly
-            foreach (Type type in interfaces)
+            Type[] interfaces = _cachedType.Type!.GetInterfaces();
+
+            for (var i = 0; i < interfaces.Length; i++)
             {
-                var cachedType = new CachedType(type);
+                var cachedType = new CachedType(interfaces[i]);
                 int key = cachedType.Type!.FullName!.GetHashCode();
                 dict[key] = cachedType;
             }
@@ -70,26 +71,26 @@ public class CachedInterfaces : ICachedInterfaces
 
     private CachedType[] SetArray()
     {
-        // If the dictionary is already populated, return its values as an array
         if (_cachedDict.IsValueCreated)
         {
-            var resultArray = new CachedType[_cachedDict.Value.Count];
+            Dictionary<int, CachedType?>.ValueCollection cachedDictValues = _cachedDict.Value.Values;
+            var resultArray = new CachedType[cachedDictValues.Count];
             var i = 0;
-            foreach (CachedType? entry in _cachedDict.Value.Values)
+
+            foreach (CachedType? entry in cachedDictValues)
             {
                 resultArray[i++] = entry!;
             }
+
             return resultArray;
         }
 
-        // If the dictionary is not populated, build the array directly
         Type[] interfaces = _cachedType.Type!.GetInterfaces();
         var result = new CachedType[interfaces.Length];
 
         for (var i = 0; i < interfaces.Length; i++)
         {
-            CachedType cachedType = GetCachedInterface(interfaces[i].FullName!);
-            result[i] = cachedType;
+            result[i] = GetCachedInterface(interfaces[i].FullName!);
         }
 
         return result;

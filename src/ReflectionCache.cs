@@ -1,41 +1,36 @@
 ﻿using System;
 using Soenneker.Reflection.Cache.Abstract;
 using Soenneker.Reflection.Cache.Types;
-using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache;
 
 ///<inheritdoc cref="IReflectionCache"/>
 public class ReflectionCache : IReflectionCache
 {
-    private readonly ICachedTypes _cachedTypes;
+    private readonly CachedTypes _cachedTypes;
 
-    public ReflectionCache()
+    public ReflectionCache(bool threadSafe = true)
     {
-        _cachedTypes = new CachedTypes();
+        _cachedTypes = new CachedTypes(threadSafe);
     }
 
-    public ICachedType GetCachedType(string typeName)
+    public CachedType GetCachedType(string typeName)
     {
-        ICachedType result = _cachedTypes.GetCachedType(typeName);
-        return result;
+        return _cachedTypes.GetCachedType(typeName);
     }
 
-    public ICachedType GetCachedType(Type type)
+    public CachedType GetCachedType(Type type)
     {
-        ICachedType result = _cachedTypes.GetCachedType(type);
-        return result;
+        return _cachedTypes.GetCachedType(type);
     }
 
     public Type? GetType(string typeName)
     {
-        Type? result = _cachedTypes.GetType(typeName);
-        return result;
+        return _cachedTypes.GetType(typeName);
     }
 
     public Type? GetType(Type type)
     {
-        Type? result = _cachedTypes.GetType(type);
-        return result;
+        return _cachedTypes.GetType(type);
     }
 }

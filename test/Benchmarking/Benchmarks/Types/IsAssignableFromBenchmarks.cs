@@ -1,7 +1,7 @@
 using System;
 using BenchmarkDotNet.Attributes;
 using Soenneker.Reflection.Cache.Tests.Objects;
-using Soenneker.Reflection.Cache.Types.Abstract;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Types;
 
@@ -11,7 +11,7 @@ public class IsAssignableFromBenchmarks
     private Type _sourceType = default!;
 
     private ReflectionCache _cache = default!;
-    private ICachedType _cachedType = default!;
+    private CachedType _cachedType = default!;
 
     [GlobalSetup]
     public void Setup()

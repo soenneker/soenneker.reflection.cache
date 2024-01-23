@@ -23,7 +23,7 @@ public interface ICachedType
     /// Is a hash code of <see cref="Type"/>. If <see cref="Type"/> is null, this is null.
     /// </summary>
     [Pure]
-    int? GetCacheKey();
+    int? CacheKey { get; }
 
     /// <summary>
     /// Gets information about a specific property.
@@ -86,7 +86,6 @@ public interface ICachedType
     /// <summary>
     /// Gets information about interfaces using reflection.
     /// </summary>
-    /// <returns>An IEnumerable of Type objects representing interfaces.</returns>
     [Pure]
     Type[]? GetInterfaces();
 

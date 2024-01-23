@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 using System;
-using Soenneker.Reflection.Cache.Types.Abstract;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Abstract;
 
@@ -15,7 +15,7 @@ public interface IReflectionCache
     /// <param name="typeName">The name of the type.</param>
     /// <returns>The cached type corresponding to the given type name.</returns>
     [Pure]
-    ICachedType GetCachedType(string typeName);
+    CachedType GetCachedType(string typeName);
 
     /// <summary>
     /// Gets a cached type by <see cref="Type"/> object.
@@ -23,7 +23,7 @@ public interface IReflectionCache
     /// <param name="type">The <see cref="Type"/> object.</param>
     /// <returns>The cached type corresponding to the given <see cref="Type"/> object.</returns>
     [Pure]
-    ICachedType GetCachedType(Type type);
+    CachedType GetCachedType(Type type);
 
     /// <summary>
     /// Gets a <see cref="Type"/> by type name.

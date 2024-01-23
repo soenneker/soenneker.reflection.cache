@@ -15,25 +15,25 @@ public class CachedCustomAttributes : ICachedCustomAttributes
 
     private readonly Lazy<CachedAttribute[]> _cachedCustomAttributes;
 
-    public CachedCustomAttributes(CachedType cachedType)
+    public CachedCustomAttributes(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
 
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForType, true);
+        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForType, threadSafe);
     }
 
-    public CachedCustomAttributes(CachedMethod cachedMethod)
+    public CachedCustomAttributes(CachedMethod cachedMethod, bool threadSafe = true)
     {
         _cachedMethod = cachedMethod;
 
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForMethod, true);
+        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForMethod, threadSafe);
     }
 
-    public CachedCustomAttributes(CachedConstructor cachedConstructor)
+    public CachedCustomAttributes(CachedConstructor cachedConstructor, bool threadSafe = true)
     {
         _cachedConstructor = cachedConstructor;
 
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForConstructor, true);
+        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForConstructor, threadSafe);
     }
 
     private CachedAttribute[] SetArrayForType()

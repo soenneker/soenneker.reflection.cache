@@ -15,11 +15,11 @@ public class CachedMembers : ICachedMembers
 
     private readonly CachedType _cachedType;
 
-    public CachedMembers(CachedType cachedType)
+    public CachedMembers(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
-        _cachedDict = new Lazy<Dictionary<int, MemberInfo?>>(SetCachedDict, true);
-        _cachedArray = new Lazy<MemberInfo[]>(SetArray, true);
+        _cachedDict = new Lazy<Dictionary<int, MemberInfo?>>(SetCachedDict, threadSafe);
+        _cachedArray = new Lazy<MemberInfo[]>(SetArray, threadSafe);
     }
 
     public MemberInfo? GetMember(string name)
@@ -56,20 +56,27 @@ public class CachedMembers : ICachedMembers
 
     private MemberInfo[] SetArray()
     {
-        // If the dictionary is already populated, return its values as an array
+        // If the dictionary is already populated, build the array from its values
         if (_cachedDict.IsValueCreated)
         {
-            var result = new MemberInfo[_cachedDict.Value.Count];
+            Dictionary<int, MemberInfo?>.ValueCollection values = _cachedDict.Value.Values;
+            int count = values.Count;
+            var result = new MemberInfo[count];
+
             var i = 0;
-            foreach (MemberInfo? entry in _cachedDict.Value.Values)
+
+            foreach (MemberInfo? value in values)
             {
-                result[i++] = entry;
+                result[i++] = value;
             }
+
             return result;
         }
 
         // If the dictionary is not populated, build the array directly
-        return _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
+        MemberInfo[] members = _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
+
+        return members;
     }
 
     public MemberInfo[] GetMembers()

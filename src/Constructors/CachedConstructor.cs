@@ -14,15 +14,15 @@ public class CachedConstructor : ICachedConstructor
 
     public CachedParameters? Parameters { get; }
 
-    public CachedConstructor(ConstructorInfo? constructorInfo)
+    public CachedConstructor(ConstructorInfo? constructorInfo, bool threadSafe = true)
     {
         ConstructorInfo = constructorInfo;
 
         if (constructorInfo == null)
             return;
 
-        Attributes = new CachedCustomAttributes(this);
-        Parameters = new CachedParameters(this);
+        Attributes = new CachedCustomAttributes(this, threadSafe);
+        Parameters = new CachedParameters(this, threadSafe);
     }
 
     public object? Invoke()

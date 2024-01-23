@@ -3,7 +3,7 @@ using System.Reflection;
 using FluentAssertions;
 using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Tests.Objects;
-using Soenneker.Reflection.Cache.Types.Abstract;
+using Soenneker.Reflection.Cache.Types;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -21,9 +21,9 @@ public class GetConstructorsTests
     [Fact]
     public void GetConstructors_Cache()
     {
-        ICachedType type = _cache.GetCachedType(typeof(TestType));
+        CachedType type = _cache.GetCachedType(typeof(TestType));
 
-        ConstructorInfo[] result = type.GetConstructors();
+        ConstructorInfo?[]? result = type.GetConstructors();
         result.Should().NotBeNull();
     }
 

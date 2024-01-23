@@ -104,60 +104,73 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 
 ## Benchmarks (.NET 8.0)
 
-### `GetType()` - 3,482% faster
+### `GetType()` 5,772% faster
 
-| Method                 | Mean      | Error    | StdDev   | Ratio         | RatioSD |
-|----------------------- |----------:|---------:|---------:|--------------:|--------:|
-| GetType_string_NoCache | 950.07 ns | 3.089 ns | 2.738 ns |      baseline |         |
-| GetType_string_Cache   |  26.60 ns | 0.589 ns | 0.678 ns | 35.82x faster |   1.02x |
+| Method                          | Mean      | Error    | StdDev   | Ratio         | RatioSD |
+|-------------------------------- |----------:|---------:|---------:|--------------:|--------:|
+| GetType_string_NoCache          | 955.27 ns | 2.216 ns | 2.073 ns |      baseline |         |
+| GetType_string_Cache            |  16.27 ns | 0.102 ns | 0.091 ns | 58.72x faster |   0.38x |
+| GetType_string_ThreadSafe_Cache |  23.99 ns | 0.402 ns | 0.376 ns | 39.83x faster |   0.64x |
 
 
-### `GetProperties()` - 5,160% faster
+### `GetProperties()` 8,960% faster
 
-| Method                | Mean      | Error     | StdDev    | Ratio         | RatioSD |
-|---------------------- |----------:|----------:|----------:|--------------:|--------:|
-| GetProperties_NoCache | 58.765 ns | 0.6131 ns | 0.5735 ns |      baseline |         |
-| GetProperties_Cache   |  1.119 ns | 0.0481 ns | 0.0450 ns | 52.59x faster |   2.27x |
+| Method                         | Mean       | Error     | StdDev    | Ratio         | RatioSD |
+|------------------------------- |-----------:|----------:|----------:|--------------:|--------:|
+| GetProperties_NoCache          | 58.5363 ns | 0.3463 ns | 0.3070 ns |      baseline |         |
+| GetProperties_Cache            |  0.6502 ns | 0.0370 ns | 0.0328 ns | 90.25x faster |   4.59x |
+| GetProperties_ThreadSafe_Cache |  0.7169 ns | 0.0129 ns | 0.0108 ns | 81.72x faster |   1.36x |
 
-### `GetMethods()` - 599% faster
+### `GetMethods()` 599% faster
 
 | Method             | Mean      | Error    | StdDev   | Ratio        | RatioSD |
 |------------------- |----------:|---------:|---------:|-------------:|--------:|
 | GetMethods_NoCache | 275.22 ns | 1.899 ns | 1.776 ns |     baseline |         |
 | GetMethods_Cache   |  39.36 ns | 0.694 ns | 0.649 ns | 6.99x faster |   0.13x |
 
-### `GetCustomAttributes()` - 1,319% faster
+### `GetCustomAttributes()` 1,319% faster
 
 | Method                | Mean        | Error     | StdDev    | Ratio           | RatioSD |
 |---------------------- |------------:|----------:|----------:|----------------:|--------:|
 | GetAttributes_NoCache | 1,982.84 ns | 14.271 ns | 12.651 ns |        baseline |         |
 | GetAttributes_Cache   |    14.87 ns |  0.358 ns |  0.351 ns | 132.928x faster |   3.33x |
 
-### `GetMethod()` - 37% faster
+### `GetMethod()` 37% faster
 
 | Method            | Mean     | Error    | StdDev   | Ratio        | RatioSD |
 |------------------ |---------:|---------:|---------:|-------------:|--------:|
 | GetMethod_NoCache | 23.06 ns | 0.234 ns | 0.208 ns |     baseline |         |
 | GetMethod_Cache   | 16.77 ns | 0.079 ns | 0.070 ns | 1.37x faster |   0.01x |
 
+### `GetMembers()` 71,130% faster
 
-### `GetProperty()` - 52% faster
+| Method             | Mean        | Error     | StdDev    | Ratio           | RatioSD |
+|------------------- |------------:|----------:|----------:|----------------:|--------:|
+| GetMembers_NoCache | 519.4286 ns | 1.7392 ns | 1.5417 ns |        baseline |         |
+| GetMembers_Cache   |   0.7297 ns | 0.0089 ns | 0.0083 ns | 712.321x faster |   7.66x |
+
+
+### `GetProperty()` 52% faster
 
 | Method              | Mean     | Error    | StdDev   | Ratio        | RatioSD |
 |-------------------- |---------:|---------:|---------:|-------------:|--------:|
 | GetProperty_NoCache | 25.71 ns | 0.295 ns | 0.276 ns |     baseline |         |
 | GetProperty_Cache   | 16.89 ns | 0.171 ns | 0.151 ns | 1.52x faster |   0.03x |
 
-### `GetGenericTypeDefinition()` - 420% faster
+### `GetGenericTypeDefinition()` 420% faster
 
 | Method                           | Mean      | Error     | StdDev    | Ratio        | RatioSD |
 |--------------------------------- |----------:|----------:|----------:|-------------:|--------:|
 | GetGenericTypeDefinition_NoCache | 1.8214 ns | 0.0651 ns | 0.0577 ns |     baseline |         |
 | GetGenericTypeDefinition_Cache   | 0.3505 ns | 0.0123 ns | 0.0109 ns | 5.20x faster |   0.26x |
 
-### `IsAssignableFrom()` - 36% faster
+### `IsAssignableFrom()` 36% faster
 
 | Method                   | Mean      | Error     | StdDev    | Ratio        | RatioSD |
 |------------------------- |----------:|----------:|----------:|-------------:|--------:|
 | IsAssignableFrom_NoCache | 11.054 ns | 0.2127 ns | 0.1989 ns |     baseline |         |
 | IsAssignableFrom_Cache   |  8.133 ns | 0.1196 ns | 0.1119 ns | 1.36x faster |   0.03x |
+
+Notes:
+- These are averages over many iterations. The first operation is going to be as slow as the Reflection it sits in front of. 
+- Outliers have been removed in cases BenchmarkDotnet deems necessary.

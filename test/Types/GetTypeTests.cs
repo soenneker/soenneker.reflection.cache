@@ -1,8 +1,8 @@
 ﻿using System;
 using FluentAssertions;
+using Soenneker.Reflection.Cache.Types;
 using Xunit.Abstractions;
 using Xunit;
-using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
@@ -18,7 +18,7 @@ public class GetTypeTests
     [Fact]
     public void GetCachedType_should_return_cached_type()
     {
-        ICachedType result = _cache.GetCachedType(typeof(string));
+        CachedType result = _cache.GetCachedType(typeof(string));
         result.Should().NotBeNull();
     }
 
@@ -32,7 +32,7 @@ public class GetTypeTests
     [Fact]
     public void GetCachedType_with_string_should_return_cached_type()
     {
-        ICachedType result = _cache.GetCachedType("System.String, mscorlib");
+        CachedType result = _cache.GetCachedType("System.String, mscorlib");
         result.Should().NotBeNull();
     }
 }

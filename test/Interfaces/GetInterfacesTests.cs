@@ -15,7 +15,7 @@ public class CachedInterfacesTests
     {
         var cachedType = new CachedType(typeof(TestType));
         var cachedInterfaces = new CachedInterfaces(cachedType);
-        CachedType? result = cachedInterfaces.GetCachedInterface(typeof(ITestType).FullName);
+        CachedType result = cachedInterfaces.GetCachedInterface(typeof(ITestType).FullName!);
         result.Should().NotBeNull();
         result.Type.Should().Be(typeof(ITestType));
     }
@@ -25,7 +25,7 @@ public class CachedInterfacesTests
     {
         var cachedType = new CachedType(typeof(TestType));
         var cachedInterfaces = new CachedInterfaces(cachedType);
-        Type? result = cachedInterfaces.GetInterface(typeof(ITestType).FullName);
+        Type? result = cachedInterfaces.GetInterface(typeof(ITestType).FullName!);
         result.Should().Be(typeof(ITestType));
     }
 

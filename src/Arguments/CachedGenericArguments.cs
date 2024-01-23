@@ -10,10 +10,10 @@ public class CachedGenericArguments : ICachedGenericArguments
     private readonly CachedType _cachedType;
     private readonly Lazy<CachedType[]> _cachedGenericArguments;
 
-    public CachedGenericArguments(CachedType cachedType)
+    public CachedGenericArguments(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
-        _cachedGenericArguments = new Lazy<CachedType[]>(SetArray, true);
+        _cachedGenericArguments = new Lazy<CachedType[]>(SetArray, threadSafe);
     }
 
     private CachedType[] SetArray()

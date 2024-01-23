@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
-using Soenneker.Reflection.Cache.Types.Abstract;
+using Soenneker.Reflection.Cache.Types;
 using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Constructors;
@@ -21,7 +21,7 @@ public class ConstructorInvokeTests
     {
         var cache = new ReflectionCache();
         Type type = typeof(TestType);
-        ICachedType cachedType = cache.GetCachedType(type);
+        CachedType cachedType = cache.GetCachedType(type);
         object? result = cachedType.CreateInstance();
         result.Should().NotBeNull().And.BeOfType<TestType>();
     }
@@ -39,7 +39,7 @@ public class ConstructorInvokeTests
     {
         var cache = new ReflectionCache();
         Type type = typeof(TestType);
-        ICachedType cachedType = cache.GetCachedType(type);
+        CachedType cachedType = cache.GetCachedType(type);
         object? result = cachedType.CreateInstance(0, "", "", 1.0);
         result.Should().NotBeNull().And.BeOfType<TestType>();
     }

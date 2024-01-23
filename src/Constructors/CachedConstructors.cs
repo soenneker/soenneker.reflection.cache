@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Constructors.Abstract;
@@ -17,12 +16,12 @@ public class CachedConstructors : ICachedConstructors
 
     private readonly CachedType _cachedType;
 
-    public CachedConstructors(CachedType cachedType)
+    public CachedConstructors(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
 
-        _cachedArray = new Lazy<CachedConstructor[]>(SetArray, true);
-        _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(SetDict, true);
+        _cachedArray = new Lazy<CachedConstructor[]>(SetArray, threadSafe);
+        _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(SetDict, threadSafe);
     }
 
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
@@ -38,14 +37,21 @@ public class CachedConstructors : ICachedConstructors
 
     private CachedConstructor[] SetArray()
     {
-        // Use the dictionary if it's already populated
         if (_cachedDict.IsValueCreated)
         {
-            return _cachedDict.Value.Values.ToArray();
+            Dictionary<int, CachedConstructor>.ValueCollection cachedDictValues = _cachedDict.Value.Values;
+            var result = new CachedConstructor[cachedDictValues.Count];
+            var i = 0;
+
+            foreach (CachedConstructor? constructor in cachedDictValues)
+            {
+                result[i++] = constructor;
+            }
+
+            return result;
         }
 
         ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(ReflectionCacheConstants.BindingFlags);
-
         var cachedConstructors = new CachedConstructor[constructorInfos.Length];
 
         for (var i = 0; i < constructorInfos.Length; i++)
@@ -58,33 +64,38 @@ public class CachedConstructors : ICachedConstructors
 
     private Dictionary<int, CachedConstructor> SetDict()
     {
-        // Use the array if it's already populated
         if (_cachedArray.IsValueCreated)
         {
-            var dict = new Dictionary<int, CachedConstructor>(_cachedArray.Value.Length);
+            CachedConstructor[]? cachedArrayValue = _cachedArray.Value;
+            var dict = new Dictionary<int, CachedConstructor>(cachedArrayValue.Length);
 
-            foreach (CachedConstructor constructor in _cachedArray.Value)
+            for (var i = 0; i < cachedArrayValue.Length; i++)
             {
-                int key = constructor.GetCacheKey();
-                dict.Add(key, constructor);
+                int key = cachedArrayValue[i].GetCacheKey();
+                dict[key] = cachedArrayValue[i];
             }
 
             return dict;
         }
 
         ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(ReflectionCacheConstants.BindingFlags);
-
         var constructorsDict = new Dictionary<int, CachedConstructor>(constructorInfos.Length);
 
         for (var i = 0; i < constructorInfos.Length; i++)
         {
             ConstructorInfo info = constructorInfos[i];
 
-            Type[] parameterTypes = info.GetParameters().Select(c => c.ParameterType).ToArray();
+            ParameterInfo[] parameters = info.GetParameters();
+            Type[] parameterTypes = new Type[parameters.Length];
+
+            for (var j = 0; j < parameters.Length; j++)
+            {
+                parameterTypes[j] = parameters[j].ParameterType;
+            }
 
             int key = parameterTypes.GetCacheKey();
 
-            constructorsDict.Add(key, new CachedConstructor(info));
+            constructorsDict[key] = new CachedConstructor(info);
         }
 
         return constructorsDict;

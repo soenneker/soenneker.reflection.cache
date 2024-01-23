@@ -15,12 +15,12 @@ public class CachedProperties : ICachedProperties
 
     private readonly CachedType _cachedType;
 
-    public CachedProperties(CachedType cachedType)
+    public CachedProperties(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
 
-        _cachedDict = new Lazy<Dictionary<int, PropertyInfo?>>(SetDict, true);
-        _cachedArray = new Lazy<PropertyInfo[]>(SetArray, true);
+        _cachedDict = new Lazy<Dictionary<int, PropertyInfo?>>(SetDict, threadSafe);
+        _cachedArray = new Lazy<PropertyInfo[]>(SetArray, threadSafe);
     }
 
     public PropertyInfo? GetProperty(string name)
@@ -56,10 +56,13 @@ public class CachedProperties : ICachedProperties
 
     private PropertyInfo[] SetArray()
     {
-        // Use the dictionary if it's already populated
         if (_cachedDict.IsValueCreated)
         {
-            return new List<PropertyInfo>(_cachedDict.Value.Values).ToArray();
+            Dictionary<int, PropertyInfo?>.ValueCollection values = _cachedDict.Value.Values;
+            int count = values.Count;
+            var result = new PropertyInfo[count];
+            values.CopyTo(result, 0);
+            return result;
         }
 
         return _cachedType.Type!.GetProperties(ReflectionCacheConstants.BindingFlags);

@@ -2,13 +2,13 @@ using System;
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
 using Soenneker.Reflection.Cache.Tests.Objects;
-using Soenneker.Reflection.Cache.Types.Abstract;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Methods;
 
 public class GetMethodBenchmarks
 {
-    private ICachedType _cachedTyped = default!;
+    private CachedType _cachedTyped = default!;
     private Type _type = default!;
 
     [GlobalSetup]

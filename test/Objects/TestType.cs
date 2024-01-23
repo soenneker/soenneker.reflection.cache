@@ -20,9 +20,11 @@ public class TestType : ITestType
     [DataMember]
     public string PublicProperty2 { get; set; }
 
-    private int? _privateProperty1 { get; set; }
+    private int? PrivateProperty1 { get; set; }
 
-    private double _privateProperty2 { get; set; }
+    private double? PrivateProperty2 { get; set; }
+
+    public event EventHandler? MyEvent;
 
     public TestType()
     {
@@ -30,8 +32,8 @@ public class TestType : ITestType
         PublicField = 42;
         _privateField = "PrivateFieldValue";
         PublicProperty1 = "PublicPropertyValue";
-        _privateProperty1 = 42;
-        _privateProperty2 = 3.14;
+        PrivateProperty1 = 42;
+        PrivateProperty2 = 3.14;
     }
 
     public TestType(int publicField, string privateField, string publicProperty1, double privateProperty)
@@ -39,7 +41,7 @@ public class TestType : ITestType
         PublicField = publicField;
         _privateField = privateField;
         PublicProperty1 = publicProperty1;
-        _privateProperty2 = privateProperty;
+        PrivateProperty2 = privateProperty;
     }
 
     public void PublicMethod1()
@@ -77,10 +79,7 @@ public class TestType : ITestType
         Console.WriteLine("PublicStaticMethod called");
     }
 
-    // Sample Event
-    public event EventHandler MyEvent;
 
-    // Indexer
     public string this[int index]
     {
         get { return $"Value at index {index}"; }

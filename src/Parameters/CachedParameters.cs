@@ -14,18 +14,18 @@ public class CachedParameters : ICachedParameters
 
     private readonly Lazy<CachedParameter[]> _cachedArray;
 
-    public CachedParameters(CachedMethod cachedMethod)
+    public CachedParameters(CachedMethod cachedMethod, bool threadSafe = true)
     {
         _cachedMethod = cachedMethod;
 
-        _cachedArray = new Lazy<CachedParameter[]>(SetArrayForMethod, true);
+        _cachedArray = new Lazy<CachedParameter[]>(SetArrayForMethod, threadSafe);
     }
 
-    public CachedParameters(CachedConstructor cachedConstructor)
+    public CachedParameters(CachedConstructor cachedConstructor, bool threadSafe = true)
     {
         _cachedConstructor = cachedConstructor;
 
-        _cachedArray = new Lazy<CachedParameter[]>(SetArrayForConstructor, true);
+        _cachedArray = new Lazy<CachedParameter[]>(SetArrayForConstructor, threadSafe);
     }
 
     private CachedParameter[] SetArrayForConstructor()

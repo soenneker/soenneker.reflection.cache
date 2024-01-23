@@ -1,13 +1,13 @@
 using System;
 using BenchmarkDotNet.Attributes;
 using Soenneker.Reflection.Cache.Tests.Objects;
-using Soenneker.Reflection.Cache.Types.Abstract;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Interfaces;
 
 public class GetInterfacesBenchmarks
 {
-    private ICachedType _cachedType = default!;
+    private CachedType _cachedType = default!;
     private Type _type = default!;
 
     [GlobalSetup]

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Extensions;
@@ -18,12 +17,12 @@ public class CachedMethods : ICachedMethods
 
     private readonly CachedType _cachedType;
 
-    public CachedMethods(CachedType cachedType)
+    public CachedMethods(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
 
-        _cachedDict = new Lazy<Dictionary<int, CachedMethod>>(SetCachedMethodsDict, true);
-        _cachedArray = new Lazy<CachedMethod[]>(SetCachedMethodsArray, true);
+        _cachedDict = new Lazy<Dictionary<int, CachedMethod>>(SetCachedMethodsDict, threadSafe);
+        _cachedArray = new Lazy<CachedMethod[]>(SetCachedMethodsArray, threadSafe);
     }
 
     public CachedMethod GetCachedMethod(string name)
@@ -54,8 +53,16 @@ public class CachedMethods : ICachedMethods
     {
         if (_cachedDict.IsValueCreated && _cachedDict.Value.Count > 0)
         {
-            // Don't recreate these objects if the array is already created
-            return _cachedDict.Value.Values.ToArray();
+            Dictionary<int, CachedMethod>.ValueCollection cachedDictValues = _cachedDict.Value.Values;
+            var result = new CachedMethod[cachedDictValues.Count];
+            var i = 0;
+
+            foreach (CachedMethod? method in cachedDictValues)
+            {
+                result[i++] = method;
+            }
+
+            return result;
         }
 
         MethodInfo[] methodInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);

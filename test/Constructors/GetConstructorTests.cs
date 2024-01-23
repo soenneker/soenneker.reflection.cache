@@ -3,9 +3,9 @@ using System;
 using System.Reflection;
 using FluentAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
+using Soenneker.Reflection.Cache.Types;
 using Xunit;
 using Xunit.Abstractions;
-using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Tests.Constructors;
 
@@ -30,7 +30,7 @@ public class GetConstructorTests
     [Fact]
     public void GetConstructor_Cache()
     {
-        ICachedType type = _cache.GetCachedType(typeof(TestType));
+        CachedType type = _cache.GetCachedType(typeof(TestType));
 
 
         ConstructorInfo? result = type.GetConstructor();

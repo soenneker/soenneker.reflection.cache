@@ -37,4 +37,12 @@ public class TypesRunner : BenchmarkTest
 
         await OutputSummaryToLog(summary);
     }
+
+    [LocalFact]
+    public async Task CachedType()
+    {
+        Summary summary = BenchmarkRunner.Run<CachedTypeBenchmarks>(DefaultConf);
+
+        await OutputSummaryToLog(summary);
+    }
 }

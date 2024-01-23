@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using System;
-using Soenneker.Reflection.Cache.Types.Abstract;
+using Soenneker.Reflection.Cache.Types;
 using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
 public class IsAssignableTests
 {
-    private readonly ICachedType _cachedType;
+    private readonly CachedType _cachedType;
 
     public IsAssignableTests()
     {
