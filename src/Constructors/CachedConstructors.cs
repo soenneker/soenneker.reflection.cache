@@ -108,18 +108,7 @@ public class CachedConstructors : ICachedConstructors
 
     public ConstructorInfo?[] GetConstructors()
     {
-        CachedConstructor[]? cachedArray = _cachedArray.Value;
-
-        int count = cachedArray.Length;
-
-        var constructors = new ConstructorInfo?[count];
-
-        for (var i = 0; i < count; i++)
-        {
-            constructors[i] = cachedArray[i].ConstructorInfo;
-        }
-
-        return constructors;
+        return _cachedArray.Value.ToConstructors();
     }
 
     public object? CreateInstance()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Interfaces.Abstract;
 using Soenneker.Reflection.Cache.Types;
 
@@ -103,14 +104,6 @@ public class CachedInterfaces : ICachedInterfaces
 
     public Type[] GetInterfaces()
     {
-        CachedType[] cachedInterfaces = GetCachedInterfaces();
-        var result = new Type[cachedInterfaces.Length];
-
-        for (var i = 0; i < cachedInterfaces.Length; i++)
-        {
-            result[i] = cachedInterfaces[i].Type!;
-        }
-
-        return result;
+        return GetCachedInterfaces().ToTypes();
     }
 }

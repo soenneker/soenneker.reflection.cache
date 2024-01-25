@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Constructors;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Methods;
 using Soenneker.Reflection.Cache.Parameters.Abstract;
 
@@ -56,31 +57,11 @@ public class CachedParameters : ICachedParameters
 
     public ParameterInfo?[] GetParameters()
     {
-        int count = _cachedArray.Value.Length;
-        CachedParameter[]? cachedList = _cachedArray.Value;
-
-        var parameterInfosArray = new ParameterInfo?[count];
-
-        for (var i = 0; i < count; i++)
-        {
-            parameterInfosArray[i] = cachedList[i].ParameterInfo;
-        }
-
-        return parameterInfosArray;
+        return _cachedArray.Value.ToParameters();
     }
 
     public Type[] GetParametersTypes()
     {
-        int count = _cachedArray.Value.Length;
-        CachedParameter[]? cachedList = _cachedArray.Value;
-
-        var typesArray = new Type[count];
-
-        for (var i = 0; i < count; i++)
-        {
-            typesArray[i] = cachedList[i].ParameterInfo.ParameterType;
-        }
-
-        return typesArray;
+        return _cachedArray.Value.ToParametersTypes();
     }
 }

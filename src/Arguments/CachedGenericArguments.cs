@@ -1,5 +1,6 @@
 ﻿using System;
 using Soenneker.Reflection.Cache.Arguments.Abstract;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Arguments;
@@ -36,14 +37,6 @@ public class CachedGenericArguments : ICachedGenericArguments
 
     public Type[] GetGenericArguments()
     {
-        CachedType[]? cachedArguments = _cachedGenericArguments.Value;
-        var result = new Type[cachedArguments.Length];
-
-        for (var i = 0; i < cachedArguments.Length; i++)
-        {
-            result[i] = cachedArguments[i].Type!;
-        }
-
-        return result;
+        return _cachedGenericArguments.Value.ToTypes();
     }
 }

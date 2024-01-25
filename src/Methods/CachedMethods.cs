@@ -129,15 +129,6 @@ public class CachedMethods : ICachedMethods
 
     public MethodInfo?[] GetMethods()
     {
-        CachedMethod[] cachedMethods = _cachedArray.Value;
-        int count = cachedMethods.Length;
-        var methodInfoArray = new MethodInfo?[count];
-
-        for (var i = 0; i < count; i++)
-        {
-            methodInfoArray[i] = cachedMethods[i].MethodInfo;
-        }
-
-        return methodInfoArray;
+        return _cachedArray.Value.ToMethods();
     }
 }
