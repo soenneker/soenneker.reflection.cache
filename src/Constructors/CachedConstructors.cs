@@ -114,15 +114,20 @@ public class CachedConstructors : ICachedConstructors
     public object? CreateInstance()
     {
         //TODO: One day parameterless invoke of the constructorInfo may be faster than Activator.CreateInstance
-        //CachedConstructor? cachedConstructor = GetCachedConstructor();
-        //return cachedConstructor?.Invoke();
-
         return Activator.CreateInstance(_cachedType.Type!);
+    }
+
+    public T? CreateInstance<T>()
+    {
+        return (T?)CreateInstance();
     }
 
     public object? CreateInstance(params object[] parameters)
     {
-        Type[] parameterTypes = GetParameterTypes(parameters);
+        if (parameters.Length == 0)
+            return CreateInstance();
+
+        Type[] parameterTypes = parameters.ToTypes();
 
         CachedConstructor? cachedConstructor = GetCachedConstructor(parameterTypes);
 
@@ -131,7 +136,10 @@ public class CachedConstructors : ICachedConstructors
 
     public T? CreateInstance<T>(params object[] parameters)
     {
-        Type[] parameterTypes = GetParameterTypes(parameters);
+        if (parameters.Length == 0)
+            return CreateInstance<T>();
+
+        Type[] parameterTypes = parameters.ToTypes();
 
         CachedConstructor? cachedConstructor = GetCachedConstructor(parameterTypes);
 
@@ -139,17 +147,5 @@ public class CachedConstructors : ICachedConstructors
             return default;
 
         return cachedConstructor.Invoke<T>(parameters);
-    }
-
-    private static Type[] GetParameterTypes(object[] parameters)
-    {
-        var parameterTypes = new Type[parameters.Length];
-
-        for (var i = 0; i < parameters.Length; i++)
-        {
-            parameterTypes[i] = parameters[i].GetType();
-        }
-
-        return parameterTypes;
     }
 }

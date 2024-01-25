@@ -46,6 +46,10 @@ public interface ICachedConstructors
     [Pure]
     object? CreateInstance();
 
+    /// <inheritdoc cref="CreateInstance()"/>
+    [Pure]
+    T? CreateInstance<T>();
+
     /// <summary>
     /// Creates an instance of the type with specified parameters.
     /// </summary>
