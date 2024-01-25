@@ -9,12 +9,15 @@ namespace Soenneker.Reflection.Cache.Parameters.Abstract;
 /// </summary>
 public interface ICachedParameters
 {
+    [Pure]
+    CachedParameter[] GetCachedParameters();
+
     /// <summary>
     /// Gets an array of <see cref="ParameterInfo"/> associated with the cached parameters.
     /// </summary>
     /// <returns>An array of <see cref="ParameterInfo"/> objects.</returns>
     [Pure]
-    ParameterInfo?[] GetParameters();
+    ParameterInfo[] GetParameters();
 
     /// <summary>
     /// Gets an array of parameter types associated with the cached parameters.

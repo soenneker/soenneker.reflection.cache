@@ -55,7 +55,12 @@ public class CachedParameters : ICachedParameters
         return cachedParameters;
     }
 
-    public ParameterInfo?[] GetParameters()
+    public CachedParameter[] GetCachedParameters()
+    {
+        return _cachedArray.Value;
+    }
+
+    public ParameterInfo[] GetParameters()
     {
         return _cachedArray.Value.ToParameters();
     }

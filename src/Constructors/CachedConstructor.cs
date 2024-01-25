@@ -25,6 +25,22 @@ public class CachedConstructor : ICachedConstructor
         Parameters = new CachedParameters(this, threadSafe);
     }
 
+    public CachedParameter[] GetCachedParameters()
+    {
+        if (Parameters == null)
+            return [];
+
+        return Parameters.GetCachedParameters();
+    }
+
+    public ParameterInfo[] GetParameters()
+    {
+        if (Parameters == null)
+            return [];
+
+        return Parameters.GetParameters();
+    }
+
     public object? Invoke()
     {
         if (ConstructorInfo == null)

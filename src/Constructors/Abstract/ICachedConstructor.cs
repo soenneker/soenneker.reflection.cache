@@ -28,6 +28,12 @@ public interface ICachedConstructor
     [Pure]
     CachedParameters? Parameters { get; }
 
+    [Pure]
+    CachedParameter[] GetCachedParameters();
+
+    [Pure]
+    ParameterInfo[] GetParameters();
+
     /// <summary>
     /// Invokes the constructor with no parameters.
     /// </summary>
