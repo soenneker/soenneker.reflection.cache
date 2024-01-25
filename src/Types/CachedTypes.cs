@@ -8,8 +8,11 @@ namespace Soenneker.Reflection.Cache.Types;
 ///<inheritdoc cref="ICachedTypes"/>
 public class CachedTypes : ICachedTypes
 {
+    // We'll use two sets of dictionaries - one for fast integer lookups (hopefully, common), and the other for slower string lookups
     private readonly ConcurrentDictionary<string, CachedType>? _concurrentDict;
+    private readonly ConcurrentDictionary<int, CachedType>? _concurrentDictByType;
     private readonly Dictionary<string, CachedType>? _dict;
+    private readonly Dictionary<int, CachedType>? _dictByType;
 
     private readonly bool _threadSafe;
 
@@ -18,9 +21,15 @@ public class CachedTypes : ICachedTypes
         _threadSafe = threadSafe;
 
         if (_threadSafe)
-            _concurrentDict =[];
+        {
+            _concurrentDict = [];
+            _concurrentDictByType = [];
+        }
         else
+        {
             _dict = [];
+            _dictByType = [];
+        }
     }
 
     public CachedType GetCachedType(string typeName)
@@ -62,18 +71,18 @@ public class CachedTypes : ICachedTypes
 
     public CachedType GetCachedType(Type type)
     {
-        if (string.IsNullOrEmpty(type.FullName))
-            throw new ArgumentException("The type's FullName cannot be null or empty");
+        int key = type.GetHashCode();
 
         if (_threadSafe)
-            return _concurrentDict!.GetOrAdd(type.FullName, _ => new CachedType(type));
-
-        if (_dict!.TryGetValue(type.FullName!, out CachedType? result))
-            return result;
-
+       
+            return _concurrentDictByType!.GetOrAdd(key, _ => new CachedType(type));
+        
+        if (_dictByType!.TryGetValue(key, out CachedType? result))
+                return result;
+        
         var newCachedType = new CachedType(type);
 
-        _dict.TryAdd(type.FullName, newCachedType);
+        _dictByType.TryAdd(key, newCachedType);
 
         return newCachedType;
     }
