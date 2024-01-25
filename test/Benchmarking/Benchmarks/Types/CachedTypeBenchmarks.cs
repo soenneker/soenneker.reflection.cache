@@ -68,4 +68,16 @@ public class CachedTypeBenchmarks
     {
         return _cachedType.IsEnum;
     }
+
+    [Benchmark]
+    public bool IsNullable_NoCache()
+    {
+        return Nullable.GetUnderlyingType(_type) != null;
+    }
+
+    [Benchmark]
+    public bool IsNullable_Cache()
+    {
+        return _cachedType.IsNullable;
+    }
 }

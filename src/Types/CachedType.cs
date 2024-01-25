@@ -31,6 +31,9 @@ public class CachedType : ICachedType
     public bool IsEnum => _isEnumLazy.Value;
     private readonly Lazy<bool> _isEnumLazy;
 
+    public bool IsNullable => _isNullable.Value;
+    private readonly Lazy<bool> _isNullable;
+
     private readonly CachedProperties? _cachedProperties;
     private readonly CachedMethods? _cachedMethods;
     private readonly CachedCustomAttributes? _cachedAttributes;
@@ -47,10 +50,18 @@ public class CachedType : ICachedType
 
         _cacheKeyLazy = new Lazy<int?>(() => Type?.GetHashCode(), threadSafe);
 
-        _isAbstractLazy = new Lazy<bool>(() => Type is { IsAbstract: true }, threadSafe);
-        _isInterfaceLazy = new Lazy<bool>(() => type is { IsInterface: true }, threadSafe);
-        _isGenericTypeLazy = new Lazy<bool>(() => type is { IsGenericType: true }, threadSafe);
-        _isEnumLazy = new Lazy<bool>(() => type is { IsEnum: true }, threadSafe);
+        _isAbstractLazy = new Lazy<bool>(() => Type is {IsAbstract: true}, threadSafe);
+        _isInterfaceLazy = new Lazy<bool>(() => type is {IsInterface: true}, threadSafe);
+        _isGenericTypeLazy = new Lazy<bool>(() => type is {IsGenericType: true}, threadSafe);
+        _isEnumLazy = new Lazy<bool>(() => type is {IsEnum: true}, threadSafe);
+
+        _isNullable = new Lazy<bool>(() =>
+        {
+            if (type == null)
+                return false;
+
+            return Nullable.GetUnderlyingType(type) != null;
+        }, threadSafe);
 
         if (Type == null)
             return;
