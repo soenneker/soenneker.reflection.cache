@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Soenneker.Reflection.Cache.Types.Abstract;
 
@@ -7,13 +8,21 @@ namespace Soenneker.Reflection.Cache.Types;
 ///<inheritdoc cref="ICachedIsAssignableFrom"/>
 public class CachedIsAssignableFrom : ICachedIsAssignableFrom
 {
-    // Does not need worry about concurrency because the underlying call is fast and there aren't ref types being used
-    private readonly Dictionary<int, bool> _cachedDict = [];
+    private readonly Dictionary<int, bool>? _cachedDict;
+    private readonly ConcurrentDictionary<int, bool>? _cachedConcurrentDict;
 
     private readonly CachedType _cachedType;
+    private readonly bool _threadSafe;
 
-    public CachedIsAssignableFrom(CachedType cachedType)
+    public CachedIsAssignableFrom(CachedType cachedType, bool threadSafe = true)
     {
+        _threadSafe = threadSafe;
+
+        if (threadSafe)
+            _cachedConcurrentDict = new ConcurrentDictionary<int, bool>();
+        else
+            _cachedDict = new Dictionary<int, bool>();
+
         _cachedType = cachedType;
     }
 
@@ -24,13 +33,24 @@ public class CachedIsAssignableFrom : ICachedIsAssignableFrom
 
         int key = _cachedType.CacheKey.GetValueOrDefault() + derivedType.GetHashCode();
 
-        if (_cachedDict.TryGetValue(key, out bool from))
+        if (_threadSafe)
+        {
+            if (_cachedConcurrentDict!.TryGetValue(key, out bool result))
+                return result;
+
+            bool isAssignableThreadSafe = _cachedType.Type!.IsAssignableFrom(derivedType);
+
+            _cachedConcurrentDict.TryAdd(key, isAssignableThreadSafe);
+            return isAssignableThreadSafe;
+        }
+
+        if (_cachedDict!.TryGetValue(key, out bool from))
             return from;
 
-        bool result = _cachedType.Type!.IsAssignableFrom(derivedType);
-        _cachedDict.TryAdd(key, result);
+        bool isAssignable = _cachedType.Type!.IsAssignableFrom(derivedType);
+        _cachedDict.TryAdd(key, isAssignable);
 
-        return result;
+        return isAssignable;
     }
 
     public bool IsAssignableFrom(CachedType derivedType)

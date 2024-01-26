@@ -74,7 +74,7 @@ public class CachedType : ICachedType
         _cachedMembers = new CachedMembers(this, threadSafe);
         _cachedGenericArguments = new CachedGenericArguments(this, threadSafe);
         _cachedGenericTypeDefinition = new CachedGenericTypeDefinition(this, threadSafe);
-        _cachedIsAssignableFrom = new CachedIsAssignableFrom(this);
+        _cachedIsAssignableFrom = new CachedIsAssignableFrom(this, threadSafe);
     }
 
     public PropertyInfo? GetProperty(string property)
