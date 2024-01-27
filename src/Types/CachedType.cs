@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Xml.Linq;
 using Soenneker.Reflection.Cache.Arguments;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors;
@@ -283,5 +284,10 @@ public class CachedType : ICachedType
             return false;
 
         return _cachedIsAssignableFrom!.IsAssignableFrom(derivedType);
+    }
+
+    public override string ToString()
+    {
+        return Type == null ? "null" : Type.Name;
     }
 }
