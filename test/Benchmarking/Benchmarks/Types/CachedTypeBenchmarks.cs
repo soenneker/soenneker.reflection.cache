@@ -80,4 +80,28 @@ public class CachedTypeBenchmarks
     {
         return _cachedType.IsNullable;
     }
+
+    [Benchmark]
+    public bool IsByRef_NoCache()
+    {
+        return _type.IsByRef;
+    }
+
+    [Benchmark]
+    public bool IsByRef_Cache()
+    {
+        return _cachedType.IsByRef;
+    }
+
+    [Benchmark]
+    public bool IsArray_NoCache()
+    {
+        return _type.IsArray;
+    }
+
+    [Benchmark]
+    public bool IsArray_Cache()
+    {
+        return _cachedType.IsArray;
+    }
 }

@@ -35,6 +35,12 @@ public class CachedType : ICachedType
     public bool IsNullable => _isNullable.Value;
     private readonly Lazy<bool> _isNullable;
 
+    public bool IsByRef => _isByRef.Value;
+    private readonly Lazy<bool> _isByRef;
+
+    public bool IsArray => _isArray.Value;
+    private readonly Lazy<bool> _isArray;
+
     private readonly CachedProperties? _cachedProperties;
     private readonly CachedMethods? _cachedMethods;
     private readonly CachedCustomAttributes? _cachedAttributes;
@@ -52,9 +58,9 @@ public class CachedType : ICachedType
         _cacheKeyLazy = new Lazy<int?>(() => Type?.GetHashCode(), threadSafe);
 
         _isAbstractLazy = new Lazy<bool>(() => Type is {IsAbstract: true}, threadSafe);
-        _isInterfaceLazy = new Lazy<bool>(() => type is {IsInterface: true}, threadSafe);
-        _isGenericTypeLazy = new Lazy<bool>(() => type is {IsGenericType: true}, threadSafe);
-        _isEnumLazy = new Lazy<bool>(() => type is {IsEnum: true}, threadSafe);
+        _isInterfaceLazy = new Lazy<bool>(() => Type is {IsInterface: true}, threadSafe);
+        _isGenericTypeLazy = new Lazy<bool>(() => Type is {IsGenericType: true}, threadSafe);
+        _isEnumLazy = new Lazy<bool>(() => Type is {IsEnum: true}, threadSafe);
 
         _isNullable = new Lazy<bool>(() =>
         {
@@ -63,6 +69,9 @@ public class CachedType : ICachedType
 
             return Nullable.GetUnderlyingType(type) != null;
         }, threadSafe);
+
+        _isByRef = new Lazy<bool>(() => Type is { IsByRef: true }, threadSafe);
+        _isArray = new Lazy<bool>(() => Type is { IsArray: true }, threadSafe);
 
         if (Type == null)
             return;
@@ -212,6 +221,14 @@ public class CachedType : ICachedType
             return null;
 
         return _cachedConstructors!.CreateInstance();
+    }
+
+    public T? CreateInstance<T>()
+    {
+        if (Type == null)
+            return default;
+
+        return _cachedConstructors!.CreateInstance<T>();
     }
 
     public object? CreateInstance(params object[] parameters)

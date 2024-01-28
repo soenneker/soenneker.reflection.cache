@@ -141,6 +141,13 @@ public interface ICachedType
     object? CreateInstance();
 
     /// <summary>
+    /// Creates an instance of the type.
+    /// </summary>
+    /// <returns>An instance of the type.</returns>
+    [Pure]
+    T? CreateInstance<T>();
+
+    /// <summary>
     /// Creates an instance of the type with specified parameters.
     /// </summary>
     /// <param name="parameters">Parameters for the constructor.</param>
