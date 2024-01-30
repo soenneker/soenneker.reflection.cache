@@ -8,10 +8,16 @@ public class CachedGenericTypeDefinition : ICachedGenericTypeDefinition
 {
     private readonly Lazy<CachedType> _cachedGenericTypeDefinition;
 
-    public CachedGenericTypeDefinition(CachedType cachedType, bool threadSafe = true)
+    public CachedGenericTypeDefinition(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedGenericTypeDefinition = new Lazy<CachedType>(() => 
-            new CachedType(cachedType.Type!.GetGenericTypeDefinition()), threadSafe);
+        _cachedGenericTypeDefinition = new Lazy<CachedType>(() =>
+        {
+            Type definitionType = cachedType.Type!.GetGenericTypeDefinition();
+
+            CachedType genericCachedTyped = cachedTypes.GetCachedType(definitionType);
+
+            return genericCachedTyped;
+        }, threadSafe);
     }
     
     public CachedType GetCachedGenericTypeDefinition()

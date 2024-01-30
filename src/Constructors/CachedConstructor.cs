@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors.Abstract;
 using Soenneker.Reflection.Cache.Parameters;
@@ -10,9 +11,9 @@ public class CachedConstructor : ICachedConstructor
 {
     public ConstructorInfo? ConstructorInfo { get; }
 
-    public CachedCustomAttributes? Attributes { get; }
+    private readonly Lazy<CachedCustomAttributes>? _attributes;
 
-    public CachedParameters? Parameters { get; }
+    private readonly Lazy<CachedParameters>? _parameters;
 
     public CachedConstructor(ConstructorInfo? constructorInfo, bool threadSafe = true)
     {
@@ -21,24 +22,48 @@ public class CachedConstructor : ICachedConstructor
         if (constructorInfo == null)
             return;
 
-        Attributes = new CachedCustomAttributes(this, threadSafe);
-        Parameters = new CachedParameters(this, threadSafe);
+        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, threadSafe), threadSafe);
+        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, threadSafe), threadSafe);
     }
 
     public CachedParameter[] GetCachedParameters()
     {
-        if (Parameters == null)
+        if (ConstructorInfo == null)
             return [];
 
-        return Parameters.GetCachedParameters();
+        return _parameters!.Value.GetCachedParameters();
     }
 
     public ParameterInfo[] GetParameters()
     {
-        if (Parameters == null)
+        if (ConstructorInfo == null)
             return [];
 
-        return Parameters.GetParameters();
+        return _parameters!.Value.GetParameters();
+    }
+
+    public CachedAttribute[] GetCachedCustomAttributes()
+    {
+        if (ConstructorInfo == null)
+            return [];
+
+        return _attributes!.Value.GetCachedCustomAttributes();
+    }
+
+    public object[] GetCustomAttributes()
+    {
+        if (ConstructorInfo == null)
+            return [];
+
+        return _attributes!.Value.GetCustomAttributes();
+    }
+
+    public Type[] GetParametersTypes()
+    {
+        if (ConstructorInfo == null)
+            return [];
+
+        return _parameters!.Value.GetParametersTypes();
     }
 
     public object? Invoke()
@@ -59,11 +84,11 @@ public class CachedConstructor : ICachedConstructor
 
     public T? Invoke<T>()
     {
-        return (T?)Invoke();
+        return (T?) Invoke();
     }
 
     public T? Invoke<T>(params object[] param)
     {
-        return (T?)Invoke(param);
+        return (T?) Invoke(param);
     }
 }

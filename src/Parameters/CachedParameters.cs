@@ -14,12 +14,17 @@ public class CachedParameters : ICachedParameters
     private readonly CachedConstructor? _cachedConstructor;
 
     private readonly Lazy<CachedParameter[]> _cachedArray;
+    private readonly Lazy<ParameterInfo[]> _cachedParameterInfos;
+    private readonly Lazy<Type[]> _cachedParameterTypes;
 
     public CachedParameters(CachedMethod cachedMethod, bool threadSafe = true)
     {
         _cachedMethod = cachedMethod;
 
         _cachedArray = new Lazy<CachedParameter[]>(SetArrayForMethod, threadSafe);
+
+        _cachedParameterInfos = new Lazy<ParameterInfo[]>(_cachedArray.Value.ToParameters, threadSafe);
+        _cachedParameterTypes = new Lazy<Type[]>(_cachedArray.Value.ToParametersTypes, threadSafe);
     }
 
     public CachedParameters(CachedConstructor cachedConstructor, bool threadSafe = true)
@@ -27,6 +32,9 @@ public class CachedParameters : ICachedParameters
         _cachedConstructor = cachedConstructor;
 
         _cachedArray = new Lazy<CachedParameter[]>(SetArrayForConstructor, threadSafe);
+
+        _cachedParameterInfos = new Lazy<ParameterInfo[]>(_cachedArray.Value.ToParameters, threadSafe);
+        _cachedParameterTypes = new Lazy<Type[]>(_cachedArray.Value.ToParametersTypes, threadSafe);
     }
 
     private CachedParameter[] SetArrayForConstructor()
@@ -62,11 +70,11 @@ public class CachedParameters : ICachedParameters
 
     public ParameterInfo[] GetParameters()
     {
-        return _cachedArray.Value.ToParameters();
+        return _cachedParameterInfos.Value;
     }
 
     public Type[] GetParametersTypes()
     {
-        return _cachedArray.Value.ToParametersTypes();
+        return _cachedParameterTypes.Value;
     }
 }

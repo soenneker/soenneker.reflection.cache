@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Xml.Linq;
 using Soenneker.Reflection.Cache.Arguments;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors;
@@ -41,26 +40,27 @@ public class CachedType : ICachedType
     public bool IsArray => _isArray.Value;
     private readonly Lazy<bool> _isArray;
 
-    private readonly CachedProperties? _cachedProperties;
-    private readonly CachedMethods? _cachedMethods;
-    private readonly CachedCustomAttributes? _cachedAttributes;
-    private readonly CachedInterfaces? _cachedInterfaces;
-    private readonly CachedConstructors? _cachedConstructors;
-    private readonly CachedMembers? _cachedMembers;
-    private readonly CachedGenericArguments? _cachedGenericArguments;
-    private readonly CachedGenericTypeDefinition? _cachedGenericTypeDefinition;
-    private readonly CachedIsAssignableFrom? _cachedIsAssignableFrom;
+    private readonly Lazy<CachedProperties>? _cachedProperties;
+    private readonly Lazy<CachedMethods>? _cachedMethods;
+    private readonly Lazy<CachedCustomAttributes>? _cachedAttributes;
+    private readonly Lazy<CachedInterfaces>? _cachedInterfaces;
+    private readonly Lazy<CachedConstructors>? _cachedConstructors;
+    private readonly Lazy<CachedMembers>? _cachedMembers;
+    private readonly Lazy<CachedGenericArguments>? _cachedGenericArguments;
+    private readonly Lazy<CachedGenericTypeDefinition>? _cachedGenericTypeDefinition;
+    private readonly Lazy<CachedIsAssignableFrom>? _cachedIsAssignableFrom;
 
-    public CachedType(Type? type, bool threadSafe = true)
+
+    public CachedType(Type? type, CachedTypes cachedTypes, bool threadSafe = true)
     {
         Type = type;
 
-        _cacheKeyLazy = new Lazy<int?>(() => Type?.GetHashCode(), threadSafe);
+        _cacheKeyLazy = new Lazy<int?>(() => type?.GetHashCode(), threadSafe);
 
-        _isAbstractLazy = new Lazy<bool>(() => Type is {IsAbstract: true}, threadSafe);
-        _isInterfaceLazy = new Lazy<bool>(() => Type is {IsInterface: true}, threadSafe);
-        _isGenericTypeLazy = new Lazy<bool>(() => Type is {IsGenericType: true}, threadSafe);
-        _isEnumLazy = new Lazy<bool>(() => Type is {IsEnum: true}, threadSafe);
+        _isAbstractLazy = new Lazy<bool>(() => type is {IsAbstract: true}, threadSafe);
+        _isInterfaceLazy = new Lazy<bool>(() => type is {IsInterface: true}, threadSafe);
+        _isGenericTypeLazy = new Lazy<bool>(() => type is {IsGenericType: true}, threadSafe);
+        _isEnumLazy = new Lazy<bool>(() => type is {IsEnum: true}, threadSafe);
 
         _isNullable = new Lazy<bool>(() =>
         {
@@ -70,45 +70,48 @@ public class CachedType : ICachedType
             return Nullable.GetUnderlyingType(type) != null;
         }, threadSafe);
 
-        _isByRef = new Lazy<bool>(() => Type is { IsByRef: true }, threadSafe);
-        _isArray = new Lazy<bool>(() => Type is { IsArray: true }, threadSafe);
+        _isByRef = new Lazy<bool>(() => type is {IsByRef: true}, threadSafe);
+        _isArray = new Lazy<bool>(() => type is {IsArray: true}, threadSafe);
 
         if (Type == null)
             return;
 
-        _cachedProperties = new CachedProperties(this, threadSafe);
-        _cachedMethods = new CachedMethods(this, threadSafe);
-        _cachedAttributes = new CachedCustomAttributes(this, threadSafe);
-        _cachedInterfaces = new CachedInterfaces(this, threadSafe);
-        _cachedConstructors = new CachedConstructors(this, threadSafe);
-        _cachedMembers = new CachedMembers(this, threadSafe);
-        _cachedGenericArguments = new CachedGenericArguments(this, threadSafe);
-        _cachedGenericTypeDefinition = new CachedGenericTypeDefinition(this, threadSafe);
-        _cachedIsAssignableFrom = new CachedIsAssignableFrom(this, threadSafe);
+        _cachedProperties = new Lazy<CachedProperties>(() => new CachedProperties(this, threadSafe), threadSafe);
+        _cachedMethods = new Lazy<CachedMethods>(() => new CachedMethods(this, threadSafe), threadSafe);
+        _cachedAttributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, threadSafe), threadSafe);
+        _cachedInterfaces = new Lazy<CachedInterfaces>(() => new CachedInterfaces(this, cachedTypes, threadSafe), threadSafe);
+        _cachedConstructors = new Lazy<CachedConstructors>(() => new CachedConstructors(this, threadSafe), threadSafe);
+        _cachedMembers = new Lazy<CachedMembers>(() => new CachedMembers(this, threadSafe), threadSafe);
+        _cachedGenericArguments = new Lazy<CachedGenericArguments>(() => new CachedGenericArguments(this, cachedTypes, threadSafe), threadSafe);
+        _cachedGenericTypeDefinition = new Lazy<CachedGenericTypeDefinition>(() => new CachedGenericTypeDefinition(this, cachedTypes, threadSafe), threadSafe);
+        _cachedIsAssignableFrom = new Lazy<CachedIsAssignableFrom>(() => new CachedIsAssignableFrom(this, threadSafe), threadSafe);
     }
+
 
     public PropertyInfo? GetProperty(string property)
     {
         if (Type == null)
             return null;
 
-        return _cachedProperties!.GetProperty(property);
+        return _cachedProperties!.Value.GetProperty(property);
     }
+
 
     public PropertyInfo[]? GetProperties()
     {
         if (Type == null)
             return null;
 
-        return _cachedProperties!.GetProperties();
+        return _cachedProperties!.Value.GetProperties();
     }
+
 
     public CachedMethod? GetCachedMethod(string methodName)
     {
         if (Type == null)
             return null;
 
-        return _cachedMethods!.GetCachedMethod(methodName);
+        return _cachedMethods!.Value.GetCachedMethod(methodName);
     }
 
     public MethodInfo? GetMethod(string methodName)
@@ -116,7 +119,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedMethods!.GetMethod(methodName);
+        return _cachedMethods!.Value.GetMethod(methodName);
     }
 
     public CachedMethod[]? GetCachedMethods()
@@ -124,7 +127,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedMethods!.GetCachedMethods();
+        return _cachedMethods!.Value.GetCachedMethods();
     }
 
     public MethodInfo?[]? GetMethods()
@@ -132,7 +135,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedMethods!.GetMethods();
+        return _cachedMethods!.Value.GetMethods();
     }
 
     public CachedType? GetCachedInterface(string typeName)
@@ -140,7 +143,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedInterfaces!.GetCachedInterface(typeName);
+        return _cachedInterfaces!.Value.GetCachedInterface(typeName);
     }
 
     public CachedType[]? GetCachedInterfaces()
@@ -148,15 +151,15 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedInterfaces!.GetCachedInterfaces();
+        return _cachedInterfaces!.Value.GetCachedInterfaces();
     }
-
+    
     public Type? GetInterface(string typeName)
     {
         if (Type == null)
             return null;
 
-        return _cachedInterfaces!.GetInterface(typeName);
+        return _cachedInterfaces!.Value.GetInterface(typeName);
     }
 
     public Type[]? GetInterfaces()
@@ -164,7 +167,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedInterfaces!.GetInterfaces();
+        return _cachedInterfaces!.Value.GetInterfaces();
     }
 
     public CachedAttribute[]? GetCachedCustomAttributes()
@@ -172,7 +175,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedAttributes!.GetCachedCustomAttributes();
+        return _cachedAttributes!.Value.GetCachedCustomAttributes();
     }
 
     public object[]? GetCustomAttributes()
@@ -180,7 +183,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedAttributes!.GetCustomAttributes();
+        return _cachedAttributes!.Value.GetCustomAttributes();
     }
 
     public CachedConstructor? GetCachedConstructor(Type[] parameterTypes)
@@ -188,7 +191,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedConstructors!.GetCachedConstructor(parameterTypes);
+        return _cachedConstructors!.Value.GetCachedConstructor(parameterTypes);
     }
 
     public ConstructorInfo? GetConstructor(Type[]? parameterTypes = null)
@@ -196,7 +199,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedConstructors!.GetConstructor(parameterTypes);
+        return _cachedConstructors!.Value.GetConstructor(parameterTypes);
     }
 
     public CachedConstructor[]? GetCachedConstructors()
@@ -204,7 +207,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedConstructors!.GetCachedConstructors();
+        return _cachedConstructors!.Value.GetCachedConstructors();
     }
 
     public ConstructorInfo?[]? GetConstructors()
@@ -212,15 +215,14 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedConstructors!.GetConstructors();
+        return _cachedConstructors!.Value.GetConstructors();
     }
-
     public object? CreateInstance()
     {
         if (Type == null)
             return null;
 
-        return _cachedConstructors!.CreateInstance();
+        return _cachedConstructors!.Value.CreateInstance();
     }
 
     public T? CreateInstance<T>()
@@ -228,7 +230,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return default;
 
-        return _cachedConstructors!.CreateInstance<T>();
+        return _cachedConstructors!.Value.CreateInstance<T>();
     }
 
     public object? CreateInstance(params object[] parameters)
@@ -236,7 +238,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedConstructors!.CreateInstance(parameters);
+        return _cachedConstructors!.Value.CreateInstance(parameters);
     }
 
     public T? CreateInstance<T>(params object[] parameters)
@@ -244,7 +246,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return default;
 
-        return _cachedConstructors!.CreateInstance<T>(parameters);
+        return _cachedConstructors!.Value.CreateInstance<T>(parameters);
     }
 
     public CachedType? GetCachedGenericTypeDefinition()
@@ -252,7 +254,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedGenericTypeDefinition!.GetCachedGenericTypeDefinition();
+        return _cachedGenericTypeDefinition!.Value.GetCachedGenericTypeDefinition();
     }
 
     public Type? GetGenericTypeDefinition()
@@ -260,7 +262,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedGenericTypeDefinition!.GetGenericTypeDefinition();
+        return _cachedGenericTypeDefinition!.Value.GetGenericTypeDefinition();
     }
 
     public CachedType[]? GetCachedGenericArguments()
@@ -268,7 +270,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedGenericArguments!.GetCachedGenericArguments();
+        return _cachedGenericArguments!.Value.GetCachedGenericArguments();
     }
 
     public Type[]? GetGenericArguments()
@@ -276,7 +278,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedGenericArguments!.GetGenericArguments();
+        return _cachedGenericArguments!.Value.GetGenericArguments();
     }
 
     public MemberInfo? GetMember(string name)
@@ -284,7 +286,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedMembers!.GetMember(name);
+        return _cachedMembers!.Value.GetMember(name);
     }
 
     public MemberInfo[]? GetMembers()
@@ -292,7 +294,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedMembers!.GetMembers();
+        return _cachedMembers!.Value.GetMembers();
     }
 
     public bool IsAssignableFrom(Type derivedType)
@@ -300,7 +302,7 @@ public class CachedType : ICachedType
         if (Type == null)
             return false;
 
-        return _cachedIsAssignableFrom!.IsAssignableFrom(derivedType);
+        return _cachedIsAssignableFrom!.Value.IsAssignableFrom(derivedType);
     }
 
     public override string ToString()

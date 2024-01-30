@@ -16,12 +16,16 @@ public class CachedConstructors : ICachedConstructors
 
     private readonly CachedType _cachedType;
 
+    private readonly Lazy<ConstructorInfo?[]> _cachedConstructorInfos;
+
     public CachedConstructors(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
 
         _cachedArray = new Lazy<CachedConstructor[]>(SetArray, threadSafe);
         _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(SetDict, threadSafe);
+
+        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(_cachedArray.Value.ToConstructors, threadSafe);
     }
 
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
@@ -43,7 +47,7 @@ public class CachedConstructors : ICachedConstructors
             var result = new CachedConstructor[cachedDictValues.Count];
             var i = 0;
 
-            foreach (CachedConstructor? constructor in cachedDictValues)
+            foreach (CachedConstructor constructor in cachedDictValues)
             {
                 result[i++] = constructor;
             }
@@ -108,7 +112,7 @@ public class CachedConstructors : ICachedConstructors
 
     public ConstructorInfo?[] GetConstructors()
     {
-        return _cachedArray.Value.ToConstructors();
+        return _cachedConstructorInfos.Value;
     }
 
     public object? CreateInstance()

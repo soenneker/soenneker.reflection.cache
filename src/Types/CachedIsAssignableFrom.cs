@@ -8,8 +8,8 @@ namespace Soenneker.Reflection.Cache.Types;
 ///<inheritdoc cref="ICachedIsAssignableFrom"/>
 public class CachedIsAssignableFrom : ICachedIsAssignableFrom
 {
-    private readonly Dictionary<int, bool>? _cachedDict;
     private readonly ConcurrentDictionary<int, bool>? _cachedConcurrentDict;
+    private readonly Dictionary<int, bool>? _cachedDict;
 
     private readonly CachedType _cachedType;
     private readonly bool _threadSafe;
@@ -21,7 +21,7 @@ public class CachedIsAssignableFrom : ICachedIsAssignableFrom
         if (threadSafe)
             _cachedConcurrentDict = new ConcurrentDictionary<int, bool>();
         else
-            _cachedDict = new Dictionary<int, bool>();
+            _cachedDict = [];
 
         _cachedType = cachedType;
     }

@@ -25,13 +25,19 @@ public interface ICachedMethod
     /// </summary>
     Type? ReturnType { get; }
 
-    /// <summary>
-    /// Gets the cached parameters for this method.
-    /// </summary>
-    CachedParameters? Parameters { get; }
+    CachedParameters? GetCachedParameters();
 
-    /// <summary>
-    /// Gets the cached custom attributes for this method.
-    /// </summary>
-    CachedCustomAttributes? Attributes { get; }
+    ParameterInfo[] GetParameters();
+
+    CachedCustomAttributes? GetCachedCustomAttributes();
+
+    object[] GetCustomAttributes();
+
+    object? Invoke(object instance);
+
+    object? Invoke(object instance, params object[] param);
+
+    T? Invoke<T>(object instance);
+
+    T? Invoke<T>(params object[] param);
 }

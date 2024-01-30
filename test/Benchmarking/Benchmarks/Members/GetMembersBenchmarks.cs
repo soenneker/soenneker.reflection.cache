@@ -9,15 +9,18 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Members;
 
 public class GetMembersBenchmarks
 {
+    private CachedType _cachedThreadSafeType = default!;
     private CachedType _cachedType = default!;
     private Type _type = default!;
 
     [GlobalSetup]
     public void Setup()
     {
-        var cache = new ReflectionCache();
+        var threadSafeCache = new ReflectionCache();
+        var cache = new ReflectionCache(false);
         _type = typeof(TestType);
 
+        _cachedThreadSafeType = threadSafeCache.GetCachedType(_type);
         _cachedType = cache.GetCachedType(_type);
     }
 
@@ -31,5 +34,11 @@ public class GetMembersBenchmarks
     public MemberInfo?[]? GetMembers_Cache()
     {
         return _cachedType.GetMembers();
+    }
+
+    [Benchmark]
+    public MemberInfo?[]? GetMembers_ThreadSafe_Cache()
+    {
+        return _cachedThreadSafeType.GetMembers();
     }
 }

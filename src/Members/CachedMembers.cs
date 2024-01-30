@@ -22,6 +22,7 @@ public class CachedMembers : ICachedMembers
         _cachedArray = new Lazy<MemberInfo[]>(SetArray, threadSafe);
     }
 
+
     public MemberInfo? GetMember(string name)
     {
         _cachedDict.Value.TryGetValue(name.GetHashCode(), out MemberInfo? result);
@@ -36,8 +37,11 @@ public class CachedMembers : ICachedMembers
         // If the array is already populated, build the dictionary from the array
         if (_cachedArray.IsValueCreated)
         {
-            foreach (MemberInfo member in _cachedArray.Value)
+            MemberInfo[]? members = _cachedArray.Value;
+
+            for (int i = 0; i < members.Length; i++)
             {
+                MemberInfo member = members[i];
                 dict[member.GetHashCode()] = member;
             }
         }
@@ -45,8 +49,10 @@ public class CachedMembers : ICachedMembers
         {
             // If the array is not populated, build the dictionary directly
             MemberInfo[] members = _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
-            foreach (MemberInfo member in members)
+
+            for (int i = 0; i < members.Length; i++)
             {
+                MemberInfo member = members[i];
                 dict[member.GetHashCode()] = member;
             }
         }
@@ -78,6 +84,7 @@ public class CachedMembers : ICachedMembers
 
         return members;
     }
+
 
     public MemberInfo[] GetMembers()
     {

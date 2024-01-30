@@ -11,6 +11,7 @@ public class CachedTypes : ICachedTypes
     // We'll use two sets of dictionaries - one for fast integer lookups (hopefully, common), and the other for slower string lookups
     private readonly ConcurrentDictionary<string, CachedType>? _concurrentDict;
     private readonly ConcurrentDictionary<int, CachedType>? _concurrentDictByType;
+
     private readonly Dictionary<string, CachedType>? _dict;
     private readonly Dictionary<int, CachedType>? _dictByType;
 
@@ -43,7 +44,7 @@ public class CachedTypes : ICachedTypes
             {
                 var type = Type.GetType(typeName);
 
-                var newCachedType = new CachedType(type);
+                var newCachedType = new CachedType(type, this, _threadSafe);
 
                 if (type == null)
                     _concurrentDict.TryAdd(typeName, newCachedType);
@@ -54,12 +55,12 @@ public class CachedTypes : ICachedTypes
             });
         }
 
-        if (_dict!.TryGetValue(typeName, out CachedType? result))
+        if (_dict!.TryGetValue(typeName, out CachedType result))
             return result;
 
         var type = Type.GetType(typeName);
 
-        var newCachedType = new CachedType(type);
+        var newCachedType = new CachedType(type, this, _threadSafe);
 
         if (type == null)
             _dict.TryAdd(typeName, newCachedType);
@@ -74,13 +75,12 @@ public class CachedTypes : ICachedTypes
         int key = type.GetHashCode();
 
         if (_threadSafe)
-       
-            return _concurrentDictByType!.GetOrAdd(key, _ => new CachedType(type));
+            return _concurrentDictByType!.GetOrAdd(key, _ => new CachedType(type, this, _threadSafe));
         
-        if (_dictByType!.TryGetValue(key, out CachedType? result))
+        if (_dictByType!.TryGetValue(key, out CachedType result))
                 return result;
         
-        var newCachedType = new CachedType(type);
+        var newCachedType = new CachedType(type, this, _threadSafe);
 
         _dictByType.TryAdd(key, newCachedType);
 

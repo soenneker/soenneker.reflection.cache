@@ -1,6 +1,7 @@
 ﻿using System;
 using Soenneker.Reflection.Cache.Attributes.Abstract;
 using Soenneker.Reflection.Cache.Constructors;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Methods;
 using Soenneker.Reflection.Cache.Types;
 
@@ -15,25 +16,27 @@ public class CachedCustomAttributes : ICachedCustomAttributes
 
     private readonly Lazy<CachedAttribute[]> _cachedCustomAttributes;
 
+    private readonly Lazy<object[]> _cachedObjects;
+
     public CachedCustomAttributes(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
-
         _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForType, threadSafe);
+        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
     }
 
     public CachedCustomAttributes(CachedMethod cachedMethod, bool threadSafe = true)
     {
         _cachedMethod = cachedMethod;
-
         _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForMethod, threadSafe);
+        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
     }
 
     public CachedCustomAttributes(CachedConstructor cachedConstructor, bool threadSafe = true)
     {
         _cachedConstructor = cachedConstructor;
-
         _cachedCustomAttributes = new Lazy<CachedAttribute[]>(SetArrayForConstructor, threadSafe);
+        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
     }
 
     private CachedAttribute[] SetArrayForType()
@@ -77,27 +80,11 @@ public class CachedCustomAttributes : ICachedCustomAttributes
 
     public CachedAttribute[] GetCachedCustomAttributes()
     {
-        CachedAttribute[]? cachedAttributes = _cachedCustomAttributes.Value;
-        var result = new CachedAttribute[cachedAttributes.Length];
-
-        for (var i = 0; i < cachedAttributes.Length; i++)
-        {
-            result[i] = cachedAttributes[i];
-        }
-
-        return result;
+        return _cachedCustomAttributes.Value;
     }
 
     public object[] GetCustomAttributes()
     {
-        CachedAttribute[]? cachedAttributes = _cachedCustomAttributes.Value;
-        var result = new object[cachedAttributes.Length];
-
-        for (var i = 0; i < cachedAttributes.Length; i++)
-        {
-            result[i] = cachedAttributes[i].Attribute;
-        }
-
-        return result;
+        return _cachedObjects.Value;
     }
 }

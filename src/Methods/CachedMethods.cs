@@ -17,12 +17,15 @@ public class CachedMethods : ICachedMethods
 
     private readonly CachedType _cachedType;
 
+    private readonly Lazy<MethodInfo?[]> _cachedMethodsInfos;
+
     public CachedMethods(CachedType cachedType, bool threadSafe = true)
     {
         _cachedType = cachedType;
 
         _cachedDict = new Lazy<Dictionary<int, CachedMethod>>(SetCachedMethodsDict, threadSafe);
         _cachedArray = new Lazy<CachedMethod[]>(SetCachedMethodsArray, threadSafe);
+        _cachedMethodsInfos = new Lazy<MethodInfo?[]>(_cachedArray.Value.ToMethods, threadSafe);
     }
 
     public CachedMethod GetCachedMethod(string name)
@@ -57,7 +60,7 @@ public class CachedMethods : ICachedMethods
             var result = new CachedMethod[cachedDictValues.Count];
             var i = 0;
 
-            foreach (CachedMethod? method in cachedDictValues)
+            foreach (CachedMethod method in cachedDictValues)
             {
                 result[i++] = method;
             }
@@ -122,6 +125,7 @@ public class CachedMethods : ICachedMethods
         return cachedDict;
     }
 
+
     public CachedMethod[] GetCachedMethods()
     {
         return _cachedArray.Value;
@@ -129,6 +133,6 @@ public class CachedMethods : ICachedMethods
 
     public MethodInfo?[] GetMethods()
     {
-        return _cachedArray.Value.ToMethods();
+        return _cachedMethodsInfos.Value;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using BenchmarkDotNet.Attributes;
 using Soenneker.Reflection.Cache.Tests.Objects;
-using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Types;
 
@@ -32,20 +31,20 @@ public class GetTypeBenchmarks
     }
 
     [Benchmark]
-    public Type? GetType_string_threadSafe_Cache()
+    public Type? GetType_string_ThreadSafe_Cache()
     {
         return _threadSafeCache.GetType("TestType");
     }
 
-    [Benchmark]
-    public CachedType GetCachedType_type_Cache()
-    {
-        return _cache.GetCachedType(_type);
-    }
+    //[Benchmark]
+    //public CachedType GetCachedType_type_Cache()
+    //{
+    //    return _cache.GetCachedType(_type);
+    //}
 
-    [Benchmark]
-    public CachedType GetCachedType_type_ThreadSafe_Cache()
-    {
-        return _threadSafeCache.GetCachedType(_type);
-    }
+    //[Benchmark]
+    //public CachedType GetCachedType_type_ThreadSafe_Cache()
+    //{
+    //    return _threadSafeCache.GetCachedType(_type);
+    //}
 }

@@ -13,12 +13,18 @@ public class CachedInterfaces : ICachedInterfaces
     private readonly Lazy<CachedType[]> _cachedArray;
 
     private readonly CachedType _cachedType;
+    private readonly CachedTypes _cachedTypes;
 
-    public CachedInterfaces(CachedType cachedType, bool threadSafe = true)
+    private readonly Lazy<Type[]> _cachedTypesArray;
+
+    public CachedInterfaces(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType;
+        _cachedTypes = cachedTypes;
         _cachedDict = new Lazy<Dictionary<int, CachedType?>>(SetDict, threadSafe);
         _cachedArray = new Lazy<CachedType[]>(SetArray, threadSafe);
+
+        _cachedTypesArray = new Lazy<Type[]>(GetCachedInterfaces().ToTypes, threadSafe);
     }
 
     public CachedType GetCachedInterface(string typeName)
@@ -26,10 +32,11 @@ public class CachedInterfaces : ICachedInterfaces
         int hashCode = typeName.GetHashCode();
 
         if (_cachedDict.Value.TryGetValue(hashCode, out CachedType? result))
-            return result!;
+            return result;
 
         Type? type = _cachedType.Type!.GetInterface(typeName);
-        result = new CachedType(type);
+
+        result = _cachedTypes.GetCachedType(type);
         _cachedDict.Value[hashCode] = result;
 
         return result;
@@ -54,17 +61,18 @@ public class CachedInterfaces : ICachedInterfaces
                 int key = cachedType.Type!.FullName!.GetHashCode();
                 dict[key] = cachedType;
             }
-        }
-        else
-        {
-            Type[] interfaces = _cachedType.Type!.GetInterfaces();
 
-            for (var i = 0; i < interfaces.Length; i++)
-            {
-                var cachedType = new CachedType(interfaces[i]);
-                int key = cachedType.Type!.FullName!.GetHashCode();
-                dict[key] = cachedType;
-            }
+            return dict;
+        }
+
+        Type[] interfaces = _cachedType.Type!.GetInterfaces();
+
+        for (var i = 0; i < interfaces.Length; i++)
+        {
+            CachedType cachedType = _cachedTypes.GetCachedType(interfaces[i]);
+
+            int key = cachedType.Type.FullName.GetHashCode();
+            dict[key] = cachedType;
         }
 
         return dict;
@@ -80,7 +88,8 @@ public class CachedInterfaces : ICachedInterfaces
 
             foreach (CachedType? entry in cachedDictValues)
             {
-                resultArray[i++] = entry!;
+                if (entry != null)
+                    resultArray[i++] = entry;
             }
 
             return resultArray;
@@ -91,7 +100,7 @@ public class CachedInterfaces : ICachedInterfaces
 
         for (var i = 0; i < interfaces.Length; i++)
         {
-            result[i] = GetCachedInterface(interfaces[i].FullName!);
+            result[i] = _cachedTypes.GetCachedType(interfaces[i]);
         }
 
         return result;
@@ -104,6 +113,6 @@ public class CachedInterfaces : ICachedInterfaces
 
     public Type[] GetInterfaces()
     {
-        return GetCachedInterfaces().ToTypes();
+        return _cachedTypesArray.Value;
     }
 }

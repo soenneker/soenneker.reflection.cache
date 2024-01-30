@@ -13,8 +13,9 @@ public class CachedInterfacesTests
     [Fact]
     public void GetCachedInterface_ShouldReturnCachedType()
     {
-        var cachedType = new CachedType(typeof(TestType));
-        var cachedInterfaces = new CachedInterfaces(cachedType);
+        var cachedTypes = new CachedTypes(true);
+        var cachedType = new CachedType(typeof(TestType), cachedTypes);
+        var cachedInterfaces = new CachedInterfaces(cachedType, cachedTypes);
         CachedType result = cachedInterfaces.GetCachedInterface(typeof(ITestType).FullName!);
         result.Should().NotBeNull();
         result.Type.Should().Be(typeof(ITestType));
@@ -23,8 +24,9 @@ public class CachedInterfacesTests
     [Fact]
     public void GetInterface_ShouldReturnInterfaceType()
     {
-        var cachedType = new CachedType(typeof(TestType));
-        var cachedInterfaces = new CachedInterfaces(cachedType);
+        var cachedTypes = new CachedTypes(true);
+        var cachedType = new CachedType(typeof(TestType), cachedTypes);
+        var cachedInterfaces = new CachedInterfaces(cachedType, cachedTypes);
         Type? result = cachedInterfaces.GetInterface(typeof(ITestType).FullName!);
         result.Should().Be(typeof(ITestType));
     }
@@ -32,8 +34,9 @@ public class CachedInterfacesTests
     [Fact]
     public void GetCachedInterfaces_ShouldReturnCachedTypeArray()
     {
-        var cachedType = new CachedType(typeof(TestType));
-        var cachedInterfaces = new CachedInterfaces(cachedType);
+        var cachedTypes = new CachedTypes(true);
+        var cachedType = new CachedType(typeof(TestType), cachedTypes);
+        var cachedInterfaces = new CachedInterfaces(cachedType, cachedTypes);
         CachedType[]? result = cachedInterfaces.GetCachedInterfaces();
         result.Should().NotBeNull();
         result.Should().ContainSingle().Which.Type.Should().Be(typeof(ITestType));
@@ -42,8 +45,9 @@ public class CachedInterfacesTests
     [Fact]
     public void GetInterfaces_ShouldReturnInterfaceArray()
     {
-        var cachedType = new CachedType(typeof(TestType));
-        var cachedInterfaces = new CachedInterfaces(cachedType);
+        var cachedTypes = new CachedTypes(true);
+        var cachedType = new CachedType(typeof(TestType), cachedTypes);
+        var cachedInterfaces = new CachedInterfaces(cachedType, cachedTypes);
         Type[]? result = cachedInterfaces.GetInterfaces();
         result.Should().NotBeNull();
         result.Should().ContainSingle().Which.Should().Be(typeof(ITestType));

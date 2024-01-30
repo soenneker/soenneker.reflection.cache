@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
+using System.Diagnostics.Contracts;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Parameters;
@@ -16,23 +17,20 @@ public interface ICachedConstructor
     [Pure]
     ConstructorInfo? ConstructorInfo { get; }
 
-    /// <summary>
-    /// Gets the cached custom attributes for this constructor.
-    /// </summary>
-    [Pure]
-    CachedCustomAttributes? Attributes { get; }
-
-    /// <summary>
-    /// Gets the cached parameters for this constructor.
-    /// </summary>
-    [Pure]
-    CachedParameters? Parameters { get; }
-
     [Pure]
     CachedParameter[] GetCachedParameters();
 
     [Pure]
     ParameterInfo[] GetParameters();
+
+    [Pure]
+    CachedAttribute[] GetCachedCustomAttributes();
+
+    [Pure]
+    object[] GetCustomAttributes();
+
+    [Pure]
+    Type[] GetParametersTypes();
 
     /// <summary>
     /// Invokes the constructor with no parameters.

@@ -11,10 +11,15 @@ public class CachedGenericArguments : ICachedGenericArguments
     private readonly CachedType _cachedType;
     private readonly Lazy<CachedType[]> _cachedGenericArguments;
 
-    public CachedGenericArguments(CachedType cachedType, bool threadSafe = true)
+    private readonly CachedTypes _cachedTypes;
+    private readonly Lazy<Type[]> _cachedGenericArgumentsTypes;
+
+    public CachedGenericArguments(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType;
+        _cachedTypes = cachedTypes;
         _cachedGenericArguments = new Lazy<CachedType[]>(SetArray, threadSafe);
+        _cachedGenericArgumentsTypes = new Lazy<Type[]>(_cachedGenericArguments.Value.ToTypes, threadSafe);
     }
 
     private CachedType[] SetArray()
@@ -24,7 +29,7 @@ public class CachedGenericArguments : ICachedGenericArguments
 
         for (var i = 0; i < types.Length; i++)
         {
-            result[i] = new CachedType(types[i]);
+            result[i] = _cachedTypes.GetCachedType(types[i]);
         }
 
         return result;
@@ -37,6 +42,6 @@ public class CachedGenericArguments : ICachedGenericArguments
 
     public Type[] GetGenericArguments()
     {
-        return _cachedGenericArguments.Value.ToTypes();
+        return _cachedGenericArgumentsTypes.Value;
     }
 }
