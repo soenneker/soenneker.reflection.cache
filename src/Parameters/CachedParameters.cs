@@ -4,6 +4,7 @@ using Soenneker.Reflection.Cache.Constructors;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Methods;
 using Soenneker.Reflection.Cache.Parameters.Abstract;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Parameters;
 
@@ -17,47 +18,51 @@ public class CachedParameters : ICachedParameters
     private readonly Lazy<ParameterInfo[]> _cachedParameterInfos;
     private readonly Lazy<Type[]> _cachedParameterTypes;
 
-    public CachedParameters(CachedMethod cachedMethod, bool threadSafe = true)
+    private readonly CachedTypes _cachedTypes;
+
+    public CachedParameters(CachedMethod cachedMethod, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedMethod = cachedMethod;
+        _cachedTypes = cachedTypes;
 
-        _cachedArray = new Lazy<CachedParameter[]>(SetArrayForMethod, threadSafe);
+        _cachedArray = new Lazy<CachedParameter[]>(() => SetArrayForMethod(threadSafe), threadSafe);
 
         _cachedParameterInfos = new Lazy<ParameterInfo[]>(_cachedArray.Value.ToParameters, threadSafe);
         _cachedParameterTypes = new Lazy<Type[]>(_cachedArray.Value.ToParametersTypes, threadSafe);
     }
 
-    public CachedParameters(CachedConstructor cachedConstructor, bool threadSafe = true)
+    public CachedParameters(CachedConstructor cachedConstructor, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedConstructor = cachedConstructor;
+        _cachedTypes = cachedTypes;
 
-        _cachedArray = new Lazy<CachedParameter[]>(SetArrayForConstructor, threadSafe);
+        _cachedArray = new Lazy<CachedParameter[]>(() => SetArrayForConstructor(threadSafe), threadSafe);
 
         _cachedParameterInfos = new Lazy<ParameterInfo[]>(_cachedArray.Value.ToParameters, threadSafe);
         _cachedParameterTypes = new Lazy<Type[]>(_cachedArray.Value.ToParametersTypes, threadSafe);
     }
 
-    private CachedParameter[] SetArrayForConstructor()
+    private CachedParameter[] SetArrayForConstructor(bool threadSafe)
     {
         ParameterInfo[] parameters = _cachedConstructor!.ConstructorInfo!.GetParameters();
         var cachedParameters = new CachedParameter[parameters.Length];
 
         for (var i = 0; i < parameters.Length; i++)
         {
-            cachedParameters[i] = new CachedParameter(parameters[i]);
+            cachedParameters[i] = new CachedParameter(parameters[i], _cachedTypes, threadSafe);
         }
 
         return cachedParameters;
     }
 
-    private CachedParameter[] SetArrayForMethod()
+    private CachedParameter[] SetArrayForMethod(bool threadSafe)
     {
         ParameterInfo[] parameters = _cachedMethod!.MethodInfo!.GetParameters();
         var cachedParameters = new CachedParameter[parameters.Length];
 
         for (var i = 0; i < parameters.Length; i++)
         {
-            cachedParameters[i] = new CachedParameter(parameters[i]);
+            cachedParameters[i] = new CachedParameter(parameters[i], _cachedTypes, threadSafe);
         }
 
         return cachedParameters;

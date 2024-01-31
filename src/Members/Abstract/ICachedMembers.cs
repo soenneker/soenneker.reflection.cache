@@ -7,12 +7,16 @@ namespace Soenneker.Reflection.Cache.Members.Abstract;
 /// </summary>
 public interface ICachedMembers
 {
+    CachedMember? GetCachedMember(string name);
+
     /// <summary>
     /// Gets a member by name.
     /// </summary>
     /// <param name="name">The name of the member.</param>
     /// <returns>The member with the specified name, or <c>null</c> if not found.</returns>
     MemberInfo? GetMember(string name);
+
+    CachedMember[] GetCachedMembers();
 
     /// <summary>
     /// Gets an array of cached members.

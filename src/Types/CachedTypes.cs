@@ -55,7 +55,7 @@ public class CachedTypes : ICachedTypes
             });
         }
 
-        if (_dict!.TryGetValue(typeName, out CachedType result))
+        if (_dict!.TryGetValue(typeName, out CachedType? result))
             return result;
 
         var type = Type.GetType(typeName);
@@ -76,10 +76,10 @@ public class CachedTypes : ICachedTypes
 
         if (_threadSafe)
             return _concurrentDictByType!.GetOrAdd(key, _ => new CachedType(type, this, _threadSafe));
-        
-        if (_dictByType!.TryGetValue(key, out CachedType result))
-                return result;
-        
+
+        if (_dictByType!.TryGetValue(key, out CachedType? result))
+            return result;
+
         var newCachedType = new CachedType(type, this, _threadSafe);
 
         _dictByType.TryAdd(key, newCachedType);

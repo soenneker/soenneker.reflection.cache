@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
+using Soenneker.Reflection.Cache.Constructors;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 
@@ -12,6 +14,10 @@ public class CachedTypeBenchmarks
     private CachedType _cachedType = default!;
     private Type _type = default!;
 
+    CachedConstructor[]? cachedConstructors;
+
+    List<CachedConstructor> cachedConstructorsList;
+
     [GlobalSetup]
     public void Setup()
     {
@@ -19,89 +25,85 @@ public class CachedTypeBenchmarks
         _type = typeof(TestType);
 
         _cachedType = _cache.GetCachedType(_type);
+        cachedConstructors = _cachedType.GetCachedConstructors();
+        cachedConstructorsList = new List<CachedConstructor>(cachedConstructors);
     }
 
-    [Benchmark(Baseline = true)]
-    public bool IsAbstract_NoCache()
-    {
-        return _type.IsAbstract;
-    }
+    //[Benchmark]
+    //public bool IsAbstract_Cache()
+    //{
+    //    return _cachedType.IsAbstract;
+    //}
 
-    [Benchmark]
-    public bool IsAbstract_Cache()
-    {
-        return _cachedType.IsAbstract;
-    }
+    //[Benchmark]
+    //public bool IsInterface_NoCache()
+    //{
+    //    return _type.IsInterface;
+    //}
 
-    [Benchmark]
-    public bool IsInterface_NoCache()
-    {
-        return _type.IsInterface;
-    }
+    //[Benchmark]
+    //public bool IsInterface_Cache()
+    //{
+    //    return _cachedType.IsInterface;
+    //}
 
-    [Benchmark]
-    public bool IsInterface_Cache()
-    {
-        return _cachedType.IsInterface;
-    }
+    //[Benchmark]
+    //public bool IsGenericType_NoCache()
+    //{
+    //    return _type.IsGenericType;
+    //}
 
-    [Benchmark]
-    public bool IsGenericType_NoCache()
-    {
-        return _type.IsGenericType;
-    }
+    //[Benchmark]
+    //public bool IsGenericType_Cache()
+    //{
+    //    return _cachedType.IsGenericType;
+    //}
 
-    [Benchmark]
-    public bool IsGenericType_Cache()
-    {
-        return _cachedType.IsGenericType;
-    }
+    //[Benchmark]
+    //public bool IsEnum_NoCache()
+    //{
+    //    return _type.IsEnum;
+    //}
 
-    [Benchmark]
-    public bool IsEnum_NoCache()
-    {
-        return _type.IsEnum;
-    }
+    //[Benchmark]
+    //public bool IsEnum_Cache()
+    //{
+    //    return _cachedType.IsEnum;
+    //}
 
-    [Benchmark]
-    public bool IsEnum_Cache()
-    {
-        return _cachedType.IsEnum;
-    }
+    //[Benchmark]
+    //public bool IsNullable_NoCache()
+    //{
+    //    return Nullable.GetUnderlyingType(_type) != null;
+    //}
 
-    [Benchmark]
-    public bool IsNullable_NoCache()
-    {
-        return Nullable.GetUnderlyingType(_type) != null;
-    }
+    //[Benchmark]
+    //public bool IsNullable_Cache()
+    //{
+    //    return _cachedType.IsNullable;
+    //}
 
-    [Benchmark]
-    public bool IsNullable_Cache()
-    {
-        return _cachedType.IsNullable;
-    }
+    //[Benchmark]
+    //public bool IsByRef_NoCache()
+    //{
+    //    return _type.IsByRef;
+    //}
 
-    [Benchmark]
-    public bool IsByRef_NoCache()
-    {
-        return _type.IsByRef;
-    }
+    //[Benchmark]
+    //public bool IsByRef_Cache()
+    //{
+    //    return _cachedType.IsByRef;
+    //}
 
-    [Benchmark]
-    public bool IsByRef_Cache()
-    {
-        return _cachedType.IsByRef;
-    }
+    //[Benchmark]
+    //public bool IsArray_NoCache()
+    //{
+    //    return _type.IsArray;
+    //}
 
-    [Benchmark]
-    public bool IsArray_NoCache()
-    {
-        return _type.IsArray;
-    }
-
-    [Benchmark]
-    public bool IsArray_Cache()
-    {
-        return _cachedType.IsArray;
-    }
+    //[Benchmark]
+    //public bool IsArray_Cache()
+    //{
+    //    return _cachedType.IsArray;
+    //}
 }

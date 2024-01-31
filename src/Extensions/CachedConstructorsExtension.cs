@@ -3,9 +3,9 @@ using Soenneker.Reflection.Cache.Constructors;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
-public static class CachedConstructorsExtension
+internal static class CachedConstructorsExtension
 {
-    public static ConstructorInfo?[] ToConstructors(this CachedConstructor[] cachedConstructors)
+    public static ConstructorInfo?[] ToConstructorInfos(this CachedConstructor[] cachedConstructors)
     {
         int count = cachedConstructors.Length;
 

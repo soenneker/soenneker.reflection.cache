@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics.Contracts;
+﻿using Soenneker.Reflection.Cache.Types;
+using System;
 using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Parameters.Abstract;
@@ -12,18 +12,17 @@ public interface ICachedParameter
     /// <summary>
     /// Gets the <see cref="ParameterInfo"/> associated with this cached parameter.
     /// </summary>
-    [Pure]
     ParameterInfo ParameterInfo { get; }
 
     /// <summary>
     /// Gets the name of the parameter.
     /// </summary>
-    [Pure]
     string? Name { get; }
 
     /// <summary>
     /// Gets the type of the parameter.
     /// </summary>
-    [Pure]
-    Type Type { get; }
+    Type ParameterType { get; }
+
+    CachedType CachedParameterType { get; }
 }

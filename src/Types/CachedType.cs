@@ -77,16 +77,15 @@ public class CachedType : ICachedType
             return;
 
         _cachedProperties = new Lazy<CachedProperties>(() => new CachedProperties(this, threadSafe), threadSafe);
-        _cachedMethods = new Lazy<CachedMethods>(() => new CachedMethods(this, threadSafe), threadSafe);
-        _cachedAttributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, threadSafe), threadSafe);
+        _cachedMethods = new Lazy<CachedMethods>(() => new CachedMethods(this, cachedTypes, threadSafe), threadSafe);
+        _cachedAttributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
         _cachedInterfaces = new Lazy<CachedInterfaces>(() => new CachedInterfaces(this, cachedTypes, threadSafe), threadSafe);
-        _cachedConstructors = new Lazy<CachedConstructors>(() => new CachedConstructors(this, threadSafe), threadSafe);
-        _cachedMembers = new Lazy<CachedMembers>(() => new CachedMembers(this, threadSafe), threadSafe);
+        _cachedConstructors = new Lazy<CachedConstructors>(() => new CachedConstructors(this, cachedTypes, threadSafe), threadSafe);
+        _cachedMembers = new Lazy<CachedMembers>(() => new CachedMembers(this, cachedTypes, threadSafe), threadSafe);
         _cachedGenericArguments = new Lazy<CachedGenericArguments>(() => new CachedGenericArguments(this, cachedTypes, threadSafe), threadSafe);
         _cachedGenericTypeDefinition = new Lazy<CachedGenericTypeDefinition>(() => new CachedGenericTypeDefinition(this, cachedTypes, threadSafe), threadSafe);
         _cachedIsAssignableFrom = new Lazy<CachedIsAssignableFrom>(() => new CachedIsAssignableFrom(this, threadSafe), threadSafe);
     }
-
 
     public PropertyInfo? GetProperty(string property)
     {
@@ -96,7 +95,6 @@ public class CachedType : ICachedType
         return _cachedProperties!.Value.GetProperty(property);
     }
 
-
     public PropertyInfo[]? GetProperties()
     {
         if (Type == null)
@@ -104,7 +102,6 @@ public class CachedType : ICachedType
 
         return _cachedProperties!.Value.GetProperties();
     }
-
 
     public CachedMethod? GetCachedMethod(string methodName)
     {

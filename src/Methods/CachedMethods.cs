@@ -19,12 +19,15 @@ public class CachedMethods : ICachedMethods
 
     private readonly Lazy<MethodInfo?[]> _cachedMethodsInfos;
 
-    public CachedMethods(CachedType cachedType, bool threadSafe = true)
+    private CachedTypes _cachedTypes;
+
+    public CachedMethods(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType;
+        _cachedTypes = cachedTypes;
 
-        _cachedDict = new Lazy<Dictionary<int, CachedMethod>>(SetCachedMethodsDict, threadSafe);
-        _cachedArray = new Lazy<CachedMethod[]>(SetCachedMethodsArray, threadSafe);
+        _cachedDict = new Lazy<Dictionary<int, CachedMethod>>(() => SetDict(threadSafe), threadSafe);
+        _cachedArray = new Lazy<CachedMethod[]>(() => SetArray(threadSafe), threadSafe);
         _cachedMethodsInfos = new Lazy<MethodInfo?[]>(_cachedArray.Value.ToMethods, threadSafe);
     }
 
@@ -52,7 +55,7 @@ public class CachedMethods : ICachedMethods
         return GetCachedMethod(name, types).MethodInfo;
     }
 
-    private CachedMethod[] SetCachedMethodsArray()
+    private CachedMethod[] SetArray(bool threadSafe)
     {
         if (_cachedDict.IsValueCreated && _cachedDict.Value.Count > 0)
         {
@@ -75,13 +78,13 @@ public class CachedMethods : ICachedMethods
 
         for (var i = 0; i < count; i++)
         {
-            cachedArray[i] = new CachedMethod(methodInfos[i]);
+            cachedArray[i] = new CachedMethod(methodInfos[i], _cachedTypes, threadSafe);
         }
 
         return cachedArray;
     }
 
-    private Dictionary<int, CachedMethod> SetCachedMethodsDict()
+    private Dictionary<int, CachedMethod> SetDict(bool threadSafe)
     {
         Dictionary<int, CachedMethod> cachedDict;
         int count;
@@ -89,7 +92,7 @@ public class CachedMethods : ICachedMethods
         // Don't recreate these objects if the dict is already created
         if (_cachedArray.IsValueCreated)
         {
-            CachedMethod[]? cachedMethods = _cachedArray.Value;
+            CachedMethod[] cachedMethods = _cachedArray.Value;
 
             count = cachedMethods.Length;
 
@@ -102,29 +105,28 @@ public class CachedMethods : ICachedMethods
 
                 cachedDict.Add(key, cachedMethod);
             }
+
+            return cachedDict;
         }
-        else
+
+        MethodInfo[] methodInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+
+        count = methodInfos.Length;
+
+        cachedDict = new Dictionary<int, CachedMethod>(count);
+
+        for (var i = 0; i < count; i++)
         {
-            MethodInfo[] methodInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+            MethodInfo methodInfo = methodInfos[i];
 
-            count = methodInfos.Length;
+            var cachedMethod = new CachedMethod(methodInfo, _cachedTypes, threadSafe);
+            int key = cachedMethod.GetCacheKey();
 
-            cachedDict = new Dictionary<int, CachedMethod>(count);
-
-            for (var i = 0; i < count; i++)
-            {
-                MethodInfo methodInfo = methodInfos[i];
-
-                var cachedMethod = new CachedMethod(methodInfo);
-                int key = cachedMethod.GetCacheKey();
-
-                cachedDict.Add(key, cachedMethod);
-            }
+            cachedDict.Add(key, cachedMethod);
         }
 
         return cachedDict;
     }
-
 
     public CachedMethod[] GetCachedMethods()
     {

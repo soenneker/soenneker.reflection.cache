@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Constants;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Members.Abstract;
 using Soenneker.Reflection.Cache.Types;
 
@@ -10,84 +11,117 @@ namespace Soenneker.Reflection.Cache.Members;
 ///<inheritdoc cref="ICachedMembers"/>
 public class CachedMembers : ICachedMembers
 {
-    private readonly Lazy<Dictionary<int, MemberInfo?>> _cachedDict;
-    private readonly Lazy<MemberInfo[]> _cachedArray;
+    private readonly Lazy<Dictionary<int, CachedMember>> _cachedDict;
+    private readonly Lazy<CachedMember[]> _cachedArray;
 
     private readonly CachedType _cachedType;
 
-    public CachedMembers(CachedType cachedType, bool threadSafe = true)
+    private readonly Lazy<MemberInfo?[]> _cachedMemberInfos;
+
+    private readonly CachedTypes _cachedTypes;
+
+    public CachedMembers(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
+        _cachedTypes = cachedTypes;
         _cachedType = cachedType;
-        _cachedDict = new Lazy<Dictionary<int, MemberInfo?>>(SetCachedDict, threadSafe);
-        _cachedArray = new Lazy<MemberInfo[]>(SetArray, threadSafe);
+        _cachedDict = new Lazy<Dictionary<int, CachedMember>>(() => SetDict(threadSafe), threadSafe);
+        _cachedArray = new Lazy<CachedMember[]>(() => SetArray(threadSafe), threadSafe);
+
+        _cachedMemberInfos = new Lazy<MemberInfo?[]>(_cachedArray.Value.ToMemberInfos, threadSafe);
     }
 
-
-    public MemberInfo? GetMember(string name)
+    public CachedMember? GetCachedMember(string name)
     {
-        _cachedDict.Value.TryGetValue(name.GetHashCode(), out MemberInfo? result);
+        _cachedDict.Value.TryGetValue(name.GetHashCode(), out CachedMember? result);
 
         return result;
     }
 
-    private Dictionary<int, MemberInfo?> SetCachedDict()
+    public MemberInfo? GetMember(string name)
     {
-        var dict = new Dictionary<int, MemberInfo?>();
-
-        // If the array is already populated, build the dictionary from the array
-        if (_cachedArray.IsValueCreated)
-        {
-            MemberInfo[]? members = _cachedArray.Value;
-
-            for (int i = 0; i < members.Length; i++)
-            {
-                MemberInfo member = members[i];
-                dict[member.GetHashCode()] = member;
-            }
-        }
-        else
-        {
-            // If the array is not populated, build the dictionary directly
-            MemberInfo[] members = _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
-
-            for (int i = 0; i < members.Length; i++)
-            {
-                MemberInfo member = members[i];
-                dict[member.GetHashCode()] = member;
-            }
-        }
-
-        return dict;
+        return GetCachedMember(name)?.MemberInfo;
     }
 
-    private MemberInfo[] SetArray()
+    private CachedMember[] SetArray(bool threadSafe)
     {
-        // If the dictionary is already populated, build the array from its values
-        if (_cachedDict.IsValueCreated)
+        if (_cachedDict.IsValueCreated && _cachedDict.Value.Count > 0)
         {
-            Dictionary<int, MemberInfo?>.ValueCollection values = _cachedDict.Value.Values;
-            int count = values.Count;
-            var result = new MemberInfo[count];
-
+            Dictionary<int, CachedMember>.ValueCollection cachedDictValues = _cachedDict.Value.Values;
+            var result = new CachedMember[cachedDictValues.Count];
             var i = 0;
 
-            foreach (MemberInfo? value in values)
+            foreach (CachedMember member in cachedDictValues)
             {
-                result[i++] = value;
+                result[i++] = member;
             }
 
             return result;
         }
 
-        // If the dictionary is not populated, build the array directly
-        MemberInfo[] members = _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
+        MethodInfo[] memberInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+        int count = memberInfos.Length;
 
-        return members;
+        var cachedArray = new CachedMember[count];
+
+        for (var i = 0; i < count; i++)
+        {
+            cachedArray[i] = new CachedMember(memberInfos[i], _cachedTypes, threadSafe);
+        }
+
+        return cachedArray;
     }
 
+    private Dictionary<int, CachedMember> SetDict(bool threadSafe)
+    {
+        Dictionary<int, CachedMember> cachedDict;
+        int count;
+
+        // Don't recreate these objects if the dict is already created
+        if (_cachedArray.IsValueCreated)
+        {
+            CachedMember[] cachedMembers = _cachedArray.Value;
+
+            count = cachedMembers.Length;
+
+            cachedDict = new Dictionary<int, CachedMember>(count);
+
+            for (var i = 0; i < count; i++)
+            {
+                CachedMember cachedMember = cachedMembers[i];
+                int key = cachedMember.CacheKey;
+
+                cachedDict.Add(key, cachedMember);
+            }
+
+            return cachedDict;
+        }
+
+        MethodInfo[] memberInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+
+        count = memberInfos.Length;
+
+        cachedDict = new Dictionary<int, CachedMember>(count);
+
+        for (var i = 0; i < count; i++)
+        {
+            MethodInfo memberInfo = memberInfos[i];
+
+            var cachedMember = new CachedMember(memberInfo, _cachedTypes, threadSafe);
+            int key = cachedMember.CacheKey;
+
+            cachedDict.Add(key, cachedMember);
+        }
+
+        return cachedDict;
+    }
+
+    public CachedMember[] GetCachedMembers()
+    {
+        return _cachedArray.Value;
+    }
 
     public MemberInfo[] GetMembers()
     {
-        return _cachedArray.Value;
+        return _cachedMemberInfos.Value;
     }
 }

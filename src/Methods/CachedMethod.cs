@@ -3,6 +3,7 @@ using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Methods.Abstract;
 using Soenneker.Reflection.Cache.Parameters;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Methods;
 
@@ -18,15 +19,15 @@ public class CachedMethod : ICachedMethod
     private readonly Lazy<CachedParameters>? _parameters;
     private readonly Lazy<CachedCustomAttributes>? _attributes;
 
-    public CachedMethod(MethodInfo? methodInfo, bool threadSafe = true)
+    public CachedMethod(MethodInfo? methodInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MethodInfo = methodInfo;
 
         if (methodInfo == null)
             return;
 
-        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this), threadSafe);
-        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this), threadSafe);
+        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, cachedTypes, threadSafe), threadSafe);
+        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
     }
 
     public CachedParameters? GetCachedParameters()

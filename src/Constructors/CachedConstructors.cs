@@ -15,17 +15,20 @@ public class CachedConstructors : ICachedConstructors
     private readonly Lazy<Dictionary<int, CachedConstructor>> _cachedDict;
 
     private readonly CachedType _cachedType;
+    private readonly CachedTypes _cachedTypes;
 
     private readonly Lazy<ConstructorInfo?[]> _cachedConstructorInfos;
 
-    public CachedConstructors(CachedType cachedType, bool threadSafe = true)
+    public CachedConstructors(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType;
+        _cachedTypes = cachedTypes;
 
-        _cachedArray = new Lazy<CachedConstructor[]>(SetArray, threadSafe);
-        _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(SetDict, threadSafe);
+        _cachedArray = new Lazy<CachedConstructor[]>(() => SetArray(threadSafe), threadSafe);
+        _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(() => SetDict(threadSafe), threadSafe);
+        _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(() => SetDict(threadSafe), threadSafe);
 
-        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(_cachedArray.Value.ToConstructors, threadSafe);
+        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(_cachedArray.Value.ToConstructorInfos, threadSafe);
     }
 
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
@@ -39,7 +42,7 @@ public class CachedConstructors : ICachedConstructors
         return GetCachedConstructor(parameterTypes)?.ConstructorInfo;
     }
 
-    private CachedConstructor[] SetArray()
+    private CachedConstructor[] SetArray(bool threadSafe)
     {
         if (_cachedDict.IsValueCreated)
         {
@@ -60,13 +63,13 @@ public class CachedConstructors : ICachedConstructors
 
         for (var i = 0; i < constructorInfos.Length; i++)
         {
-            cachedConstructors[i] = new CachedConstructor(constructorInfos[i]);
+            cachedConstructors[i] = new CachedConstructor(constructorInfos[i], _cachedTypes, threadSafe);
         }
 
         return cachedConstructors;
     }
 
-    private Dictionary<int, CachedConstructor> SetDict()
+    private Dictionary<int, CachedConstructor> SetDict(bool threadSafe)
     {
         if (_cachedArray.IsValueCreated)
         {
@@ -99,7 +102,7 @@ public class CachedConstructors : ICachedConstructors
 
             int key = parameterTypes.GetCacheKey();
 
-            constructorsDict[key] = new CachedConstructor(info);
+            constructorsDict[key] = new CachedConstructor(info, _cachedTypes, threadSafe);
         }
 
         return constructorsDict;

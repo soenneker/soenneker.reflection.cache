@@ -1,5 +1,5 @@
-﻿using System;
-using System.Diagnostics.Contracts;
+﻿using Soenneker.Reflection.Cache.Types;
+using System;
 
 namespace Soenneker.Reflection.Cache.Attributes.Abstract;
 
@@ -11,12 +11,12 @@ public interface ICachedAttribute
     /// <summary>
     /// Gets the underlying attribute object.
     /// </summary>
-    [Pure]
     object Attribute { get; }
 
     /// <summary>
     /// Gets the type of the attribute.
     /// </summary>
-    [Pure]
     Type AttributeType { get; }
+
+    CachedType CachedAttributeType { get; }
 }

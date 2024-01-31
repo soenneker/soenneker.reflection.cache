@@ -3,6 +3,7 @@ using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors.Abstract;
 using Soenneker.Reflection.Cache.Parameters;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Constructors;
 
@@ -15,15 +16,15 @@ public class CachedConstructor : ICachedConstructor
 
     private readonly Lazy<CachedParameters>? _parameters;
 
-    public CachedConstructor(ConstructorInfo? constructorInfo, bool threadSafe = true)
+    public CachedConstructor(ConstructorInfo? constructorInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         ConstructorInfo = constructorInfo;
 
         if (constructorInfo == null)
             return;
 
-        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, threadSafe), threadSafe);
-        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, threadSafe), threadSafe);
+        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
+        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, cachedTypes, threadSafe), threadSafe);
     }
 
     public CachedParameter[] GetCachedParameters()
