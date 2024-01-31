@@ -278,12 +278,28 @@ public class CachedType : ICachedType
         return _cachedGenericArguments!.Value.GetGenericArguments();
     }
 
+    public CachedMember? GetCachedMember(string name)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedMembers!.Value.GetCachedMember(name);
+    }
+
     public MemberInfo? GetMember(string name)
     {
         if (Type == null)
             return null;
 
         return _cachedMembers!.Value.GetMember(name);
+    }
+
+    public CachedMember[]? GetCachedMembers()
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedMembers!.Value.GetCachedMembers();
     }
 
     public MemberInfo[]? GetMembers()

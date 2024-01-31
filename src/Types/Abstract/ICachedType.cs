@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors;
+using Soenneker.Reflection.Cache.Members;
 using Soenneker.Reflection.Cache.Methods;
 
 namespace Soenneker.Reflection.Cache.Types.Abstract;
@@ -192,6 +193,9 @@ public interface ICachedType
     [Pure]
     Type[]? GetGenericArguments();
 
+    [Pure]
+    CachedMember? GetCachedMember(string name);
+
     /// <summary>
     /// Gets information about a specific member.
     /// </summary>
@@ -199,6 +203,9 @@ public interface ICachedType
     /// <returns>Information about the specified member.</returns>
     [Pure]
     MemberInfo? GetMember(string name);
+
+    [Pure]
+    CachedMember[]? GetCachedMembers();
 
     /// <summary>
     /// Gets information about all members.
