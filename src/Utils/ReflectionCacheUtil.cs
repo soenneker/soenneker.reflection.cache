@@ -12,7 +12,7 @@ public static class ReflectionCacheUtil
         if (parameterTypes == null || parameterTypes.Length == 0)
             return methodNameKey;
 
-        int arrayKey = parameterTypes.GetCacheKey();
+        int arrayKey = parameterTypes.ToCacheKey();
 
         return methodNameKey + arrayKey;
     }

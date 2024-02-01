@@ -277,21 +277,21 @@ public class CachedType : ICachedType
         return _cachedGenericArguments!.Value.GetGenericArguments();
     }
 
-    public CachedMember? GetCachedMember(string name)
-    {
-        if (Type == null)
-            return null;
+    //public CachedMember? GetCachedMember(string name)
+    //{
+    //    if (Type == null)
+    //        return null;
 
-        return _cachedMembers!.Value.GetCachedMember(name);
-    }
+    //    return _cachedMembers!.Value.GetCachedMember(name);
+    //}
 
-    public MemberInfo? GetMember(string name)
-    {
-        if (Type == null)
-            return null;
+    //public MemberInfo? GetMember(string name)
+    //{
+    //    if (Type == null)
+    //        return null;
 
-        return _cachedMembers!.Value.GetMember(name);
-    }
+    //    return _cachedMembers!.Value.GetMember(name);
+    //}
 
     public CachedMember[]? GetCachedMembers()
     {

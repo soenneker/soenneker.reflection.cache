@@ -5,7 +5,7 @@ namespace Soenneker.Reflection.Cache.Extensions;
 public static class TypeArrayExtension
 {
     // TODO: consider using a more efficient hash algorithm
-    public static int GetCacheKey(this Type[]? types)
+    public static int ToCacheKey(this Type[]? types)
     {
         if (types == null || types.Length == 0)
             return 0;

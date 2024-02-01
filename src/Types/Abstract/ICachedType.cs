@@ -193,16 +193,16 @@ public interface ICachedType
     [Pure]
     Type[]? GetGenericArguments();
 
-    [Pure]
-    CachedMember? GetCachedMember(string name);
+    //[Pure]
+    //CachedMember? GetCachedMember(string name);
 
-    /// <summary>
-    /// Gets information about a specific member.
-    /// </summary>
-    /// <param name="name">The name of the member.</param>
-    /// <returns>Information about the specified member.</returns>
-    [Pure]
-    MemberInfo? GetMember(string name);
+    ///// <summary>
+    ///// Gets information about a specific member.
+    ///// </summary>
+    ///// <param name="name">The name of the member.</param>
+    ///// <returns>Information about the specified member.</returns>
+    //[Pure]
+    //MemberInfo? GetMember(string name);
 
     [Pure]
     CachedMember[]? GetCachedMembers();

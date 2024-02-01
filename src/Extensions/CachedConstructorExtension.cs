@@ -5,10 +5,10 @@ namespace Soenneker.Reflection.Cache.Extensions;
 
 public static class CachedConstructorExtension
 {
-    public static int GetCacheKey(this CachedConstructor cachedConstructor)
+    public static int ToCacheKey(this CachedConstructor cachedConstructor)
     {
         Type[] parameterTypes = cachedConstructor.GetParametersTypes();
 
-        return parameterTypes.GetCacheKey();
+        return parameterTypes.ToCacheKey();
     }
 }

@@ -25,9 +25,9 @@ public class GetMemberBenchmarks
         return _type.GetMember("PublicMember1");
     }
 
-    [Benchmark]
-    public MemberInfo? GetMember_Cache()
-    {
-        return _cachedTyped.GetMember("PublicMember1");
-    }
+    //[Benchmark]
+    //public MemberInfo? GetMember_Cache()
+    //{
+    //    return _cachedTyped.GetMember("PublicMember1");
+    //}
 }

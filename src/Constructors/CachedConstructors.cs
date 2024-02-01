@@ -33,7 +33,7 @@ public class CachedConstructors : ICachedConstructors
 
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
     {
-        int key = parameterTypes.GetCacheKey();
+        int key = parameterTypes.ToCacheKey();
         return _cachedDict.Value.GetValueOrDefault(key);
     }
 
@@ -78,7 +78,7 @@ public class CachedConstructors : ICachedConstructors
 
             for (var i = 0; i < cachedArrayValue.Length; i++)
             {
-                int key = cachedArrayValue[i].GetCacheKey();
+                int key = cachedArrayValue[i].ToCacheKey();
                 dict[key] = cachedArrayValue[i];
             }
 
@@ -100,7 +100,7 @@ public class CachedConstructors : ICachedConstructors
                 parameterTypes[j] = parameters[j].ParameterType;
             }
 
-            int key = parameterTypes.GetCacheKey();
+            int key = parameterTypes.ToCacheKey();
 
             constructorsDict[key] = new CachedConstructor(info, _cachedTypes, threadSafe);
         }
@@ -118,15 +118,15 @@ public class CachedConstructors : ICachedConstructors
         return _cachedConstructorInfos.Value;
     }
 
-    public object? CreateInstance(bool? nonPublic = false)
+    public object? CreateInstance()
     {
         //TODO: One day parameterless invoke of the constructorInfo may be faster than Activator.CreateInstance
-        return Activator.CreateInstance(_cachedType.Type!, nonPublic);
+        return Activator.CreateInstance(_cachedType.Type!);
     }
 
-    public T? CreateInstance<T>(bool? nonPublic = false)
+    public T? CreateInstance<T>()
     {
-        return (T?)Activator.CreateInstance(_cachedType.Type!, nonPublic);
+        return (T?)Activator.CreateInstance(_cachedType.Type!);
     }
     
     public object? CreateInstance(params object[] parameters)

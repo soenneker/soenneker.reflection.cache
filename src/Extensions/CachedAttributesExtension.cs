@@ -6,13 +6,13 @@ public static class CachedAttributesExtension
 {
     public static object[] ToObjects(this CachedAttribute[] cachedAttributes)
     {
-            var result = new object[cachedAttributes.Length];
+        var result = new object[cachedAttributes.Length];
 
-            for (var i = 0; i < cachedAttributes.Length; i++)
-            {
-                result[i] = cachedAttributes[i].Attribute;
-            }
-
-            return result;
+        for (var i = 0; i < cachedAttributes.Length; i++)
+        {
+            result[i] = cachedAttributes[i].Attribute;
         }
+
+        return result;
+    }
 }

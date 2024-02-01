@@ -6,7 +6,7 @@ namespace Soenneker.Reflection.Cache.Extensions;
 
 public static class CachedMethodExtension
 {
-    public static int GetCacheKey(this CachedMethod cachedMethod)
+    public static int ToCacheKey(this CachedMethod cachedMethod)
     {
         Type[] parameterTypes = cachedMethod.GetCachedParameters().GetParametersTypes();
 

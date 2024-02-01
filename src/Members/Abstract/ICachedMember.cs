@@ -34,7 +34,7 @@ public interface ICachedMember
 
     bool IsField { get; }
 
-    int CacheKey { get; }
+   // int CacheKey { get; }
 
     MemberTypes MemberType { get; }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Members.Abstract;
 using Soenneker.Reflection.Cache.Types;
 
@@ -33,7 +34,7 @@ public class CachedMember : ICachedMember
     {
         MemberType = memberInfo.MemberType;
 
-        CacheKey = memberInfo.GetHashCode();
+        CacheKey = memberInfo.ToCacheKey();
 
         CachedType = cachedTypes.GetCachedType(memberInfo.DeclaringType);
         MemberInfo = memberInfo;

@@ -101,7 +101,7 @@ public class CachedMethods : ICachedMethods
             for (var i = 0; i < count; i++)
             {
                 CachedMethod cachedMethod = cachedMethods[i];
-                int key = cachedMethod.GetCacheKey();
+                int key = cachedMethod.ToCacheKey();
 
                 cachedDict.Add(key, cachedMethod);
             }
@@ -120,7 +120,7 @@ public class CachedMethods : ICachedMethods
             MethodInfo methodInfo = methodInfos[i];
 
             var cachedMethod = new CachedMethod(methodInfo, _cachedTypes, threadSafe);
-            int key = cachedMethod.GetCacheKey();
+            int key = cachedMethod.ToCacheKey();
 
             cachedDict.Add(key, cachedMethod);
         }
