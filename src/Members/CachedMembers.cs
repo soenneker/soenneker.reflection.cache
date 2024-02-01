@@ -27,12 +27,12 @@ public class CachedMembers : ICachedMembers
         _cachedDict = new Lazy<Dictionary<int, CachedMember>>(() => SetDict(threadSafe), threadSafe);
         _cachedArray = new Lazy<CachedMember[]>(() => SetArray(threadSafe), threadSafe);
 
-        _cachedMemberInfos = new Lazy<MemberInfo?[]>(_cachedArray.Value.ToMemberInfos, threadSafe);
+        _cachedMemberInfos = new Lazy<MemberInfo?[]>(() => _cachedArray.Value.ToMemberInfos(), threadSafe);
     }
 
     public CachedMember? GetCachedMember(string name)
     {
-        _cachedDict.Value.TryGetValue(name.GetHashCode(), out CachedMember? result);
+        _cachedDict.Value.TryGetValue(name.GetHashCode(), out CachedMember result);
 
         return result;
     }
@@ -58,7 +58,7 @@ public class CachedMembers : ICachedMembers
             return result;
         }
 
-        MethodInfo[] memberInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+        MemberInfo[] memberInfos = _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
         int count = memberInfos.Length;
 
         var cachedArray = new CachedMember[count];
@@ -96,7 +96,7 @@ public class CachedMembers : ICachedMembers
             return cachedDict;
         }
 
-        MethodInfo[] memberInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+        MemberInfo[] memberInfos = _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
 
         count = memberInfos.Length;
 
@@ -104,7 +104,7 @@ public class CachedMembers : ICachedMembers
 
         for (var i = 0; i < count; i++)
         {
-            MethodInfo memberInfo = memberInfos[i];
+            MemberInfo memberInfo = memberInfos[i];
 
             var cachedMember = new CachedMember(memberInfo, _cachedTypes, threadSafe);
             int key = cachedMember.CacheKey;

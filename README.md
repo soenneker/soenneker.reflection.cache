@@ -5,12 +5,10 @@
 # ![](https://user-images.githubusercontent.com/4441470/224455560-91ed3ee7-f510-4041-a8d2-3fc093025112.png) Soenneker.Reflection.Cache
 ### The fastest .NET Reflection cache
 
-Reflection is [slow](https://learn.microsoft.com/en-us/archive/msdn-magazine/2005/july/using-net-avoid-common-performance-pitfalls-for-speedier-apps).
+## Why?
 
-- If you're calling some Reflection code **once**, consider if creating a cache is necessary.
-- If you need to call Reflection repeatedly, this library can help speed things up.
+System.Reflection is [slow](https://learn.microsoft.com/en-us/archive/msdn-magazine/2005/july/using-net-avoid-common-performance-pitfalls-for-speedier-apps). If you need to call Reflection code repeatedly, this library can *drastically* speed up subsequent calls. It's thread-safe and supports concurrency.
 
-This library is attempting to be a drop-in replacement for `System.Reflection` and caches the results of Reflection calls (so it's going to allocate more memory). It's thread-safe and supports concurrency.
 
 ## Installation
 
@@ -94,6 +92,7 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 
 ### Notes
 
+- Consider if caching is even necessary for your use case. If you're only calling Reflection once, it may not be worth it.
 - Be thoughtful of your memory footprint and where/when you dispose of the cache.
 - A cache removal mechanism is needing to be built yet.
 - Many Reflection functionalities are not yet implemented, and could benefit from caching.

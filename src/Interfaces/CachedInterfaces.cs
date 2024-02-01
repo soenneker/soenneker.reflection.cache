@@ -24,7 +24,7 @@ public class CachedInterfaces : ICachedInterfaces
         _cachedDict = new Lazy<Dictionary<int, CachedType?>>(SetDict, threadSafe);
         _cachedArray = new Lazy<CachedType[]>(SetArray, threadSafe);
 
-        _cachedTypesArray = new Lazy<Type[]>(GetCachedInterfaces().ToTypes, threadSafe);
+        _cachedTypesArray = new Lazy<Type[]>(() => GetCachedInterfaces().ToTypes(), threadSafe);
     }
 
     public CachedType GetCachedInterface(string typeName)

@@ -19,7 +19,7 @@ public class CachedGenericArguments : ICachedGenericArguments
         _cachedType = cachedType;
         _cachedTypes = cachedTypes;
         _cachedGenericArguments = new Lazy<CachedType[]>(SetArray, threadSafe);
-        _cachedGenericArgumentsTypes = new Lazy<Type[]>(_cachedGenericArguments.Value.ToTypes, threadSafe);
+        _cachedGenericArgumentsTypes = new Lazy<Type[]>(() => _cachedGenericArguments.Value.ToTypes(), threadSafe);
     }
 
     private CachedType[] SetArray()

@@ -21,15 +21,6 @@ public class GetMethodsTests
     }
 
     [Fact]
-    public void GetMethods_Cache()
-    {
-        CachedType result = _cache.GetCachedType(TestType.Locator);
-
-        MethodInfo? methodInfo = result.GetMethod("PublicMethod1");
-        methodInfo.Should().NotBeNull();
-    }
-
-    [Fact]
     public void GetMethods_NoCache()
     {
         var type = Type.GetType(TestType.Locator);

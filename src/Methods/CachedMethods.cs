@@ -28,7 +28,7 @@ public class CachedMethods : ICachedMethods
 
         _cachedDict = new Lazy<Dictionary<int, CachedMethod>>(() => SetDict(threadSafe), threadSafe);
         _cachedArray = new Lazy<CachedMethod[]>(() => SetArray(threadSafe), threadSafe);
-        _cachedMethodsInfos = new Lazy<MethodInfo?[]>(_cachedArray.Value.ToMethods, threadSafe);
+        _cachedMethodsInfos = new Lazy<MethodInfo?[]>(() => _cachedArray.Value.ToMethods(), threadSafe);
     }
 
     public CachedMethod GetCachedMethod(string name)

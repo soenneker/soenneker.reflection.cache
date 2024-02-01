@@ -50,7 +50,6 @@ public class CachedType : ICachedType
     private readonly Lazy<CachedGenericTypeDefinition>? _cachedGenericTypeDefinition;
     private readonly Lazy<CachedIsAssignableFrom>? _cachedIsAssignableFrom;
 
-
     public CachedType(Type? type, CachedTypes cachedTypes, bool threadSafe = true)
     {
         Type = type;

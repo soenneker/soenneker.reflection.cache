@@ -28,7 +28,7 @@ public class CachedConstructors : ICachedConstructors
         _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(() => SetDict(threadSafe), threadSafe);
         _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(() => SetDict(threadSafe), threadSafe);
 
-        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(_cachedArray.Value.ToConstructorInfos, threadSafe);
+        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(() => _cachedArray.Value.ToConstructorInfos(), threadSafe);
     }
 
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
@@ -118,17 +118,17 @@ public class CachedConstructors : ICachedConstructors
         return _cachedConstructorInfos.Value;
     }
 
-    public object? CreateInstance()
+    public object? CreateInstance(bool? nonPublic = false)
     {
         //TODO: One day parameterless invoke of the constructorInfo may be faster than Activator.CreateInstance
-        return Activator.CreateInstance(_cachedType.Type!);
+        return Activator.CreateInstance(_cachedType.Type!, nonPublic);
     }
 
-    public T? CreateInstance<T>()
+    public T? CreateInstance<T>(bool? nonPublic = false)
     {
-        return (T?)CreateInstance();
+        return (T?)Activator.CreateInstance(_cachedType.Type!, nonPublic);
     }
-
+    
     public object? CreateInstance(params object[] parameters)
     {
         if (parameters.Length == 0)

@@ -44,11 +44,14 @@ public interface ICachedConstructors
     /// </summary>
     /// <returns>An instance of the type.</returns>
     [Pure]
-    object? CreateInstance();
+    object? CreateInstance(bool? nonPublic = false);
 
-    /// <inheritdoc cref="CreateInstance()"/>
+    /// <summary>
+    /// Creates an instance of the type with default constructor parameters.
+    /// </summary>
+    /// <returns>An instance of the type.</returns>
     [Pure]
-    T? CreateInstance<T>();
+    T? CreateInstance<T>(bool? nonPublic = false);
 
     /// <summary>
     /// Creates an instance of the type with specified parameters.

@@ -26,7 +26,7 @@ public class CachedCustomAttributes : ICachedCustomAttributes
         _cachedTypes = cachedTypes;
         _cachedType = cachedType;
         _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForType(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _cachedObjects = new Lazy<object[]>(() => _cachedCustomAttributes.Value.ToObjects(), threadSafe);
     }
 
     public CachedCustomAttributes(CachedMethod cachedMethod, CachedTypes cachedTypes, bool threadSafe = true)
@@ -34,7 +34,7 @@ public class CachedCustomAttributes : ICachedCustomAttributes
         _cachedTypes = cachedTypes;
         _cachedMethod = cachedMethod;
         _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForMethod(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _cachedObjects = new Lazy<object[]>(() => _cachedCustomAttributes.Value.ToObjects(), threadSafe);
     }
 
     public CachedCustomAttributes(CachedConstructor cachedConstructor, CachedTypes cachedTypes, bool threadSafe = true)
@@ -42,7 +42,7 @@ public class CachedCustomAttributes : ICachedCustomAttributes
         _cachedTypes = cachedTypes;
         _cachedConstructor = cachedConstructor;
         _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForConstructor(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _cachedObjects = new Lazy<object[]>(() => _cachedCustomAttributes.Value.ToObjects(), threadSafe);
     }
 
     public CachedCustomAttributes(CachedMember cachedMember, CachedTypes cachedTypes, bool threadSafe = true)
@@ -50,7 +50,7 @@ public class CachedCustomAttributes : ICachedCustomAttributes
         _cachedTypes = cachedTypes;
         _cachedMember = cachedMember;
         _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForType(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _cachedObjects = new Lazy<object[]>(() => _cachedCustomAttributes.Value.ToObjects(), threadSafe);
     }
 
     private CachedAttribute[] SetArrayForType(bool threadSafe)
