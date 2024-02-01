@@ -123,6 +123,14 @@ public partial class CachedType : ICachedType
         return _cachedMethods!.Value.GetMethod(methodName);
     }
 
+    public MethodInfo? GetMethod(string methodName, Type[] parameterTypes)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedMethods!.Value.GetMethod(methodName, parameterTypes);
+    }
+
     public CachedMethod[]? GetCachedMethods()
     {
         if (Type == null)

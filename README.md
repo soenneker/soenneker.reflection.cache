@@ -243,5 +243,6 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 | IsArray_Cache         | 0.0060 ns | 0.0102 ns | 0.0096 ns | 0.0000 ns |
 
 Notes:
-- These benchmarks are built over iterations. The first operation is going to be as slow as the Reflection it sits in front of. 
+- These benchmarks are built over iterations. The first operation is going to be as slow as the Reflection it sits in front of.
+- These are based off of a test class `TestType` which is located in the test library.
 - Outliers have been removed in cases BenchmarkDotnet deems necessary.

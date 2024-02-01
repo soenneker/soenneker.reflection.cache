@@ -76,6 +76,9 @@ public interface ICachedType
     [Pure]
     MethodInfo? GetMethod(string methodName);
 
+    [Pure]
+    MethodInfo? GetMethod(string methodName, Type[] parameterTypes);
+
     /// <summary>
     /// Gets information about all methods using reflection.
     /// </summary>
