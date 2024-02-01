@@ -12,6 +12,7 @@ public class CachedTypeBenchmarks
     private ReflectionCache _cache = default!;
 
     private CachedType _cachedType = default!;
+    private CachedType _doubleDerivedType = default!;
     private Type _type = default!;
 
     CachedConstructor[]? cachedConstructors;
@@ -25,6 +26,7 @@ public class CachedTypeBenchmarks
         _type = typeof(TestType);
 
         _cachedType = _cache.GetCachedType(_type);
+        _doubleDerivedType = _cache.GetCachedType(typeof(DoubleDerivedDictionary));
         cachedConstructors = _cachedType.GetCachedConstructors();
         cachedConstructorsList = new List<CachedConstructor>(cachedConstructors);
     }
@@ -105,5 +107,17 @@ public class CachedTypeBenchmarks
     //public bool IsArray_Cache()
     //{
     //    return _cachedType.IsArray;
+    //}
+
+    //[Benchmark]
+    //public bool IsDictionary_NoCache()
+    //{
+    //    return _type.IsDictionary;
+    //}
+
+    //[Benchmark]
+    //public bool IsDictionary_Cache()
+    //{
+    //    return _doubleDerivedType.IsDictionary;
     //}
 }

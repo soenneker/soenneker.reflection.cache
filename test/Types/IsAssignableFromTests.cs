@@ -6,11 +6,11 @@ using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
-public class IsAssignableTests
+public class IsAssignableFromTests
 {
     private readonly CachedType _cachedType;
 
-    public IsAssignableTests()
+    public IsAssignableFromTests()
     {
         var cache = new ReflectionCache();
         _cachedType = cache.GetCachedType(typeof(BaseType));

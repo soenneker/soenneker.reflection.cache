@@ -43,9 +43,16 @@ public class CachedMethods : ICachedMethods
         return GetCachedMethod(name).MethodInfo;
     }
 
-    public CachedMethod GetCachedMethod(string name, Type[] types)
+    public CachedMethod GetCachedMethod(string name, Type[] parameterTypes)
     {
-        int key = ReflectionCacheUtil.GetCacheKeyForMethod(name, types);
+        int key = ReflectionCacheUtil.GetCacheKeyForMethod(name, parameterTypes);
+
+        return _cachedDict.Value.GetValueOrDefault(key);
+    }
+
+    public CachedMethod GetCachedMethod(string name, CachedType[] cachedParameterTypes)
+    {
+        int key = ReflectionCacheUtil.GetCacheKeyForMethod(name, cachedParameterTypes);
 
         return _cachedDict.Value.GetValueOrDefault(key);
     }

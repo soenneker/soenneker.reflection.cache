@@ -156,6 +156,14 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 | GetProperty_NoCache | 25.61 ns | 0.382 ns | 0.357 ns |     baseline |         |
 | GetProperty_Cache   | 16.23 ns | 0.074 ns | 0.062 ns | 1.57x faster |   0.01x |
 
+### `GetFields()` 419% faster
+
+| Method                     | Mean      | Error     | StdDev    | Ratio         | RatioSD |
+|--------------------------- |----------:|----------:|----------:|--------------:|--------:|
+| GetFields_NoCache          | 48.941 ns | 0.9092 ns | 0.8505 ns |      baseline |         |
+| GetFields_Cache            |  1.141 ns | 0.0512 ns | 0.0479 ns | 42.95x faster |   1.32x |
+| GetFields_ThreadSafe_Cache |  1.178 ns | 0.0144 ns | 0.0128 ns | 41.56x faster |   0.79x |
+
 ### `GetInterfaces()` 1,439% faster
 
 | Method                | Mean       | Error     | StdDev    | Ratio         | RatioSD |

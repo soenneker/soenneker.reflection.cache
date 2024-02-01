@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Soenneker.Reflection.Cache.Types;
+using System;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 
@@ -29,10 +30,13 @@ public interface ICachedMethods
     /// Gets a CachedMethod by name and parameter types.
     /// </summary>
     /// <param name="name">The name of the method.</param>
-    /// <param name="types">An array of parameter types.</param>
+    /// <param name="parameterTypes">An array of parameter types.</param>
     /// <returns>The CachedMethod corresponding to the given name and parameter types.</returns>
     [Pure]
-    CachedMethod GetCachedMethod(string name, Type[] types);
+    CachedMethod GetCachedMethod(string name, Type[] parameterTypes);
+
+    [Pure]
+    CachedMethod GetCachedMethod(string name, CachedType[] cachedParameterTypes);
 
     /// <summary>
     /// Gets a regular MethodInfo by name and parameter types.

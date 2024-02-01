@@ -41,6 +41,12 @@ public interface ICachedType
     [Pure]
     PropertyInfo[]? GetProperties();
 
+    [Pure]
+    FieldInfo? GetField(string fieldName);
+
+    [Pure]
+    FieldInfo[]? GetFields();
+
     /// <summary>
     /// Gets information about a specific method.
     /// </summary>
@@ -48,6 +54,12 @@ public interface ICachedType
     /// <returns>Information about the specified method.</returns>
     [Pure]
     CachedMethod? GetCachedMethod(string methodName);
+
+    [Pure]
+    CachedMethod? GetCachedMethod(string methodName, Type[] parameters);
+
+    [Pure]
+    CachedMethod? GetCachedMethod(string methodName, CachedType[] parameters);
 
     /// <summary>
     /// Gets information about all methods.
@@ -216,4 +228,7 @@ public interface ICachedType
 
     [Pure]
     bool IsAssignableFrom(Type derivedType);
+
+    [Pure]
+    bool IsAssignableFrom(CachedType cachedType);
 }

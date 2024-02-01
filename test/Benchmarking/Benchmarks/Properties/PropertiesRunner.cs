@@ -8,9 +8,9 @@ using Xunit.Abstractions;
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Properties;
 
 [Collection("Collection")]
-public class ParametersRunner : BenchmarkTest
+public class PropertiesRunner : BenchmarkTest
 {
-    public ParametersRunner(ITestOutputHelper outputHelper) : base(outputHelper)
+    public PropertiesRunner(ITestOutputHelper outputHelper) : base(outputHelper)
     {
     }
 

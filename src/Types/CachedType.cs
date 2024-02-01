@@ -3,6 +3,7 @@ using System.Reflection;
 using Soenneker.Reflection.Cache.Arguments;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors;
+using Soenneker.Reflection.Cache.Fields;
 using Soenneker.Reflection.Cache.Interfaces;
 using Soenneker.Reflection.Cache.Members;
 using Soenneker.Reflection.Cache.Methods;
@@ -12,36 +13,16 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 namespace Soenneker.Reflection.Cache.Types;
 
 ///<inheritdoc cref="ICachedType"/>
-public class CachedType : ICachedType
+public partial class CachedType : ICachedType
 {
     public Type? Type { get; }
 
     public int? CacheKey => _cacheKeyLazy.Value;
     private readonly Lazy<int?> _cacheKeyLazy;
 
-    public bool IsAbstract => _isAbstractLazy.Value;
-    private readonly Lazy<bool> _isAbstractLazy;
-
-    public bool IsInterface => _isInterfaceLazy.Value;
-    private readonly Lazy<bool> _isInterfaceLazy;
-
-    public bool IsGenericType => _isGenericTypeLazy.Value;
-    private readonly Lazy<bool> _isGenericTypeLazy;
-
-    public bool IsEnum => _isEnumLazy.Value;
-    private readonly Lazy<bool> _isEnumLazy;
-
-    public bool IsNullable => _isNullable.Value;
-    private readonly Lazy<bool> _isNullable;
-
-    public bool IsByRef => _isByRef.Value;
-    private readonly Lazy<bool> _isByRef;
-
-    public bool IsArray => _isArray.Value;
-    private readonly Lazy<bool> _isArray;
-
     private readonly Lazy<CachedProperties>? _cachedProperties;
     private readonly Lazy<CachedMethods>? _cachedMethods;
+    private readonly Lazy<CachedFields>? _cachedFields;
     private readonly Lazy<CachedCustomAttributes>? _cachedAttributes;
     private readonly Lazy<CachedInterfaces>? _cachedInterfaces;
     private readonly Lazy<CachedConstructors>? _cachedConstructors;
@@ -50,33 +31,25 @@ public class CachedType : ICachedType
     private readonly Lazy<CachedGenericTypeDefinition>? _cachedGenericTypeDefinition;
     private readonly Lazy<CachedIsAssignableFrom>? _cachedIsAssignableFrom;
 
+    private readonly bool _threadSafe;
+    private readonly CachedTypes _cachedTypes;
+
     public CachedType(Type? type, CachedTypes cachedTypes, bool threadSafe = true)
     {
         Type = type;
+        _cachedTypes = cachedTypes;
+        _threadSafe = threadSafe;
 
         _cacheKeyLazy = new Lazy<int?>(() => type?.GetHashCode(), threadSafe);
 
-        _isAbstractLazy = new Lazy<bool>(() => type is {IsAbstract: true}, threadSafe);
-        _isInterfaceLazy = new Lazy<bool>(() => type is {IsInterface: true}, threadSafe);
-        _isGenericTypeLazy = new Lazy<bool>(() => type is {IsGenericType: true}, threadSafe);
-        _isEnumLazy = new Lazy<bool>(() => type is {IsEnum: true}, threadSafe);
-
-        _isNullable = new Lazy<bool>(() =>
-        {
-            if (type == null)
-                return false;
-
-            return Nullable.GetUnderlyingType(type) != null;
-        }, threadSafe);
-
-        _isByRef = new Lazy<bool>(() => type is {IsByRef: true}, threadSafe);
-        _isArray = new Lazy<bool>(() => type is {IsArray: true}, threadSafe);
+        InitializeProperties();
 
         if (Type == null)
             return;
 
         _cachedProperties = new Lazy<CachedProperties>(() => new CachedProperties(this, threadSafe), threadSafe);
         _cachedMethods = new Lazy<CachedMethods>(() => new CachedMethods(this, cachedTypes, threadSafe), threadSafe);
+        _cachedFields = new Lazy<CachedFields>(() => new CachedFields(this, threadSafe), threadSafe);
         _cachedAttributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
         _cachedInterfaces = new Lazy<CachedInterfaces>(() => new CachedInterfaces(this, cachedTypes, threadSafe), threadSafe);
         _cachedConstructors = new Lazy<CachedConstructors>(() => new CachedConstructors(this, cachedTypes, threadSafe), threadSafe);
@@ -108,6 +81,38 @@ public class CachedType : ICachedType
             return null;
 
         return _cachedMethods!.Value.GetCachedMethod(methodName);
+    }
+
+    public CachedMethod? GetCachedMethod(string methodName, Type[] parameters)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedMethods!.Value.GetCachedMethod(methodName, parameters);
+    }
+
+    public CachedMethod? GetCachedMethod(string methodName, CachedType[] parameters)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedMethods!.Value.GetCachedMethod(methodName, parameters);
+    }
+
+    public FieldInfo[]? GetFields()
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedFields!.Value.GetFields();
+    }
+
+    public FieldInfo? GetField(string fieldName)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedFields!.Value.GetField(fieldName);
     }
 
     public MethodInfo? GetMethod(string methodName)
@@ -315,6 +320,14 @@ public class CachedType : ICachedType
             return false;
 
         return _cachedIsAssignableFrom!.Value.IsAssignableFrom(derivedType);
+    }
+
+    public bool IsAssignableFrom(CachedType cachedType)
+    {
+        if (Type == null)
+            return false;
+
+        return _cachedIsAssignableFrom!.Value.IsAssignableFrom(cachedType);
     }
 
     public override string ToString()
