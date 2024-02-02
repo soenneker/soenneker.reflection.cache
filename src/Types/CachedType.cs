@@ -17,6 +17,12 @@ public partial class CachedType : ICachedType
 {
     public Type? Type { get; }
 
+    public Type? BaseType => Type?.BaseType;
+
+    public CachedType? CachedBaseType => _cachedBaseTypeLazy.Value;
+
+    private readonly Lazy<CachedType?> _cachedBaseTypeLazy;
+
     public int? CacheKey => _cacheKeyLazy.Value;
     private readonly Lazy<int?> _cacheKeyLazy;
 
@@ -46,6 +52,8 @@ public partial class CachedType : ICachedType
 
         if (Type == null)
             return;
+
+        _cachedBaseTypeLazy = new Lazy<CachedType>(() => _cachedTypes.GetCachedType(Type.BaseType), _threadSafe);
 
         _cachedProperties = new Lazy<CachedProperties>(() => new CachedProperties(this, threadSafe), threadSafe);
         _cachedMethods = new Lazy<CachedMethods>(() => new CachedMethods(this, cachedTypes, threadSafe), threadSafe);
@@ -162,7 +170,7 @@ public partial class CachedType : ICachedType
 
         return _cachedInterfaces!.Value.GetCachedInterfaces();
     }
-    
+
     public Type? GetInterface(string typeName)
     {
         if (Type == null)
@@ -226,6 +234,7 @@ public partial class CachedType : ICachedType
 
         return _cachedConstructors!.Value.GetConstructors();
     }
+
     public object? CreateInstance()
     {
         if (Type == null)
@@ -330,12 +339,12 @@ public partial class CachedType : ICachedType
         return _cachedIsAssignableFrom!.Value.IsAssignableFrom(derivedType);
     }
 
-    public bool IsAssignableFrom(CachedType cachedType)
+    public bool IsAssignableFrom(CachedType cachedDerivedType)
     {
         if (Type == null)
             return false;
 
-        return _cachedIsAssignableFrom!.Value.IsAssignableFrom(cachedType);
+        return _cachedIsAssignableFrom!.Value.IsAssignableFrom(cachedDerivedType);
     }
 
     public override string ToString()

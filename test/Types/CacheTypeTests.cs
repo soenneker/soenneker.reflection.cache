@@ -50,4 +50,32 @@ public class CacheTypeTests
         CachedType result = _cache.GetCachedType(typeof(DerivedReadOnlyDictionary));
         result.IsReadOnlyDictionary.Should().BeTrue();
     }
+
+    [Fact]
+    public void IsCollection_Derived_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(DerivedCollection));
+        result.IsCollection.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsCollection_direct_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(ICollection<string>));
+        result.IsCollection.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsEnumerable_derived_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(DerivedEnumerable));
+        result.IsEnumerable.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsEnumerable_direct_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(IEnumerable<string>));
+        result.IsEnumerable.Should().BeTrue();
+    }
 }

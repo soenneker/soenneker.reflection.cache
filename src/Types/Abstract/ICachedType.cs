@@ -233,5 +233,5 @@ public interface ICachedType
     bool IsAssignableFrom(Type derivedType);
 
     [Pure]
-    bool IsAssignableFrom(CachedType cachedType);
+    bool IsAssignableFrom(CachedType cachedDerivedType);
 }

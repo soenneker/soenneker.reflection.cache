@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Soenneker.Reflection.Cache.Extensions;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Dynamic;
 
 namespace Soenneker.Reflection.Cache.Types;
@@ -77,10 +79,18 @@ public partial class CachedType
             if (Type == null)
                 return false;
 
-            CachedType collectionType = _cachedTypes.GetCachedType(typeof(ICollection));
-
-            if (collectionType.IsAssignableFrom(this))
+            if (Type.Name is "ICollection`1" or "ICollection")
                 return true;
+
+            CachedType[] interfaces = GetCachedInterfaces()!;
+
+            for (var index = 0; index < interfaces.Length; index++)
+            {
+                CachedType i = interfaces[index];
+
+                if (i.Type!.Name is "ICollection`1" or "ICollection")
+                    return true;
+            }
 
             return false;
         }, _threadSafe);
@@ -104,13 +114,16 @@ public partial class CachedType
             if (Type == null)
                 return false;
 
+            if (Type.Name == "ReadOnlyDictionary")
+                return true;
+
             CachedType[] interfaces = GetCachedInterfaces()!;
 
             for (var index = 0; index < interfaces.Length; index++)
             {
                 CachedType i = interfaces[index];
 
-                if (i.Type.Name == "IReadOnlyDictionary`2")
+                if (i.Type!.Name == "IReadOnlyDictionary`2")
                     return true;
             }
 
