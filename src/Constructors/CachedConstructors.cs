@@ -73,7 +73,7 @@ public class CachedConstructors : ICachedConstructors
     {
         if (_cachedArray.IsValueCreated)
         {
-            CachedConstructor[]? cachedArrayValue = _cachedArray.Value;
+            CachedConstructor[] cachedArrayValue = _cachedArray.Value;
             var dict = new Dictionary<int, CachedConstructor>(cachedArrayValue.Length);
 
             for (var i = 0; i < cachedArrayValue.Length; i++)
@@ -88,16 +88,20 @@ public class CachedConstructors : ICachedConstructors
         ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(ReflectionCacheConstants.BindingFlags);
         var constructorsDict = new Dictionary<int, CachedConstructor>(constructorInfos.Length);
 
-        for (var i = 0; i < constructorInfos.Length; i++)
+        ReadOnlySpan<ConstructorInfo> constructorsSpan = constructorInfos;
+
+        for (var i = 0; i < constructorsSpan.Length; i++)
         {
-            ConstructorInfo info = constructorInfos[i];
+            ConstructorInfo info = constructorsSpan[i];
 
             ParameterInfo[] parameters = info.GetParameters();
-            Type[] parameterTypes = new Type[parameters.Length];
+            var parameterTypes = new Type[parameters.Length];
 
-            for (var j = 0; j < parameters.Length; j++)
+            ReadOnlySpan<ParameterInfo> parametersSpan = parameters;
+
+            for (var j = 0; j < parametersSpan.Length; j++)
             {
-                parameterTypes[j] = parameters[j].ParameterType;
+                parameterTypes[j] = parametersSpan[j].ParameterType;
             }
 
             int key = parameterTypes.ToCacheKey();

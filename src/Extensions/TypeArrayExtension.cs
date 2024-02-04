@@ -11,11 +11,13 @@ public static class TypeArrayExtension
         if (types == null || types.Length == 0)
             return 0;
 
+        ReadOnlySpan<Type> span = types;
+
         var hash = 17;
 
-        for (var i = 0; i < types.Length; i++)
+        for (var i = 0; i < span.Length; i++)
         {
-            hash = hash * 31 + types[i].GetHashCode();
+            hash = hash * 31 + span[i].GetHashCode();
         }
 
         return hash;
@@ -26,11 +28,13 @@ public static class TypeArrayExtension
         if (cachedTypes == null || cachedTypes.Length == 0)
             return 0;
 
+        ReadOnlySpan<CachedType> span = cachedTypes;
+
         var hash = 17;
 
-        for (var i = 0; i < cachedTypes.Length; i++)
+        for (var i = 0; i < span.Length; i++)
         {
-            hash = hash * 31 + cachedTypes[i].GetHashCode();
+            hash = hash * 31 + span[i].GetHashCode();
         }
 
         return hash;

@@ -1,4 +1,5 @@
 ﻿using Soenneker.Reflection.Cache.Methods;
+using System;
 using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Extensions;
@@ -7,12 +8,13 @@ public static class CachedMethodsExtension
 {
     public static MethodInfo?[] ToMethods(this CachedMethod[] cachedMethods)
     {
-        int count = cachedMethods.Length;
-        var methodInfoArray = new MethodInfo?[count];
+        ReadOnlySpan<CachedMethod> span = cachedMethods;
 
-        for (var i = 0; i < count; i++)
+        var methodInfoArray = new MethodInfo?[span.Length];
+
+        for (var i = 0; i < span.Length; i++)
         {
-            methodInfoArray[i] = cachedMethods[i].MethodInfo;
+            methodInfoArray[i] = span[i].MethodInfo;
         }
 
         return methodInfoArray;

@@ -7,13 +7,13 @@ internal static class ParameterInfoExtension
 {
     public static Type[] ToParametersTypes(this ParameterInfo[] parameterInfos)
     {
-        int count = parameterInfos.Length;
+        ReadOnlySpan<ParameterInfo> span = parameterInfos;
 
-        var typesArray = new Type[count];
+        var typesArray = new Type[span.Length];
 
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < span.Length; i++)
         {
-            typesArray[i] = parameterInfos[i].ParameterType;
+            typesArray[i] = span[i].ParameterType;
         }
 
         return typesArray;

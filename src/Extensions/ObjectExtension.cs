@@ -6,11 +6,13 @@ public static class ObjectExtension
 {
     public static Type[] ToTypes(this object[] objects)
     {
-        var parameterTypes = new Type[objects.Length];
+        ReadOnlySpan<object> span = objects;
 
-        for (var i = 0; i < objects.Length; i++)
+        var parameterTypes = new Type[span.Length];
+
+        for (var i = 0; i < span.Length; i++)
         {
-            parameterTypes[i] = objects[i].GetType();
+            parameterTypes[i] = span[i].GetType();
         }
 
         return parameterTypes;

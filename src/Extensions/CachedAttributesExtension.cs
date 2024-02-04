@@ -1,4 +1,5 @@
 ﻿using Soenneker.Reflection.Cache.Attributes;
+using System;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
@@ -6,11 +7,13 @@ public static class CachedAttributesExtension
 {
     public static object[] ToObjects(this CachedAttribute[] cachedAttributes)
     {
-        var result = new object[cachedAttributes.Length];
+        ReadOnlySpan<CachedAttribute> span = cachedAttributes;
 
-        for (var i = 0; i < cachedAttributes.Length; i++)
+        var result = new object[span.Length];
+
+        for (var i = 0; i < span.Length; i++)
         {
-            result[i] = cachedAttributes[i].Attribute;
+            result[i] = span[i].Attribute;
         }
 
         return result;

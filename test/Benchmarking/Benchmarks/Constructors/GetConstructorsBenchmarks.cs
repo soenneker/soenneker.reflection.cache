@@ -7,6 +7,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Constructors;
 
+[MemoryDiagnoser(false)]
 public class GetConstructorsBenchmarks
 {
     private CachedType _cachedType = default!;
@@ -36,9 +37,9 @@ public class GetConstructorsBenchmarks
         return _cachedType.GetConstructors();
     }
 
-    [Benchmark]
-    public ConstructorInfo?[]? GetConstructors_ThreadSafe_Cache()
-    {
-        return _threadSafeCachedType.GetConstructors();
-    }
+    //[Benchmark]
+    //public ConstructorInfo?[]? GetConstructors_ThreadSafe_Cache()
+    //{
+    //    return _threadSafeCachedType.GetConstructors();
+    //}
 }

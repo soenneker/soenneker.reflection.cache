@@ -7,11 +7,13 @@ public static class CachedTypesExtension
 {
     public static Type[] ToTypes(this CachedType[] cachedInterfaces)
     {
-        var result = new Type[cachedInterfaces.Length];
+        ReadOnlySpan<CachedType> span = cachedInterfaces;
 
-        for (var i = 0; i < cachedInterfaces.Length; i++)
+        var result = new Type[span.Length];
+
+        for (var i = 0; i < span.Length; i++)
         {
-            result[i] = cachedInterfaces[i].Type!;
+            result[i] = span[i].Type!;
         }
 
         return result;
