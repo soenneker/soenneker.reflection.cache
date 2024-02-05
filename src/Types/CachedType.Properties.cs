@@ -79,7 +79,7 @@ public partial class CachedType
             if (Type == null)
                 return false;
 
-            if (Type.Name is "ICollection`1" or "ICollection")
+            if (Type.Name == "ICollection`1")
                 return true;
 
             CachedType[] interfaces = GetCachedInterfaces()!;
@@ -88,7 +88,7 @@ public partial class CachedType
             {
                 CachedType i = interfaces[index];
 
-                if (i.Type!.Name is "ICollection`1" or "ICollection")
+                if (i.Type!.Name == "ICollection`1")
                     return true;
             }
 
