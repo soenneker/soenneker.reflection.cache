@@ -234,6 +234,13 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 | MakeGenericType_NoCache | 158.56 ns | 0.900 ns | 0.842 ns |      baseline |         |
 | MakeGenericType_Cache   |  10.01 ns | 0.216 ns | 0.202 ns | 15.85x faster |   0.31x |
 
+### `GetElementType()` 1,847% faster
+
+| Method                 | Mean      | Error     | StdDev    | Ratio         | RatioSD |
+|----------------------- |----------:|----------:|----------:|--------------:|--------:|
+| GetElementType_NoCache | 4.9175 ns | 0.0442 ns | 0.0369 ns |      baseline |         |
+| GetElementType_Cache   | 0.2585 ns | 0.0204 ns | 0.0191 ns | 19.47x faster |   1.06x |
+
 ## Properties on `Type` (e.g. `typeof(string).IsNullable`)
 
 | Method                | Mean      | Error     | StdDev    | Median    |
@@ -255,5 +262,4 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 
 Notes:
 - These benchmarks are built over iterations. The first operation is going to be as slow as the Reflection it sits in front of.
-- These are based off of a test class `TestType` which is located in the test library.
-- Outliers have been removed in cases BenchmarkDotnet deems necessary.
+- Many of these are based off of a test class `TestType` which is located in the test library.

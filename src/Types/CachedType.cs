@@ -37,6 +37,7 @@ public partial class CachedType : ICachedType
     private readonly Lazy<CachedGenericTypeDefinition>? _cachedGenericTypeDefinition;
     private readonly Lazy<CachedIsAssignableFrom>? _cachedIsAssignableFrom;
     private readonly Lazy<CachedMakeGenericType>? _cachedMakeGenericType;
+    private readonly Lazy<CachedGetElementType>? _cachedGetElementType;
 
     private readonly bool _threadSafe;
     private readonly CachedTypes _cachedTypes;
@@ -67,6 +68,7 @@ public partial class CachedType : ICachedType
         _cachedGenericTypeDefinition = new Lazy<CachedGenericTypeDefinition>(() => new CachedGenericTypeDefinition(this, cachedTypes, threadSafe), threadSafe);
         _cachedIsAssignableFrom = new Lazy<CachedIsAssignableFrom>(() => new CachedIsAssignableFrom(this, threadSafe), threadSafe);
         _cachedMakeGenericType = new Lazy<CachedMakeGenericType>(() => new CachedMakeGenericType(this, cachedTypes, threadSafe), threadSafe);
+        _cachedGetElementType = new Lazy<CachedGetElementType>(() => new CachedGetElementType(this, cachedTypes, threadSafe), threadSafe);
     }
 
     public PropertyInfo? GetProperty(string property)
@@ -362,6 +364,16 @@ public partial class CachedType : ICachedType
     public Type? MakeGenericType(params Type[] typeArguments)
     {
         return _cachedMakeGenericType!.Value.MakeGenericType(typeArguments);
+    }
+
+    public CachedType? GetCachedElementType()
+    {
+        return _cachedGetElementType!.Value.GetCachedElementType();
+    }
+
+    public Type? GetElementType()
+    {
+        return _cachedGetElementType!.Value.GetElementType();
     }
 
     public override string ToString()

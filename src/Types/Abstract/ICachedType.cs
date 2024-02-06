@@ -248,4 +248,10 @@ public interface ICachedType
 
     [Pure]
     Type? MakeGenericType(params Type[] typeArguments);
+
+    [Pure]
+    CachedType? GetCachedElementType();
+
+    [Pure]
+    Type? GetElementType();
 }

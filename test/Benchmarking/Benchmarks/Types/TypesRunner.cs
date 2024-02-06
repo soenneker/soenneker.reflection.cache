@@ -31,6 +31,14 @@ public class TypesRunner : BenchmarkTest
     }
 
     [LocalFact]
+    public async Task GetElementType()
+    {
+        Summary summary = BenchmarkRunner.Run<GetElementTypeBenchmarks>(DefaultConf);
+
+        await OutputSummaryToLog(summary);
+    }
+
+    [LocalFact]
     public async Task IsAssignableFrom()
     {
         Summary summary = BenchmarkRunner.Run<IsAssignableFromBenchmarks>(DefaultConf);
