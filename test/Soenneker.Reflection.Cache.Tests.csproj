@@ -9,7 +9,7 @@
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
         <PackageReference Include="Soenneker.Facts.Local" Version="2.1.202" />
         <PackageReference Include="xunit.core" Version="2.6.6" />
