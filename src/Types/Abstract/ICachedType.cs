@@ -234,4 +234,18 @@ public interface ICachedType
 
     [Pure]
     bool IsAssignableFrom(CachedType cachedDerivedType);
+
+    /// <summary>
+    /// This is going to be the fastest of all the MakeGenericType methods
+    /// </summary>
+    /// <param name="typeArguments"></param>
+    /// <returns></returns>
+    [Pure]
+    CachedType? MakeCachedGenericType(params Type[] typeArguments);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(params CachedType[] typeArguments);
+
+    [Pure]
+    Type? MakeGenericType(params Type[] typeArguments);
 }

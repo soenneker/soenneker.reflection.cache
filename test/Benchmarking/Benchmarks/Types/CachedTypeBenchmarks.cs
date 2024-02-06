@@ -17,7 +17,12 @@ public class CachedTypeBenchmarks
 
     CachedConstructor[]? cachedConstructors;
 
-    List<CachedConstructor> cachedConstructorsList;
+    List<CachedConstructor> _cachedConstructorsList;
+
+    private Type _genericTypeDefinition;
+
+    private CachedType _cachedGenericType;
+    readonly Type[] _typeArguments = [typeof(int)];
 
     [GlobalSetup]
     public void Setup()
@@ -28,7 +33,10 @@ public class CachedTypeBenchmarks
         _cachedType = _cache.GetCachedType(_type);
         _doubleDerivedType = _cache.GetCachedType(typeof(DoubleDerivedDictionary));
         cachedConstructors = _cachedType.GetCachedConstructors();
-        cachedConstructorsList = new List<CachedConstructor>(cachedConstructors);
+        _cachedConstructorsList = new List<CachedConstructor>(cachedConstructors);
+
+        _genericTypeDefinition = typeof(List<>);
+        _cachedGenericType = _cache.GetCachedType(_genericTypeDefinition);
     }
 
     //[Benchmark]
@@ -120,4 +128,16 @@ public class CachedTypeBenchmarks
     //{
     //    return _doubleDerivedType.IsDictionary;
     //}
+
+    [Benchmark(Baseline = true)]
+    public Type MakeGenericType_NoCache()
+    {
+        return _genericTypeDefinition.MakeGenericType(_typeArguments);
+    }
+
+    [Benchmark]
+    public Type? MakeGenericType_Cache()
+    {
+        return _cachedGenericType.MakeGenericType(_typeArguments);
+    }
 }

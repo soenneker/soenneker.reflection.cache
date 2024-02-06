@@ -36,6 +36,7 @@ public partial class CachedType : ICachedType
     private readonly Lazy<CachedGenericArguments>? _cachedGenericArguments;
     private readonly Lazy<CachedGenericTypeDefinition>? _cachedGenericTypeDefinition;
     private readonly Lazy<CachedIsAssignableFrom>? _cachedIsAssignableFrom;
+    private readonly Lazy<CachedMakeGenericType>? _cachedMakeGenericType;
 
     private readonly bool _threadSafe;
     private readonly CachedTypes _cachedTypes;
@@ -65,6 +66,7 @@ public partial class CachedType : ICachedType
         _cachedGenericArguments = new Lazy<CachedGenericArguments>(() => new CachedGenericArguments(this, cachedTypes, threadSafe), threadSafe);
         _cachedGenericTypeDefinition = new Lazy<CachedGenericTypeDefinition>(() => new CachedGenericTypeDefinition(this, cachedTypes, threadSafe), threadSafe);
         _cachedIsAssignableFrom = new Lazy<CachedIsAssignableFrom>(() => new CachedIsAssignableFrom(this, threadSafe), threadSafe);
+        _cachedMakeGenericType = new Lazy<CachedMakeGenericType>(() => new CachedMakeGenericType(this, cachedTypes, threadSafe), threadSafe);
     }
 
     public PropertyInfo? GetProperty(string property)
@@ -345,6 +347,21 @@ public partial class CachedType : ICachedType
             return false;
 
         return _cachedIsAssignableFrom!.Value.IsAssignableFrom(cachedDerivedType);
+    }
+
+    public CachedType? MakeCachedGenericType(params Type[] typeArguments)
+    {
+        return _cachedMakeGenericType!.Value.MakeGenericCachedType(typeArguments);
+    }
+
+    public CachedType? MakeCachedGenericType(params CachedType[] typeArguments)
+    {
+        return _cachedMakeGenericType!.Value.MakeGenericCachedType(typeArguments);
+    }
+
+    public Type? MakeGenericType(params Type[] typeArguments)
+    {
+        return _cachedMakeGenericType!.Value.MakeGenericType(typeArguments);
     }
 
     public override string ToString()

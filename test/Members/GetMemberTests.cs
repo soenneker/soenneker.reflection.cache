@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using FluentAssertions;
 using Xunit;
 using Soenneker.Reflection.Cache.Tests.Objects;
@@ -11,9 +13,9 @@ public class GetMemberTests
     [Fact]
     public void GetMember_NoCache_should_return_memberInfo()
     {
-        var type = typeof(TestType);
+        Type? type = typeof(TestType);
 
-        var memberInfo = type.GetMember("PublicProperty1");
+        MemberInfo[]? memberInfo = type.GetMember("PublicProperty1");
         memberInfo.Should().NotBeNull();
     }
 

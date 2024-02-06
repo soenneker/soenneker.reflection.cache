@@ -90,10 +90,14 @@ MethodInfo methodInfo = cachedType.GetMethod("Intern"); // <-- uh oh, a non-cach
 ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, repeat calls are slow
 ```
 
+### Tips
+
+- Almost all of the `Cached` methods (e.g. `GetCachedParameters()` vs `GetParameters()` are faster due to the final preparation needed to match System.Reflection.
+- Consider if caching is even necessary for your use case. If you're only calling Reflection once, it may not be worth it.
+- Caching isn't free. Be thoughtful of your memory footprint and where/when you dispose of the cache.
+
 ### Notes
 
-- Consider if caching is even necessary for your use case. If you're only calling Reflection once, it may not be worth it.
-- Be thoughtful of your memory footprint and where/when you dispose of the cache.
 - A cache removal mechanism is needing to be built yet.
 - Many Reflection functionalities are not yet implemented, and could benefit from caching.
 - If you see something that could be improved (performance or allocation), please open an issue or PR.
@@ -222,6 +226,13 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 |------------------------- |---------:|----------:|----------:|-------------:|--------:|
 | IsAssignableFrom_NoCache | 9.355 ns | 0.1357 ns | 0.1270 ns |     baseline |         |
 | IsAssignableFrom_Cache   | 6.198 ns | 0.0794 ns | 0.0742 ns | 1.51x faster |   0.04x |
+
+### `MakeGenericType()` 1,485% faster
+
+| Method                  | Mean      | Error    | StdDev   | Ratio         | RatioSD |
+|------------------------ |----------:|---------:|---------:|--------------:|--------:|
+| MakeGenericType_NoCache | 158.56 ns | 0.900 ns | 0.842 ns |      baseline |         |
+| MakeGenericType_Cache   |  10.01 ns | 0.216 ns | 0.202 ns | 15.85x faster |   0.31x |
 
 ## Properties on `Type` (e.g. `typeof(string).IsNullable`)
 
