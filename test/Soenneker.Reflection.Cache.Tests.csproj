@@ -25,7 +25,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\src\Soenneker.Reflection.Cache.csproj" />
-        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="2.1.18" />
+        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="2.1.19" />
     </ItemGroup>
 
     <ItemGroup>
