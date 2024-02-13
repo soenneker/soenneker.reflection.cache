@@ -93,6 +93,7 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 ### Tips
 
 - Almost all of the `Cached` methods (e.g. `GetCachedParameters()` vs `GetParameters()` are faster due to the final preparation needed to match System.Reflection.
+- Thread safety can be disabled for more speed.
 - Consider if caching is even necessary for your use case. If you're only calling Reflection once, it may not be worth it.
 - Caching isn't free. Be thoughtful of your memory footprint and where/when you dispose of the cache.
 
