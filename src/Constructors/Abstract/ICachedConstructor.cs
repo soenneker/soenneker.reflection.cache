@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Parameters;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Constructors.Abstract;
 
@@ -31,6 +32,9 @@ public interface ICachedConstructor
 
     [Pure]
     Type[] GetParametersTypes();
+
+    [Pure]
+    CachedType[] GetCachedParameterTypes();
 
     /// <summary>
     /// Invokes the constructor with no parameters.

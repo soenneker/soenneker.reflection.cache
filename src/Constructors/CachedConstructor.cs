@@ -64,7 +64,15 @@ public class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return [];
 
-        return _parameters!.Value.GetParametersTypes();
+        return _parameters!.Value.GetParameterTypes();
+    }
+
+    public CachedType[] GetCachedParameterTypes()
+    {
+        if (ConstructorInfo == null)
+            return [];
+
+        return _parameters!.Value.GetCachedParameterTypes();
     }
 
     public object? Invoke()

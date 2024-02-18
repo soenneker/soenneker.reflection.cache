@@ -116,7 +116,9 @@ public partial class CachedType : ICachedType
         if (Type == null)
             return null;
 
-        return _cachedFields!.Value.GetFields();
+        FieldInfo[] result = _cachedFields!.Value.GetFields();
+        
+        return result;
     }
 
     public FieldInfo? GetField(string fieldName)

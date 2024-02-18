@@ -24,5 +24,5 @@ public interface ICachedParameters
     /// </summary>
     /// <returns>An array of parameter types.</returns>
     [Pure]
-    Type[] GetParametersTypes();
+    Type[] GetParameterTypes();
 }

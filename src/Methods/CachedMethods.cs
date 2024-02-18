@@ -19,7 +19,7 @@ public class CachedMethods : ICachedMethods
 
     private readonly Lazy<MethodInfo?[]> _cachedMethodsInfos;
 
-    private CachedTypes _cachedTypes;
+    private readonly CachedTypes _cachedTypes;
 
     public CachedMethods(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {

@@ -16,10 +16,16 @@ public interface ICachedFields
     [Pure]
     FieldInfo? GetField(string name);
 
+    [Pure]
+    CachedField? GetCachedField(string name);
+
     /// <summary>
     /// Gets an array of cached fields.
     /// </summary>
     /// <returns>An array of cached fields.</returns>
     [Pure]
     FieldInfo[] GetFields();
+
+    [Pure]
+    CachedField[] GetCachedFields();
 }

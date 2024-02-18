@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using Soenneker.Reflection.Cache.Constructors;
 
 namespace Soenneker.Reflection.Cache.Extensions;

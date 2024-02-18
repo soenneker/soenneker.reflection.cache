@@ -1,7 +1,5 @@
-﻿using Soenneker.Reflection.Cache.Extensions;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Dynamic;
 
 namespace Soenneker.Reflection.Cache.Types;

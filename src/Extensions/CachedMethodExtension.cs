@@ -8,7 +8,7 @@ public static class CachedMethodExtension
 {
     public static int ToCacheKey(this CachedMethod cachedMethod)
     {
-        Type[] parameterTypes = cachedMethod.GetCachedParameters().GetParametersTypes();
+        Type[] parameterTypes = cachedMethod.GetCachedParameters().GetParameterTypes();
 
         return ReflectionCacheUtil.GetCacheKeyForMethod(cachedMethod.Name!, parameterTypes);
     }

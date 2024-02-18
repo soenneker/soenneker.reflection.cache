@@ -1,5 +1,6 @@
 ﻿using Soenneker.Reflection.Cache.Utils;
 using System.Reflection;
+using Soenneker.Extensions.ParameterInfo;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
@@ -22,6 +23,4 @@ internal static class MemberInfoExtension
         result = memberInfo.Name.GetHashCode();
         return result;
     }
-
-
 }
