@@ -6,11 +6,11 @@ namespace Soenneker.Reflection.Cache.Extensions;
 
 public static class CachedFieldsExtension
 {
-    public static FieldInfo[] ToFieldInfos(this CachedField[] cachedField)
+    public static FieldInfo[] ToFieldInfos(this CachedField[] cachedFields)
     {
-        ReadOnlySpan<CachedField> span = cachedField;
+        ReadOnlySpan<CachedField> span = cachedFields;
 
-        var fieldInfos = new FieldInfo[cachedField.Length];
+        var fieldInfos = new FieldInfo[cachedFields.Length];
 
         for (var i = 0; i < span.Length; i++)
         {

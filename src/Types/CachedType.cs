@@ -79,12 +79,28 @@ public partial class CachedType : ICachedType
         return _cachedProperties!.Value.GetProperty(property);
     }
 
+    public CachedProperty? GetCachedProperty(string property)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedProperties!.Value.GetCachedProperty(property);
+    }
+
     public PropertyInfo[]? GetProperties()
     {
         if (Type == null)
             return null;
 
         return _cachedProperties!.Value.GetProperties();
+    }
+
+    public CachedProperty[]? GetCachedProperties()
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedProperties!.Value.GetCachedProperties();
     }
 
     public CachedMethod? GetCachedMethod(string methodName)

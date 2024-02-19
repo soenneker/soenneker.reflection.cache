@@ -5,6 +5,7 @@ using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors;
 using Soenneker.Reflection.Cache.Members;
 using Soenneker.Reflection.Cache.Methods;
+using Soenneker.Reflection.Cache.Properties;
 
 namespace Soenneker.Reflection.Cache.Types.Abstract;
 
@@ -26,6 +27,9 @@ public interface ICachedType
     [Pure]
     int? CacheKey { get; }
 
+    [Pure]
+    CachedProperty? GetCachedProperty(string property);
+
     /// <summary>
     /// Gets information about a specific property.
     /// </summary>
@@ -33,6 +37,9 @@ public interface ICachedType
     /// <returns>Information about the specified property.</returns>
     [Pure]
     PropertyInfo? GetProperty(string property);
+
+    [Pure]
+    CachedProperty[]? GetCachedProperties();
 
     /// <summary>
     /// Gets information about all properties.

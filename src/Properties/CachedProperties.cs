@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Constants;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Properties.Abstract;
 using Soenneker.Reflection.Cache.Types;
 
@@ -10,8 +11,10 @@ namespace Soenneker.Reflection.Cache.Properties;
 ///<inheritdoc cref="ICachedProperties"/>
 public class CachedProperties : ICachedProperties
 {
-    private readonly Lazy<Dictionary<int, PropertyInfo?>> _cachedDict;
-    private readonly Lazy<PropertyInfo[]> _cachedArray;
+    private readonly Lazy<Dictionary<int, CachedProperty?>> _cachedDict;
+    private readonly Lazy<CachedProperty[]> _cachedArray;
+
+    private readonly Lazy<PropertyInfo[]> _propertiesCache;
 
     private readonly CachedType _cachedType;
 
@@ -19,25 +22,32 @@ public class CachedProperties : ICachedProperties
     {
         _cachedType = cachedType;
 
-        _cachedDict = new Lazy<Dictionary<int, PropertyInfo?>>(SetDict, threadSafe);
-        _cachedArray = new Lazy<PropertyInfo[]>(SetArray, threadSafe);
+        _cachedDict = new Lazy<Dictionary<int, CachedProperty?>>(SetDict, threadSafe);
+        _cachedArray = new Lazy<CachedProperty[]>(SetArray, threadSafe);
+        _propertiesCache = new Lazy<PropertyInfo[]>(() => GetCachedProperties().ToPropertyInfos(), threadSafe);
     }
 
     public PropertyInfo? GetProperty(string name)
     {
+        CachedProperty? cachedProperty = GetCachedProperty(name);
+        return cachedProperty?.PropertyInfo;
+    }
+
+    public CachedProperty? GetCachedProperty(string name)
+    {
         return _cachedDict.Value.GetValueOrDefault(name.GetHashCode());
     }
 
-    private Dictionary<int, PropertyInfo?> SetDict()
+    private Dictionary<int, CachedProperty?> SetDict()
     {
-        var dict = new Dictionary<int, PropertyInfo?>();
+        var dict = new Dictionary<int, CachedProperty?>();
 
         // If the array is already populated, build the dictionary from the array
         if (_cachedArray.IsValueCreated)
         {
-            foreach (PropertyInfo property in _cachedArray.Value)
+            foreach (CachedProperty cachedProperty in _cachedArray.Value)
             {
-                dict[property.Name.GetHashCode()] = property;
+                dict[cachedProperty.PropertyInfo.Name.GetHashCode()] = cachedProperty;
             }
         }
         else
@@ -47,28 +57,36 @@ public class CachedProperties : ICachedProperties
 
             foreach (PropertyInfo property in properties)
             {
-                dict[property.Name.GetHashCode()] = property;
+                var cachedProperty = new CachedProperty(property);
+                dict[property.Name.GetHashCode()] = cachedProperty;
             }
         }
 
         return dict;
     }
 
-    private PropertyInfo[] SetArray()
+    private CachedProperty[] SetArray()
     {
         if (_cachedDict.IsValueCreated)
         {
-            Dictionary<int, PropertyInfo?>.ValueCollection values = _cachedDict.Value.Values;
+            Dictionary<int, CachedProperty?>.ValueCollection values = _cachedDict.Value.Values;
             int count = values.Count;
-            var result = new PropertyInfo[count];
+            var result = new CachedProperty[count];
             values.CopyTo(result, 0);
             return result;
         }
 
-        return _cachedType.Type!.GetProperties(ReflectionCacheConstants.BindingFlags);
+        PropertyInfo[] properties = _cachedType.Type!.GetProperties(ReflectionCacheConstants.BindingFlags);
+
+        return properties.ToCachedProperties();
     }
 
     public PropertyInfo[] GetProperties()
+    {
+        return _propertiesCache.Value;
+    }
+
+    public CachedProperty[] GetCachedProperties()
     {
         return _cachedArray.Value;
     }

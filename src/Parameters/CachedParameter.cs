@@ -21,7 +21,7 @@ public class CachedParameter : ICachedParameter
     public CachedParameter(ParameterInfo parameterInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         ParameterInfo = parameterInfo;
-
+        
         _lazyCachedParameterType = new Lazy<CachedType>(() => cachedTypes.GetCachedType(parameterInfo.ParameterType), threadSafe);
         _parameterTypeLazy = new Lazy<Type>(() => _lazyCachedParameterType.Value.Type!, threadSafe);
     }

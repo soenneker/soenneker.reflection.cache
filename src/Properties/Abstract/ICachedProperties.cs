@@ -16,10 +16,16 @@ public interface ICachedProperties
     [Pure]
     PropertyInfo? GetProperty(string name);
 
+    [Pure]
+    CachedProperty? GetCachedProperty(string name);
+
     /// <summary>
     /// Gets an array of cached properties.
     /// </summary>
     /// <returns>An array of cached properties.</returns>
     [Pure]
     PropertyInfo[] GetProperties();
+
+    [Pure]
+    CachedProperty[] GetCachedProperties();
 }
