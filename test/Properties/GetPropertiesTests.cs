@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System.Reflection;
+using Soenneker.Reflection.Cache.Properties;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 using Xunit;
@@ -17,18 +18,18 @@ public class GetPropertiesTests
     }
 
     [Fact]
-    public void GetProperty_should_return_propertyInfo()
+    public void GetProperties_should_return_propertyInfos()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
-        PropertyInfo? propertyInfo = result.GetProperty("PublicProperty1");
-        propertyInfo.Should().NotBeNull();
+        PropertyInfo[]? propertyInfos = result.GetProperties();
+        propertyInfos.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
-    public void GetProperties_should_return_propertyInfos()
+    public void GetCachedProperties_should_return_CachedProperties()
     {
-        CachedType result = _cache.GetCachedType(typeof(string));
-        PropertyInfo[]? propertyInfos = result.GetProperties();
-        propertyInfos.Should().NotBeNullOrEmpty();
+        CachedType result = _cache.GetCachedType(typeof(TestType));
+        CachedProperty[]? cachedProperties = result.GetCachedProperties();
+        cachedProperties.Should().NotBeNullOrEmpty();
     }
 }

@@ -127,6 +127,16 @@ public partial class CachedType : ICachedType
         return _cachedMethods!.Value.GetCachedMethod(methodName, parameters);
     }
 
+    public CachedField[]? GetCachedFields()
+    {
+        if (Type == null)
+            return null;
+
+        CachedField[] result = _cachedFields!.Value.GetCachedFields();
+
+        return result;
+    }
+
     public FieldInfo[]? GetFields()
     {
         if (Type == null)
@@ -135,6 +145,14 @@ public partial class CachedType : ICachedType
         FieldInfo[] result = _cachedFields!.Value.GetFields();
         
         return result;
+    }
+
+    public CachedField? GetCachedField(string fieldName)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedFields!.Value.GetCachedField(fieldName);
     }
 
     public FieldInfo? GetField(string fieldName)

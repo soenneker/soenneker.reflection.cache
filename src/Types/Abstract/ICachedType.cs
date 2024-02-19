@@ -3,6 +3,7 @@ using System.Diagnostics.Contracts;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors;
+using Soenneker.Reflection.Cache.Fields;
 using Soenneker.Reflection.Cache.Members;
 using Soenneker.Reflection.Cache.Methods;
 using Soenneker.Reflection.Cache.Properties;
@@ -49,10 +50,17 @@ public interface ICachedType
     PropertyInfo[]? GetProperties();
 
     [Pure]
-    FieldInfo? GetField(string fieldName);
+    CachedField[]? GetCachedFields();
 
     [Pure]
     FieldInfo[]? GetFields();
+
+    [Pure]
+    CachedField? GetCachedField(string fieldName);
+
+    [Pure]
+    FieldInfo? GetField(string fieldName);
+
 
     /// <summary>
     /// Gets information about a specific method.

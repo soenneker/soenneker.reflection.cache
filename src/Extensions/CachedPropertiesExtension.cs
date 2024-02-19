@@ -10,13 +10,13 @@ public static class CachedPropertiesExtension
     {
         ReadOnlySpan<CachedProperty> span = cachedProperties;
 
-        var fieldInfos = new PropertyInfo[cachedProperties.Length];
+        var propertyInfos = new PropertyInfo[cachedProperties.Length];
 
         for (var i = 0; i < span.Length; i++)
         {
-            fieldInfos[i] = span[i].PropertyInfo;
+            propertyInfos[i] = span[i].PropertyInfo;
         }
 
-        return fieldInfos;
+        return propertyInfos;
     }
 }

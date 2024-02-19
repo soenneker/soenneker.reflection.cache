@@ -1,5 +1,6 @@
 using FluentAssertions;
 using System.Reflection;
+using Soenneker.Reflection.Cache.Fields;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 using Xunit;
@@ -17,18 +18,18 @@ public class GetFieldsTests
     }
 
     [Fact]
-    public void GetField_should_return_fieldInfo()
+    public void GetFields_should_return_fieldInfos()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
-        FieldInfo? fieldInfo = result.GetField("PublicField");
-        fieldInfo.Should().NotBeNull();
+        FieldInfo[]? fieldInfos = result.GetFields();
+        fieldInfos.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
-    public void GetFields_should_return_fieldInfos()
+    public void GetCachedFields_should_return_CachedFields()
     {
-        CachedType result = _cache.GetCachedType(typeof(string));
-        FieldInfo[]? fieldInfos = result.GetFields();
-        fieldInfos.Should().NotBeNullOrEmpty();
+        CachedType result = _cache.GetCachedType(typeof(TestType));
+        CachedField[]? cachedFields = result.GetCachedFields();
+        cachedFields.Should().NotBeNullOrEmpty();
     }
 }
