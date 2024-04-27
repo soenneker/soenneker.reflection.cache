@@ -32,4 +32,12 @@ public class GetFieldTests
         CachedField? cachedField = result.GetCachedField("PublicField");
         cachedField.Should().NotBeNull();
     }
+
+    [Fact]
+    public void GetCachedField_should_return_internal_CachedField()
+    {
+        CachedType result = _cache.GetCachedType(typeof(TestType));
+        CachedField? cachedField = result.GetCachedField("_internalField");
+        cachedField.Should().NotBeNull();
+    }
 }

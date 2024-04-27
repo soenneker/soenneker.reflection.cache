@@ -25,6 +25,7 @@ public class CachedGenericArguments : ICachedGenericArguments
     private CachedType[] SetArray()
     {
         Type[] types = _cachedType.Type!.GetGenericArguments();
+
         var result = new CachedType[types.Length];
 
         for (var i = 0; i < types.Length; i++)

@@ -32,11 +32,11 @@ public class CachedInterfaces : ICachedInterfaces
         int hashCode = typeName.GetHashCode();
 
         if (_cachedDict.Value.TryGetValue(hashCode, out CachedType? result))
-            return result;
+            return result!;
 
-        Type? type = _cachedType.Type!.GetInterface(typeName);
+        Type? interfaceType = _cachedType.Type!.GetInterface(typeName);
 
-        result = _cachedTypes.GetCachedType(type);
+        result = _cachedTypes.GetCachedType(interfaceType);
         _cachedDict.Value[hashCode] = result;
 
         return result;
@@ -53,7 +53,7 @@ public class CachedInterfaces : ICachedInterfaces
 
         if (_cachedArray.IsValueCreated)
         {
-            CachedType[]? cachedArrayValue = _cachedArray.Value;
+            CachedType[] cachedArrayValue = _cachedArray.Value;
 
             for (var i = 0; i < cachedArrayValue.Length; i++)
             {

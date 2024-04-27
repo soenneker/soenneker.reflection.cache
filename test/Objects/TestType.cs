@@ -26,6 +26,10 @@ public class TestType : ITestType
 
     public event EventHandler? MyEvent;
 
+    protected internal int ProtectedInternalProperty { get; set; }
+
+    internal int _internalField;
+
     public TestType()
     {
         // Initialize some values in the constructor
@@ -34,6 +38,8 @@ public class TestType : ITestType
         PublicProperty1 = "PublicPropertyValue";
         PrivateProperty1 = 42;
         PrivateProperty2 = 3.14;
+        ProtectedInternalProperty = 5;
+        _internalField = 10;
     }
 
     public TestType(int publicField, string privateField, string publicProperty1, double privateProperty)
@@ -78,7 +84,6 @@ public class TestType : ITestType
     {
         Console.WriteLine("PublicStaticMethod called");
     }
-
 
     public string this[int index]
     {

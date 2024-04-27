@@ -32,4 +32,12 @@ public class GetPropertyTests
         CachedProperty? cachedProperty = result.GetCachedProperty("PublicProperty1");
         cachedProperty.Should().NotBeNull();
     }
+
+    [Fact]
+    public void GetCachedProperty_should_return_internal_CachedProperty()
+    {
+        CachedType result = _cache.GetCachedType(typeof(TestType));
+        CachedProperty? cachedProperty = result.GetCachedProperty("ProtectedInternalProperty");
+        cachedProperty.Should().NotBeNull();
+    }
 }
