@@ -8,6 +8,7 @@ public partial class CachedType
 {
     public bool IsAbstract => _isAbstractLazy.Value;
     private Lazy<bool> _isAbstractLazy;
+
     public bool IsInterface => _isInterfaceLazy.Value;
     private Lazy<bool> _isInterfaceLazy;
 
@@ -40,6 +41,9 @@ public partial class CachedType
 
     public bool IsExpandoObject => _isExpandoObject.Value;
     private Lazy<bool> _isExpandoObject;
+
+    public bool IsSealed => _isSealed.Value;
+    private Lazy<bool> _isSealed;
 
     private void InitializeProperties()
     {
@@ -135,5 +139,7 @@ public partial class CachedType
 
             return Type == typeof(ExpandoObject);
         }, _threadSafe);
+
+        _isSealed = new Lazy<bool>(() => Type is {IsSealed: true}, _threadSafe);
     }
 }
