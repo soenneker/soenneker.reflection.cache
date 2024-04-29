@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Constructors;
 
 ///<inheritdoc cref="ICachedConstructor"/>
-public class CachedConstructor : ICachedConstructor
+public partial class CachedConstructor : ICachedConstructor
 {
     public ConstructorInfo? ConstructorInfo { get; }
 
@@ -16,9 +16,14 @@ public class CachedConstructor : ICachedConstructor
 
     private readonly Lazy<CachedParameters>? _parameters;
 
+    private readonly bool _threadSafe;
+
     public CachedConstructor(ConstructorInfo? constructorInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         ConstructorInfo = constructorInfo;
+        _threadSafe = threadSafe;
+
+        InitializeProperties();
 
         if (constructorInfo == null)
             return;

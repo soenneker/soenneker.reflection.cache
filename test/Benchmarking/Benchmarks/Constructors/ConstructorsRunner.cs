@@ -23,6 +23,14 @@ public class ConstructorsRunner : BenchmarkTest
     }
 
     [LocalFact]
+    public async Task CachedConstructors()
+    {
+        Summary summary = BenchmarkRunner.Run<CachedConstructorBenchmarks>(DefaultConf);
+
+        await OutputSummaryToLog(summary);
+    }
+
+    [LocalFact]
     public async Task GetConstructors()
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorsBenchmarks>(DefaultConf);
