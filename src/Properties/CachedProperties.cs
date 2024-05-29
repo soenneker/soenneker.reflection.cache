@@ -53,7 +53,7 @@ public class CachedProperties : ICachedProperties
         else
         {
             // If the array is not populated, build the dictionary directly
-            PropertyInfo[] properties = _cachedType.Type!.GetProperties(ReflectionCacheConstants.BindingFlags);
+            PropertyInfo[] properties = _cachedType.Type!.GetProperties(ReflectionCacheConstants.BindingFlagsProperties);
 
             foreach (PropertyInfo property in properties)
             {
@@ -76,7 +76,7 @@ public class CachedProperties : ICachedProperties
             return result;
         }
 
-        PropertyInfo[] properties = _cachedType.Type!.GetProperties(ReflectionCacheConstants.BindingFlags);
+        PropertyInfo[] properties = _cachedType.Type!.GetProperties(ReflectionCacheConstants.BindingFlagsProperties);
 
         return properties.ToCachedProperties();
     }

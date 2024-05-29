@@ -53,7 +53,7 @@ public class CachedFields : ICachedFields
         else
         {
             // If the array is not populated, build the dictionary directly
-            FieldInfo[] fields = _cachedType.Type!.GetFields(ReflectionCacheConstants.BindingFlags);
+            FieldInfo[] fields = _cachedType.Type!.GetFields(ReflectionCacheConstants.BindingFlagsFields);
 
             foreach (FieldInfo field in fields)
             {
@@ -76,7 +76,7 @@ public class CachedFields : ICachedFields
             return result;
         }
 
-        FieldInfo[] fields = _cachedType.Type!.GetFields(ReflectionCacheConstants.BindingFlags);
+        FieldInfo[] fields = _cachedType.Type!.GetFields(ReflectionCacheConstants.BindingFlagsFields);
 
         return fields.ToCachedFields();
     }

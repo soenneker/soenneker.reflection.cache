@@ -28,6 +28,8 @@ public class TestType : ITestType
 
     protected internal int ProtectedInternalProperty { get; set; }
 
+    private int PrivateProperty { get; set; }
+
     internal int _internalField;
 
     public TestType()

@@ -1,8 +1,12 @@
 using System.Reflection;
+
 using FluentAssertions;
+
+using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Fields;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
+
 using Xunit;
 using Xunit.Abstractions;
 
@@ -20,6 +24,8 @@ public class GetFieldTests
     [Fact]
     public void GetField_should_return_fieldInfo()
     {
+        ReflectionCacheConstants.BindingFlagsFields = ReflectionCacheConstants.BindingFlags;
+
         CachedType result = _cache.GetCachedType(typeof(TestType));
         FieldInfo? fieldInfo = result.GetField("PublicField");
         fieldInfo.Should().NotBeNull();
@@ -28,6 +34,8 @@ public class GetFieldTests
     [Fact]
     public void GetCachedField_should_return_CachedField()
     {
+        ReflectionCacheConstants.BindingFlagsFields = ReflectionCacheConstants.BindingFlags;
+
         CachedType result = _cache.GetCachedType(typeof(TestType));
         CachedField? cachedField = result.GetCachedField("PublicField");
         cachedField.Should().NotBeNull();
@@ -36,8 +44,40 @@ public class GetFieldTests
     [Fact]
     public void GetCachedField_should_return_internal_CachedField()
     {
+        ReflectionCacheConstants.BindingFlagsFields = ReflectionCacheConstants.BindingFlags;
+
         CachedType result = _cache.GetCachedType(typeof(TestType));
         CachedField? cachedField = result.GetCachedField("_internalField");
         cachedField.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void GetCachedField_should_return_private_CachedField()
+    {
+        ReflectionCacheConstants.BindingFlagsFields = ReflectionCacheConstants.BindingFlags;
+
+        CachedType result = _cache.GetCachedType(typeof(TestType));
+        CachedField? cachedField = result.GetCachedField("_privateField");
+        cachedField.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void GetCachedField_should_not_return_internal_CachedField_when_BindingFlagsNonPublic_is_not_used()
+    {
+        ReflectionCacheConstants.BindingFlagsFields = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
+
+        CachedType result = _cache.GetCachedType(typeof(TestType));
+        CachedField? cachedField = result.GetCachedField("_internalField");
+        cachedField.Should().BeNull();
+    }
+
+    [Fact]
+    public void GetCachedField_should_not_return_private_CachedField_when_BindingFlagsNonPublic_is_not_used()
+    {
+        ReflectionCacheConstants.BindingFlagsFields = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
+
+        CachedType result = _cache.GetCachedType(typeof(TestType));
+        CachedField? cachedField = result.GetCachedField("_privateField");
+        cachedField.Should().BeNull();
     }
 }
