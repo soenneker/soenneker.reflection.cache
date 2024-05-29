@@ -107,4 +107,11 @@ public class CacheTypeTests
         cachedGenericType.Should().NotBeNull();
         cachedGenericType.Should().Be(_cache.GetCachedType(typeof(List<int>)));
     }
+
+    [Fact]
+    public void IsFunc_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(Func<int>));
+        result.IsFunc.Should().BeTrue();
+    }
 }

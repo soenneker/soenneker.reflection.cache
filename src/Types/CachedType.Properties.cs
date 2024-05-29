@@ -45,6 +45,9 @@ public partial class CachedType
     public bool IsSealed => _isSealed.Value;
     private Lazy<bool> _isSealed;
 
+    public bool IsFunc => _isFunc.Value;
+    private Lazy<bool> _isFunc;
+
     private void InitializeProperties()
     {
         _isAbstractLazy = new Lazy<bool>(() => Type is {IsAbstract: true}, _threadSafe);
@@ -141,5 +144,16 @@ public partial class CachedType
         }, _threadSafe);
 
         _isSealed = new Lazy<bool>(() => Type is {IsSealed: true}, _threadSafe);
+
+        _isFunc = new Lazy<bool>(() =>
+        {
+            if (Type == null)
+                return false;
+
+            if (IsGenericType && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(Func<>)))
+                return true;
+
+            return false;
+        }, _threadSafe);
     }
 }
