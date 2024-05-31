@@ -59,7 +59,7 @@ public class CachedConstructors : ICachedConstructors
             return result;
         }
 
-        ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(ReflectionCacheConstants.BindingFlags);
+        ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(_cachedTypes.Options.ConstructorFlags);
         var cachedConstructors = new CachedConstructor[constructorInfos.Length];
 
         for (var i = 0; i < constructorInfos.Length; i++)
@@ -86,7 +86,7 @@ public class CachedConstructors : ICachedConstructors
             return dict;
         }
 
-        ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(ReflectionCacheConstants.BindingFlags);
+        ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(_cachedTypes.Options.ConstructorFlags);
         var constructorsDict = new Dictionary<int, CachedConstructor>(constructorInfos.Length);
 
         ReadOnlySpan<ConstructorInfo> constructorsSpan = constructorInfos;

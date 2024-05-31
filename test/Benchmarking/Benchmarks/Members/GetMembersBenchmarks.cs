@@ -17,7 +17,7 @@ public class GetMembersBenchmarks
     public void Setup()
     {
         var threadSafeCache = new ReflectionCache();
-        var cache = new ReflectionCache(false);
+        var cache = new ReflectionCache(null, false);
         _type = typeof(TestType);
 
         _cachedThreadSafeType = threadSafeCache.GetCachedType(_type);

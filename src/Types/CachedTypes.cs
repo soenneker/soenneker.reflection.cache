@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Soenneker.Reflection.Cache.Options;
 using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Types;
@@ -17,8 +18,13 @@ public class CachedTypes : ICachedTypes
 
     private readonly bool _threadSafe;
 
-    public CachedTypes(bool threadSafe)
+    public ReflectionCacheOptions Options { get; private set; }
+
+    public CachedTypes(ReflectionCacheOptions? options = null, bool threadSafe = true)
     {
+        options ??= new ReflectionCacheOptions();
+        Options = options;
+
         _threadSafe = threadSafe;
 
         if (_threadSafe)

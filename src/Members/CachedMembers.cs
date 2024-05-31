@@ -29,7 +29,7 @@ public class CachedMembers : ICachedMembers
 
     private CachedMember[] SetArray(bool threadSafe)
     {
-        MemberInfo[] memberInfos = _cachedType.Type!.GetMembers(ReflectionCacheConstants.BindingFlags);
+        MemberInfo[] memberInfos = _cachedType.Type!.GetMembers(_cachedTypes.Options.MemberFlags);
         int count = memberInfos.Length;
 
         var cachedArray = new CachedMember[count];

@@ -18,9 +18,12 @@ public class CachedFields : ICachedFields
 
     private readonly CachedType _cachedType;
 
-    public CachedFields(CachedType cachedType, bool threadSafe = true)
+    private readonly CachedTypes _cachedTypes;
+
+    public CachedFields(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType;
+        _cachedTypes = cachedTypes;
 
         _cachedDict = new Lazy<Dictionary<int, CachedField?>>(SetDict, threadSafe);
         _cachedArray = new Lazy<CachedField[]>(SetArray, threadSafe);
@@ -53,7 +56,7 @@ public class CachedFields : ICachedFields
         else
         {
             // If the array is not populated, build the dictionary directly
-            FieldInfo[] fields = _cachedType.Type!.GetFields(ReflectionCacheConstants.BindingFlags);
+            FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
 
             foreach (FieldInfo field in fields)
             {
@@ -76,7 +79,7 @@ public class CachedFields : ICachedFields
             return result;
         }
 
-        FieldInfo[] fields = _cachedType.Type!.GetFields(ReflectionCacheConstants.BindingFlags);
+        FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
 
         return fields.ToCachedFields();
     }

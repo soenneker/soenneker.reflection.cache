@@ -57,9 +57,9 @@ public partial class CachedType : ICachedType
 
         _cachedBaseTypeLazy = new Lazy<CachedType>(() => _cachedTypes.GetCachedType(Type.BaseType), _threadSafe);
 
-        _cachedProperties = new Lazy<CachedProperties>(() => new CachedProperties(this, threadSafe), threadSafe);
+        _cachedProperties = new Lazy<CachedProperties>(() => new CachedProperties(this, cachedTypes, threadSafe), threadSafe);
         _cachedMethods = new Lazy<CachedMethods>(() => new CachedMethods(this, cachedTypes, threadSafe), threadSafe);
-        _cachedFields = new Lazy<CachedFields>(() => new CachedFields(this, threadSafe), threadSafe);
+        _cachedFields = new Lazy<CachedFields>(() => new CachedFields(this, cachedTypes, threadSafe), threadSafe);
         _cachedAttributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
         _cachedInterfaces = new Lazy<CachedInterfaces>(() => new CachedInterfaces(this, cachedTypes, threadSafe), threadSafe);
         _cachedConstructors = new Lazy<CachedConstructors>(() => new CachedConstructors(this, cachedTypes, threadSafe), threadSafe);

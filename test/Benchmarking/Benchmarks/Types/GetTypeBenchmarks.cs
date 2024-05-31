@@ -13,7 +13,7 @@ public class GetTypeBenchmarks
     [GlobalSetup]
     public void Setup()
     {
-        _cache = new ReflectionCache(false);
+        _cache = new ReflectionCache(null, false);
         _threadSafeCache = new ReflectionCache();
         _type = typeof(TestType);
     }

@@ -78,7 +78,7 @@ public class CachedMethods : ICachedMethods
             return result;
         }
 
-        MethodInfo[] methodInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+        MethodInfo[] methodInfos = _cachedType.Type!.GetMethods(_cachedTypes.Options.MethodFlags);
         int count = methodInfos.Length;
 
         var cachedArray = new CachedMethod[count];
@@ -116,7 +116,7 @@ public class CachedMethods : ICachedMethods
             return cachedDict;
         }
 
-        MethodInfo[] methodInfos = _cachedType.Type!.GetMethods(ReflectionCacheConstants.BindingFlags);
+        MethodInfo[] methodInfos = _cachedType.Type!.GetMethods(_cachedTypes.Options.MethodFlags);
 
         count = methodInfos.Length;
 

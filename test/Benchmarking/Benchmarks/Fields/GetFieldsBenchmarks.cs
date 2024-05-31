@@ -16,7 +16,7 @@ public class GetFieldsBenchmarks
     [GlobalSetup]
     public void Setup()
     {
-        var cache = new ReflectionCache(false);
+        var cache = new ReflectionCache(null, false);
         var threadSafeCache = new ReflectionCache();
 
         _type = typeof(TestType);

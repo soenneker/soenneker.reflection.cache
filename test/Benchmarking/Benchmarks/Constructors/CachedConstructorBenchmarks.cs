@@ -16,7 +16,7 @@ public class CachedConstructorBenchmarks
     [GlobalSetup]
     public void Setup()
     {
-        _cache = new ReflectionCache(false);
+        _cache = new ReflectionCache(null, false);
         Type type = typeof(TestType);
 
         CachedType _cachedType = _cache.GetCachedType(type);
