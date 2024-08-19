@@ -5,6 +5,7 @@ using Xunit.Abstractions;
 using Xunit;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
@@ -35,6 +36,20 @@ public class CacheTypeTests
     public void IsDictionary_direct_should_be_true()
     {
         CachedType result = _cache.GetCachedType(typeof(Dictionary<string, object>));
+        result.IsDictionary.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsDictionary_should_be_true_for_generic_IDictionary()
+    {
+        CachedType result = _cache.GetCachedType(typeof(IDictionary<string, string>));
+        result.IsDictionary.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsDictionary_should_be_true_for_IDictionary()
+    {
+        CachedType result = _cache.GetCachedType(typeof(IDictionary));
         result.IsDictionary.Should().BeTrue();
     }
 

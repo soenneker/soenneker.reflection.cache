@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Dynamic;
 
 namespace Soenneker.Reflection.Cache.Types;
@@ -70,6 +71,14 @@ public partial class CachedType
         {
             if (Type == null)
                 return false;
+
+            if (IsGenericType)
+            {
+                CachedType genericDictionary = _cachedTypes.GetCachedType(typeof(IDictionary<,>));
+
+                if (GetCachedGenericTypeDefinition() == genericDictionary.GetCachedGenericTypeDefinition())
+                    return true;
+            }
 
             CachedType dictionaryType = _cachedTypes.GetCachedType(typeof(IDictionary));
 
