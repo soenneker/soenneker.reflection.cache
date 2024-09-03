@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Types;
 
@@ -48,6 +49,42 @@ public partial class CachedType
 
     public bool IsFunc => _isFunc.Value;
     private Lazy<bool> _isFunc;
+
+    public bool IsClass => _isClass.Value;
+    private Lazy<bool> _isClass;
+
+    public bool IsValueType => _isValueType.Value;
+    private Lazy<bool> _isValueType;
+
+    public bool IsPrimitive => _isPrimitive.Value;
+    private Lazy<bool> _isPrimitive;
+
+    public bool IsStaticClass => _isStaticClass.Value;
+    private Lazy<bool> _isStaticClass;
+
+    public bool IsTuple => _isTuple.Value;
+    private Lazy<bool> _isTuple;
+
+    public bool IsDelegate => _isDelegate.Value;
+    private Lazy<bool> _isDelegate;
+
+    public bool IsAnonymousType => _isAnonymousType.Value;
+    private Lazy<bool> _isAnonymousType;
+
+    public bool IsRecord => _isRecord.Value;
+    private Lazy<bool> _isRecord;
+
+    public bool IsNullableValueType => _isNullableValueType.Value;
+    private Lazy<bool> _isNullableValueType;
+
+    public bool IsObsolete => _isObsolete.Value;
+    private Lazy<bool> _isObsolete;
+
+    public bool IsConstructedGenericType => _isConstructedGenericType.Value;
+    private Lazy<bool> _isConstructedGenericType;
+
+    public bool IsAbstractAndSealed => _isAbstractAndSealed.Value;
+    private Lazy<bool> _isAbstractAndSealed;
 
     private void InitializeProperties()
     {
@@ -164,5 +201,40 @@ public partial class CachedType
 
             return false;
         }, _threadSafe);
+
+        _isClass = new Lazy<bool>(() => Type is {IsClass: true}, _threadSafe);
+        _isValueType = new Lazy<bool>(() => Type is {IsValueType: true}, _threadSafe);
+        _isPrimitive = new Lazy<bool>(() => Type is {IsPrimitive: true}, _threadSafe);
+        _isStaticClass = new Lazy<bool>(() => Type is {IsAbstract: true, IsSealed: true}, _threadSafe);
+        _isTuple = new Lazy<bool>(() => Type is {IsGenericType: true} && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(ValueTuple<>)), _threadSafe);
+        _isDelegate = new Lazy<bool>(() => typeof(Delegate).IsAssignableFrom(Type), _threadSafe);
+
+        _isAnonymousType = new Lazy<bool>(() =>
+        {
+            if (Type == null)
+                return false;
+
+            return Type.Name.Contains("AnonymousType") && Type.IsSealed && Type.IsGenericType;
+        }, _threadSafe);
+
+        _isRecord = new Lazy<bool>(() =>
+        {
+            if (Type == null) return false;
+            return Type.IsClass && Type.IsSealed && Type.GetMethod("<Clone>$") != null;
+        }, _threadSafe);
+
+        _isNullableValueType = new Lazy<bool>(() =>
+        {
+            if (Type == null)
+                return false;
+
+            return Nullable.GetUnderlyingType(Type)?.IsValueType == true;
+        }, _threadSafe);
+
+        _isObsolete = new Lazy<bool>(() => { return Type?.GetCustomAttribute<ObsoleteAttribute>() != null; }, _threadSafe);
+
+        _isConstructedGenericType = new Lazy<bool>(() => { return Type?.IsConstructedGenericType == true; }, _threadSafe);
+
+        _isAbstractAndSealed = new Lazy<bool>(() => Type is {IsAbstract: true, IsSealed: true}, _threadSafe);
     }
 }
