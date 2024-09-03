@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Properties.Abstract;
 using Soenneker.Reflection.Cache.Types;
@@ -20,10 +19,13 @@ public class CachedProperties : ICachedProperties
 
     private readonly CachedTypes _cachedTypes;
 
+    private readonly bool _threadSafe;
+
     public CachedProperties(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType;
         _cachedTypes = cachedTypes;
+        _threadSafe = threadSafe;
 
         _cachedDict = new Lazy<Dictionary<int, CachedProperty?>>(SetDict, threadSafe);
         _cachedArray = new Lazy<CachedProperty[]>(SetArray, threadSafe);
@@ -60,7 +62,7 @@ public class CachedProperties : ICachedProperties
 
             foreach (PropertyInfo property in properties)
             {
-                var cachedProperty = new CachedProperty(property);
+                var cachedProperty = new CachedProperty(property, _cachedTypes, _threadSafe);
                 dict[property.Name.GetHashCode()] = cachedProperty;
             }
         }
@@ -81,7 +83,7 @@ public class CachedProperties : ICachedProperties
 
         PropertyInfo[] properties = _cachedType.Type!.GetProperties(_cachedTypes.Options.PropertyFlags);
 
-        return properties.ToCachedProperties();
+        return properties.ToCachedProperties(_cachedTypes, _threadSafe);
     }
 
     public PropertyInfo[] GetProperties()

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Fields.Abstract;
 using Soenneker.Reflection.Cache.Types;
@@ -20,10 +19,13 @@ public class CachedFields : ICachedFields
 
     private readonly CachedTypes _cachedTypes;
 
+    private readonly bool _threadSafe;
+
     public CachedFields(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType;
         _cachedTypes = cachedTypes;
+        _threadSafe = threadSafe;
 
         _cachedDict = new Lazy<Dictionary<int, CachedField?>>(SetDict, threadSafe);
         _cachedArray = new Lazy<CachedField[]>(SetArray, threadSafe);
@@ -60,7 +62,7 @@ public class CachedFields : ICachedFields
 
             foreach (FieldInfo field in fields)
             {
-                var cachedField = new CachedField(field);
+                var cachedField = new CachedField(field, _cachedTypes, _threadSafe);
                 dict[field.Name.GetHashCode()] = cachedField;
             }
         }
@@ -81,7 +83,7 @@ public class CachedFields : ICachedFields
 
         FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
 
-        return fields.ToCachedFields();
+        return fields.ToCachedFields(_cachedTypes, _threadSafe);
     }
 
     public FieldInfo[] GetFields()

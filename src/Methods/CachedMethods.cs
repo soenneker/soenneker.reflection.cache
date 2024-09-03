@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Methods.Abstract;
 using Soenneker.Reflection.Cache.Types;

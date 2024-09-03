@@ -207,7 +207,7 @@ public partial class CachedType
         _isPrimitive = new Lazy<bool>(() => Type is {IsPrimitive: true}, _threadSafe);
         _isStaticClass = new Lazy<bool>(() => Type is {IsAbstract: true, IsSealed: true}, _threadSafe);
         _isTuple = new Lazy<bool>(() => Type is {IsGenericType: true} && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(ValueTuple<>)), _threadSafe);
-        _isDelegate = new Lazy<bool>(() => typeof(Delegate).IsAssignableFrom(Type), _threadSafe);
+        _isDelegate = new Lazy<bool>(() => _cachedTypes.GetCachedType(typeof(Delegate)).IsAssignableFrom(this), _threadSafe);
 
         _isAnonymousType = new Lazy<bool>(() =>
         {

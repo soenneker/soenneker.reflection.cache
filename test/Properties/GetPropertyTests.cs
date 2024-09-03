@@ -40,4 +40,20 @@ public class GetPropertyTests
         CachedProperty? cachedProperty = result.GetCachedProperty("ProtectedInternalProperty");
         cachedProperty.Should().NotBeNull();
     }
+
+    [Fact]
+    public void IsDelegate_ShouldReturnTrue_WhenPropertyTypeIsDelegate()
+    {
+        CachedType result = _cache.GetCachedType(typeof(ClassWithDelegateProperty));
+        CachedProperty? cachedProperty = result.GetCachedProperty("DelegateProperty");
+        cachedProperty.IsDelegate.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsDelegate_ShouldReturnFalse_WhenPropertyTypeIsNotDelegate()
+    {
+        CachedType result = _cache.GetCachedType(typeof(ClassWithDelegateProperty));
+        CachedProperty? cachedProperty = result.GetCachedProperty("NonDelegateProperty");
+        cachedProperty.IsDelegate.Should().BeFalse();
+    }
 }
