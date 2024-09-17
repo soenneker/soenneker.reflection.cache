@@ -42,7 +42,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-        <PackageReference Include="Soenneker.Extensions.Array.Object" Version="2.1.15" />
+        <PackageReference Include="Soenneker.Extensions.Array.Object" Version="2.1.16" />
         <PackageReference Include="Soenneker.Extensions.ParameterInfo" Version="2.1.15" />
     </ItemGroup>
 </Project>
