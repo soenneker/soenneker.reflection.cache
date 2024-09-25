@@ -9,6 +9,7 @@ public class CachedField
     public FieldInfo FieldInfo { get; }
 
     public bool IsDelegate => _isDelegate.Value;
+
     private readonly Lazy<bool> _isDelegate;
 
     public CachedField(FieldInfo fieldInfo, CachedTypes cachedTypes, bool threadSafe)

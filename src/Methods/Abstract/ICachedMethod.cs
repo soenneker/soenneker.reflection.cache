@@ -2,6 +2,7 @@
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Parameters;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Methods.Abstract;
 
@@ -30,6 +31,8 @@ public interface ICachedMethod
     ParameterInfo[] GetParameters();
 
     CachedCustomAttributes? GetCachedCustomAttributes();
+
+    CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes);
 
     object[] GetCustomAttributes();
 

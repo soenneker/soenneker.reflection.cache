@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
+using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Methods.Abstract;
 using Soenneker.Reflection.Cache.Parameters;
 using Soenneker.Reflection.Cache.Types;
@@ -19,15 +21,24 @@ public class CachedMethod : ICachedMethod
     private readonly Lazy<CachedParameters>? _parameters;
     private readonly Lazy<CachedCustomAttributes>? _attributes;
 
+    private readonly Lazy<Dictionary<int, CachedMethod>>? _genericMethodCache;
+
+    private readonly CachedTypes _cachedTypes;
+
+    private readonly bool _threadSafe;
+
     public CachedMethod(MethodInfo? methodInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MethodInfo = methodInfo;
+        _threadSafe = threadSafe;
 
         if (methodInfo == null)
             return;
 
+        _cachedTypes = cachedTypes;
         _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, cachedTypes, threadSafe), threadSafe);
         _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
+        _genericMethodCache = new Lazy<Dictionary<int, CachedMethod>>(threadSafe);
     }
 
     public CachedParameters? GetCachedParameters()
@@ -52,6 +63,26 @@ public class CachedMethod : ICachedMethod
             return null;
 
         return _attributes!.Value;
+    }
+
+    public CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes)
+    {
+        if (MethodInfo == null)
+            return null;
+
+        int key = cachedTypes.ToCacheKey();
+
+        if (_genericMethodCache!.Value.TryGetValue(key, out CachedMethod? cachedGenericMethod))
+        {
+            return cachedGenericMethod;
+        }
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod(cachedTypes.ToTypes());
+
+        var newCachedMethod = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        _genericMethodCache.Value[key] = newCachedMethod;
+
+        return newCachedMethod;
     }
 
     public object[] GetCustomAttributes()
