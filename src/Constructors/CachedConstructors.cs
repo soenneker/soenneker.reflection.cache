@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Soenneker.Extensions.Array.Object;
+using Soenneker.Extensions.Type.Array;
 using Soenneker.Reflection.Cache.Constructors.Abstract;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types;
@@ -33,7 +34,7 @@ public class CachedConstructors : ICachedConstructors
 
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
     {
-        int key = parameterTypes.ToCacheKey();
+        int key = parameterTypes.ToHashKey();
         return _cachedDict.Value.GetValueOrDefault(key);
     }
 
@@ -78,7 +79,7 @@ public class CachedConstructors : ICachedConstructors
 
             for (var i = 0; i < cachedArrayValue.Length; i++)
             {
-                int key = cachedArrayValue[i].ToCacheKey();
+                int key = cachedArrayValue[i].ToHashKey();
                 dict[key] = cachedArrayValue[i];
             }
 
@@ -104,7 +105,7 @@ public class CachedConstructors : ICachedConstructors
                 parameterTypes[j] = parametersSpan[j].ParameterType;
             }
 
-            int key = parameterTypes.ToCacheKey();
+            int key = parameterTypes.ToHashKey();
 
             constructorsDict[key] = new CachedConstructor(info, _cachedTypes, threadSafe);
         }

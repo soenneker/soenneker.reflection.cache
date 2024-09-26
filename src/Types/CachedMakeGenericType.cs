@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Soenneker.Extensions.Type.Array;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types.Abstract;
 
@@ -34,7 +35,7 @@ public class CachedMakeGenericType : ICachedMakeGenericType
         if (_cachedType.Type == null)
             return null;
 
-        int key = _cachedType.CacheKey.GetValueOrDefault() + typeArguments.ToCacheKey();
+        int key = _cachedType.CacheKey.GetValueOrDefault() + typeArguments.ToHashKey();
 
         Type genericType;
 

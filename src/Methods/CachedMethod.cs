@@ -70,7 +70,7 @@ public class CachedMethod : ICachedMethod
         if (MethodInfo == null)
             return null;
 
-        int key = cachedTypes.ToCacheKey();
+        int key = cachedTypes.ToHashKey();
 
         if (_genericMethodCache!.Value.TryGetValue(key, out CachedMethod? cachedGenericMethod))
         {

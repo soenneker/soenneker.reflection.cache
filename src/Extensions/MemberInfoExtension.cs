@@ -1,13 +1,14 @@
 ﻿using Soenneker.Reflection.Cache.Utils;
 using System.Reflection;
 using Soenneker.Extensions.ParameterInfo;
+using Soenneker.Extensions.MethodInfo;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
 internal static class MemberInfoExtension
 {
     // TODO: I'm pretty sure this is broken in several situations
-    internal static int ToCacheKey(this MemberInfo memberInfo)
+    internal static int ToHashKey(this MemberInfo memberInfo)
     {
         int result;
 

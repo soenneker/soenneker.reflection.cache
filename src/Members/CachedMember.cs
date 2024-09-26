@@ -34,7 +34,7 @@ public class CachedMember : ICachedMember
     {
         MemberType = memberInfo.MemberType;
 
-        CacheKey = memberInfo.ToCacheKey();
+        CacheKey = memberInfo.ToHashKey();
 
         CachedType = cachedTypes.GetCachedType(memberInfo.DeclaringType);
         MemberInfo = memberInfo;

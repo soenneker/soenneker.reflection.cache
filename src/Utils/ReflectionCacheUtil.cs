@@ -1,4 +1,5 @@
 ﻿using System;
+using Soenneker.Extensions.Type.Array;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types;
 
@@ -13,7 +14,7 @@ public static class ReflectionCacheUtil
         if (parameterTypes == null || parameterTypes.Length == 0)
             return methodNameKey;
 
-        int arrayKey = parameterTypes.ToCacheKey();
+        int arrayKey = parameterTypes.ToHashKey();
 
         return methodNameKey + arrayKey;
     }
@@ -25,7 +26,7 @@ public static class ReflectionCacheUtil
         if (parameterTypes == null || parameterTypes.Length == 0)
             return methodNameKey;
 
-        int arrayKey = parameterTypes.ToCacheKey();
+        int arrayKey = parameterTypes.ToHashKey();
 
         return methodNameKey + arrayKey;
     }
