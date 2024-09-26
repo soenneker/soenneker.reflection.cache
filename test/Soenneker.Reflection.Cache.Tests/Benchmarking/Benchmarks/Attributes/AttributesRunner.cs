@@ -21,4 +21,12 @@ public class AttributesRunner : BenchmarkTest
 
         await OutputSummaryToLog(summary);
     }
+
+    [LocalFact]
+    public async Task CachedAttributesExtension()
+    {
+        Summary summary = BenchmarkRunner.Run<CachedAttributesExtensionBenchmarks>(DefaultConf);
+
+        await OutputSummaryToLog(summary);
+    }
 }

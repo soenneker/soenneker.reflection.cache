@@ -11,16 +11,15 @@ public static class TypeArrayExtension
         if (types == null || types.Length == 0)
             return 0;
 
-        ReadOnlySpan<Type> span = types;
+        var hash = new HashCode();
 
-        var hash = 17;
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < types.Length; i++)
         {
-            hash = hash * 31 + span[i].GetHashCode();
+            Type type = types[i];
+            hash.Add(type);
         }
 
-        return hash;
+        return hash.ToHashCode();
     }
 
     public static int ToCacheKey(this CachedType[]? cachedTypes)
@@ -28,15 +27,14 @@ public static class TypeArrayExtension
         if (cachedTypes == null || cachedTypes.Length == 0)
             return 0;
 
-        ReadOnlySpan<CachedType> span = cachedTypes;
+        var hash = new HashCode();
 
-        var hash = 17;
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < cachedTypes.Length; i++)
         {
-            hash = hash * 31 + span[i].GetHashCode();
+            CachedType type = cachedTypes[i];
+            hash.Add(type);
         }
 
-        return hash;
+        return hash.ToHashCode();
     }
 }
