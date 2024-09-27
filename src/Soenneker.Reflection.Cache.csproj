@@ -45,6 +45,6 @@
         <PackageReference Include="Soenneker.Extensions.Array.Object" Version="2.1.17" />
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="2.1.318" />
         <PackageReference Include="Soenneker.Extensions.ParameterInfo" Version="2.1.17" />
-        <PackageReference Include="Soenneker.Extensions.Type.Array" Version="2.1.4" />
+        <PackageReference Include="Soenneker.Extensions.Type.Array" Version="2.1.5" />
     </ItemGroup>
 </Project>
