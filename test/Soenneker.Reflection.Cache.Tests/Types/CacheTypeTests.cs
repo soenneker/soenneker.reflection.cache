@@ -89,6 +89,20 @@ public class CacheTypeTests
     }
 
     [Fact]
+    public void IsRecord_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(TestRecord));
+        result.IsRecord.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsClass_should_be_false()
+    {
+        CachedType result = _cache.GetCachedType(typeof(TestRecord));
+        result.IsClass.Should().BeTrue();
+    }
+
+    [Fact]
     public void IsEnumerable_direct_should_be_true()
     {
         CachedType result = _cache.GetCachedType(typeof(IEnumerable<string>));

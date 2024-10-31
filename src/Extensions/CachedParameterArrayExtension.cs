@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
-public static class CachedParametersExtension
+public static class CachedParameterArrayExtension
 {
-    public static ParameterInfo[] ToParameters(this CachedParameter[] cachedParameters)
+    public static ParameterInfo[] ToParameterInfos(this CachedParameter[] cachedParameters)
     {
         ReadOnlySpan<CachedParameter> span = cachedParameters;
 

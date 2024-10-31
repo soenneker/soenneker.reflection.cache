@@ -219,8 +219,12 @@ public partial class CachedType
 
         _isRecord = new Lazy<bool>(() =>
         {
-            if (Type == null) return false;
-            return Type.IsClass && Type.IsSealed && Type.GetMethod("<Clone>$") != null;
+            if (Type == null) 
+                return false;
+
+            bool hasCloneMethod = GetCachedMethod("<Clone>$") != null;
+
+            return Type.IsClass && hasCloneMethod;
         }, _threadSafe);
 
         _isNullableValueType = new Lazy<bool>(() =>
@@ -231,7 +235,8 @@ public partial class CachedType
             return Nullable.GetUnderlyingType(Type)?.IsValueType == true;
         }, _threadSafe);
 
-        _isObsolete = new Lazy<bool>(() => { return Type?.GetCustomAttribute<ObsoleteAttribute>() != null; }, _threadSafe);
+        _isObsolete = new Lazy<bool>(() => { 
+            return Type?.GetCustomAttribute<ObsoleteAttribute>() != null; }, _threadSafe);
 
         _isConstructedGenericType = new Lazy<bool>(() => { return Type?.IsConstructedGenericType == true; }, _threadSafe);
 

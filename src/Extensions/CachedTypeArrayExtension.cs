@@ -20,4 +20,18 @@ public static class CachedTypeArrayExtension
 
         return hash.ToHashCode();
     }
+
+    public static Type[] ToTypes(this CachedType[] cachedTypes)
+    {
+        ReadOnlySpan<CachedType> span = cachedTypes;
+
+        var result = new Type[span.Length];
+
+        for (var i = 0; i < span.Length; i++)
+        {
+            result[i] = span[i].Type!;
+        }
+
+        return result;
+    }
 }

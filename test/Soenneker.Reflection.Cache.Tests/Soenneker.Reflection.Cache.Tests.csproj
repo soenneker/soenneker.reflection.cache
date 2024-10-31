@@ -31,7 +31,6 @@
     <ItemGroup>
       <Folder Include="Benchmarking\Benchmarks\Arguments\" />
       <Folder Include="Arguments\" />
-      <Folder Include="Parameters\" />
     </ItemGroup>
 
 </Project>

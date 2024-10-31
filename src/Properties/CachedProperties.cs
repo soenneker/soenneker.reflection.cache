@@ -50,8 +50,9 @@ public class CachedProperties : ICachedProperties
         // If the array is already populated, build the dictionary from the array
         if (_cachedArray.IsValueCreated)
         {
-            foreach (CachedProperty cachedProperty in _cachedArray.Value)
+            for (var index = 0; index < _cachedArray.Value.Length; index++)
             {
+                CachedProperty cachedProperty = _cachedArray.Value[index];
                 dict[cachedProperty.PropertyInfo.Name.GetHashCode()] = cachedProperty;
             }
         }
@@ -60,8 +61,9 @@ public class CachedProperties : ICachedProperties
             // If the array is not populated, build the dictionary directly
             PropertyInfo[] properties = _cachedType.Type!.GetProperties(_cachedTypes.Options.PropertyFlags);
 
-            foreach (PropertyInfo property in properties)
+            for (var index = 0; index < properties.Length; index++)
             {
+                PropertyInfo property = properties[index];
                 var cachedProperty = new CachedProperty(property, _cachedTypes, _threadSafe);
                 dict[property.Name.GetHashCode()] = cachedProperty;
             }

@@ -50,8 +50,9 @@ public class CachedFields : ICachedFields
         // If the array is already populated, build the dictionary from the array
         if (_cachedArray.IsValueCreated)
         {
-            foreach (CachedField cachedField in _cachedArray.Value)
+            for (var index = 0; index < _cachedArray.Value.Length; index++)
             {
+                CachedField cachedField = _cachedArray.Value[index];
                 dict[cachedField.FieldInfo.Name.GetHashCode()] = cachedField;
             }
         }

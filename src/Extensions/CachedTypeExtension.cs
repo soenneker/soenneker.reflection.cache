@@ -10,8 +10,9 @@ public static class CachedTypeExtension
 
         while (tempCachedType != null)
         {
-            foreach (CachedType targetCachedType in targetCachedTypes)
+            for (var index = 0; index < targetCachedTypes.Length; index++)
             {
+                CachedType targetCachedType = targetCachedTypes[index];
                 // Check if it's non-generic
                 if (targetCachedType.IsAssignableFrom(sourceCachedType))
                     return true;
