@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq;
+using System.Reflection;
 using FluentAssertions;
 using Soenneker.Reflection.Cache.Properties;
 using Soenneker.Reflection.Cache.Tests.Objects;
@@ -46,7 +47,7 @@ public class GetPropertyTests
     {
         CachedType result = _cache.GetCachedType(typeof(ClassWithDelegateProperty));
         CachedProperty? cachedProperty = result.GetCachedProperty("DelegateProperty");
-        cachedProperty.IsDelegate.Should().BeTrue();
+        cachedProperty!.IsDelegate.Should().BeTrue();
     }
 
     [Fact]
@@ -54,6 +55,16 @@ public class GetPropertyTests
     {
         CachedType result = _cache.GetCachedType(typeof(ClassWithDelegateProperty));
         CachedProperty? cachedProperty = result.GetCachedProperty("NonDelegateProperty");
-        cachedProperty.IsDelegate.Should().BeFalse();
+        cachedProperty!.IsDelegate.Should().BeFalse();
+    }
+
+    [Fact]
+    public void IsEqualityContract_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(TestRecord));
+
+        CachedProperty[]? properties = result.GetCachedProperties();
+
+        properties!.First().IsEqualityContract.Should().BeTrue();
     }
 }
