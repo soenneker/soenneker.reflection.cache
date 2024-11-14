@@ -1,4 +1,4 @@
-﻿[![](https://img.shields.io/nuget/v/soenneker.reflection.cache.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker.reflection.cache/)
+[![](https://img.shields.io/nuget/v/soenneker.reflection.cache.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker.reflection.cache/)
 [![](https://img.shields.io/github/actions/workflow/status/soenneker/soenneker.reflection.cache/publish-package.yml?style=for-the-badge)](https://github.com/soenneker/soenneker.reflection.cache/actions/workflows/publish-package.yml)
 [![](https://img.shields.io/nuget/dt/soenneker.reflection.cache.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker.reflection.cache/)
 
@@ -106,7 +106,7 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 
 ---
 
-## Benchmarks (.NET 8.0)
+## Benchmarks (.NET 9.0)
 
 ### `GetType()` 5,772% faster
 
