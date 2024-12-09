@@ -129,15 +129,21 @@ public class CachedTypeBenchmarks
     //    return _doubleDerivedType.IsDictionary;
     //}
 
-    [Benchmark(Baseline = true)]
-    public Type MakeGenericType_NoCache()
+    [Benchmark]
+    public bool IsWeakReference()
     {
-        return _genericTypeDefinition.MakeGenericType(_typeArguments);
+        return _doubleDerivedType.IsWeakReference;
     }
 
-    [Benchmark]
-    public Type? MakeGenericType_Cache()
-    {
-        return _cachedGenericType.MakeGenericType(_typeArguments);
-    }
+    //[Benchmark(Baseline = true)]
+    //public Type MakeGenericType_NoCache()
+    //{
+    //    return _genericTypeDefinition.MakeGenericType(_typeArguments);
+    //}
+
+    //[Benchmark]
+    //public Type? MakeGenericType_Cache()
+    //{
+    //    return _cachedGenericType.MakeGenericType(_typeArguments);
+    //}
 }

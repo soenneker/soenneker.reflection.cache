@@ -86,6 +86,9 @@ public partial class CachedType
     public bool IsAbstractAndSealed => _isAbstractAndSealed.Value;
     private Lazy<bool> _isAbstractAndSealed;
 
+    public bool IsWeakReference => _isWeakReference.Value;
+    private Lazy<bool> _isWeakReference;
+
     private void InitializeProperties()
     {
         _isAbstractLazy = new Lazy<bool>(() => Type is {IsAbstract: true}, _threadSafe);
@@ -241,5 +244,21 @@ public partial class CachedType
         _isConstructedGenericType = new Lazy<bool>(() => { return Type?.IsConstructedGenericType == true; }, _threadSafe);
 
         _isAbstractAndSealed = new Lazy<bool>(() => Type is {IsAbstract: true, IsSealed: true}, _threadSafe);
+
+        _isWeakReference = new Lazy<bool>(() =>
+        {
+            if (Type == null)
+                return false;
+
+            // WeakReference is sealed, cannot derive
+
+            if (Type == typeof(WeakReference))
+                return true;
+
+            if (IsGenericType && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(WeakReference<>)))
+                return true;
+
+            return false;
+        }, _threadSafe);
     }
 }

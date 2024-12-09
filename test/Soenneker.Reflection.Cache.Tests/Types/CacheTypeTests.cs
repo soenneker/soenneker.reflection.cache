@@ -6,6 +6,7 @@ using Xunit;
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
@@ -68,6 +69,13 @@ public class CacheTypeTests
     }
 
     [Fact]
+    public void IsReadOnlyDictionary_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(ReadOnlyDictionary<string, string>));
+        result.IsReadOnlyDictionary.Should().BeTrue();
+    }
+
+    [Fact]
     public void IsCollection_Derived_should_be_true()
     {
         CachedType result = _cache.GetCachedType(typeof(DerivedCollection));
@@ -107,6 +115,20 @@ public class CacheTypeTests
     {
         CachedType result = _cache.GetCachedType(typeof(IEnumerable<string>));
         result.IsEnumerable.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsWeakReferenceT_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(WeakReference<string>));
+        result.IsWeakReference.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsWeakReference_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(WeakReference));
+        result.IsWeakReference.Should().BeTrue();
     }
 
     [Fact]
