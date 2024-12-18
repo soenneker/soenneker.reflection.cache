@@ -1,11 +1,11 @@
-﻿using Soenneker.Reflection.Cache.Constants;
+using Soenneker.Reflection.Cache.Constants;
 using System;
 using System.Reflection;
 using FluentAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 using Xunit;
-using Xunit.Abstractions;
+
 
 namespace Soenneker.Reflection.Cache.Tests.Constructors;
 

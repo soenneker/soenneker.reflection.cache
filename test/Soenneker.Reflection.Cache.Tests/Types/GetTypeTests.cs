@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using FluentAssertions;
 using Soenneker.Reflection.Cache.Types;
-using Xunit.Abstractions;
+
 using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;

@@ -1,9 +1,9 @@
-﻿using System.IO;
+using System.IO;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Reports;
 using Xunit;
-using Xunit.Abstractions;
+
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking;
 

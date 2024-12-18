@@ -3,7 +3,7 @@ using Soenneker.Reflection.Cache.Constants;
 using System.Reflection;
 using System;
 using Xunit;
-using Xunit.Abstractions;
+
 using Soenneker.Reflection.Cache.Members;
 using System.Linq;
 using Soenneker.Reflection.Cache.Tests.Objects;
