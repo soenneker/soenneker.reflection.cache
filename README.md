@@ -106,7 +106,7 @@ ParameterInfo?[] parameters = methodInfo.GetParameters(); // <-- not cached, rep
 
 ---
 
-## Benchmarks (.NET 9.0)
+## Benchmarks (.NET)
 
 ### `GetType()` 5,772% faster
 
