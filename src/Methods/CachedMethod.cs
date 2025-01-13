@@ -10,7 +10,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Methods;
 
 ///<inheritdoc cref="ICachedMethod"/>
-public class CachedMethod : ICachedMethod
+public sealed class CachedMethod : ICachedMethod
 {
     public MethodInfo? MethodInfo { get; }
 

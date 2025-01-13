@@ -7,12 +7,17 @@ public static class CachedTypeArrayExtension
 {
     public static int ToHashKey(this CachedType[]? cachedTypes)
     {
-        if (cachedTypes == null || cachedTypes.Length == 0)
+        if (cachedTypes == null)
+            return 0;
+
+        int length = cachedTypes.Length;
+
+        if (length == 0)
             return 0;
 
         var hash = new HashCode();
 
-        for (var i = 0; i < cachedTypes.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             CachedType type = cachedTypes[i];
             hash.Add(type);
@@ -23,13 +28,12 @@ public static class CachedTypeArrayExtension
 
     public static Type[] ToTypes(this CachedType[] cachedTypes)
     {
-        ReadOnlySpan<CachedType> span = cachedTypes;
+        int length = cachedTypes.Length;
+        var result = new Type[length];
 
-        var result = new Type[span.Length];
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < length; i++)
         {
-            result[i] = span[i].Type!;
+            result[i] = cachedTypes[i].Type!;
         }
 
         return result;

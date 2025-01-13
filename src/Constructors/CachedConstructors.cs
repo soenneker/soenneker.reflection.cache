@@ -10,7 +10,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Constructors;
 
 ///<inheritdoc cref="ICachedConstructors"/>
-public class CachedConstructors : ICachedConstructors
+public sealed class CachedConstructors : ICachedConstructors
 {
     private readonly Lazy<CachedConstructor[]> _cachedArray;
     private readonly Lazy<Dictionary<int, CachedConstructor>> _cachedDict;
@@ -60,9 +60,11 @@ public class CachedConstructors : ICachedConstructors
         }
 
         ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(_cachedTypes.Options.ConstructorFlags);
-        var cachedConstructors = new CachedConstructor[constructorInfos.Length];
+        int length = constructorInfos.Length;
 
-        for (var i = 0; i < constructorInfos.Length; i++)
+        var cachedConstructors = new CachedConstructor[length];
+
+        for (var i = 0; i < length; i++)
         {
             cachedConstructors[i] = new CachedConstructor(constructorInfos[i], _cachedTypes, threadSafe);
         }
@@ -75,9 +77,11 @@ public class CachedConstructors : ICachedConstructors
         if (_cachedArray.IsValueCreated)
         {
             CachedConstructor[] cachedArrayValue = _cachedArray.Value;
-            var dict = new Dictionary<int, CachedConstructor>(cachedArrayValue.Length);
+            int length = cachedArrayValue.Length;
 
-            for (var i = 0; i < cachedArrayValue.Length; i++)
+            var dict = new Dictionary<int, CachedConstructor>(length);
+
+            for (var i = 0; i < length; i++)
             {
                 int key = cachedArrayValue[i].ToHashKey();
                 dict[key] = cachedArrayValue[i];
@@ -87,20 +91,25 @@ public class CachedConstructors : ICachedConstructors
         }
 
         ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(_cachedTypes.Options.ConstructorFlags);
-        var constructorsDict = new Dictionary<int, CachedConstructor>(constructorInfos.Length);
+        int constructorInfosLength = constructorInfos.Length;
+
+        var constructorsDict = new Dictionary<int, CachedConstructor>(constructorInfosLength);
 
         ReadOnlySpan<ConstructorInfo> constructorsSpan = constructorInfos;
 
-        for (var i = 0; i < constructorsSpan.Length; i++)
+        for (var i = 0; i < constructorInfosLength; i++)
         {
             ConstructorInfo info = constructorsSpan[i];
 
             ParameterInfo[] parameters = info.GetParameters();
-            var parameterTypes = new Type[parameters.Length];
+
+            int parametersLength = parameters.Length;
+
+            var parameterTypes = new Type[parametersLength];
 
             ReadOnlySpan<ParameterInfo> parametersSpan = parameters;
 
-            for (var j = 0; j < parametersSpan.Length; j++)
+            for (var j = 0; j < parametersLength; j++)
             {
                 parameterTypes[j] = parametersSpan[j].ParameterType;
             }

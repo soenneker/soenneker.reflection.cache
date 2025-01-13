@@ -6,7 +6,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Parameters;
 
 ///<inheritdoc cref="ICachedParameter"/>
-public class CachedParameter : ICachedParameter
+public sealed class CachedParameter : ICachedParameter
 {
     public ParameterInfo ParameterInfo { get; }
 

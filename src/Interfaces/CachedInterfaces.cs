@@ -7,7 +7,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Interfaces;
 
 ///<inheritdoc cref="ICachedInterfaces"/>
-public class CachedInterfaces : ICachedInterfaces
+public sealed class CachedInterfaces : ICachedInterfaces
 {
     private readonly Lazy<Dictionary<int, CachedType?>> _cachedDict;
     private readonly Lazy<CachedType[]> _cachedArray;

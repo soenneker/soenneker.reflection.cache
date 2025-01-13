@@ -8,6 +8,6 @@ namespace Soenneker.Reflection.Cache.Tests;
 /// ICollectionFixture interfaces.
 /// </summary>
 [CollectionDefinition("Collection")]
-public class Collection : ICollectionFixture<Fixture>
+public sealed class Collection : ICollectionFixture<Fixture>
 {
 }

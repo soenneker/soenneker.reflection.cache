@@ -1,11 +1,13 @@
 using System;
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
+using Perfolizer.Mathematics.OutlierDetection;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Methods;
 
+[Outliers(OutlierMode.DontRemove)]
 public class GetMethodBenchmarks
 {
     private CachedType _cachedTyped = default!;

@@ -19,7 +19,7 @@ public class PropertiesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetPropertyBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -27,6 +27,6 @@ public class PropertiesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetPropertiesBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 }

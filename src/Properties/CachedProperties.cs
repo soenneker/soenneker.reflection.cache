@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Properties;
 
 ///<inheritdoc cref="ICachedProperties"/>
-public class CachedProperties : ICachedProperties
+public sealed class CachedProperties : ICachedProperties
 {
     private readonly Lazy<Dictionary<int, CachedProperty?>> _cachedDict;
     private readonly Lazy<CachedProperty[]> _cachedArray;
@@ -50,9 +50,11 @@ public class CachedProperties : ICachedProperties
         // If the array is already populated, build the dictionary from the array
         if (_cachedArray.IsValueCreated)
         {
-            for (var index = 0; index < _cachedArray.Value.Length; index++)
+            int length = _cachedArray.Value.Length;
+
+            for (var i = 0; i < length; i++)
             {
-                CachedProperty cachedProperty = _cachedArray.Value[index];
+                CachedProperty cachedProperty = _cachedArray.Value[i];
                 dict[cachedProperty.PropertyInfo.Name.GetHashCode()] = cachedProperty;
             }
         }
@@ -60,10 +62,11 @@ public class CachedProperties : ICachedProperties
         {
             // If the array is not populated, build the dictionary directly
             PropertyInfo[] properties = _cachedType.Type!.GetProperties(_cachedTypes.Options.PropertyFlags);
+            int length = properties.Length;
 
-            for (var index = 0; index < properties.Length; index++)
+            for (var i = 0; i < length; i++)
             {
-                PropertyInfo property = properties[index];
+                PropertyInfo property = properties[i];
                 var cachedProperty = new CachedProperty(property, _cachedTypes, _threadSafe);
                 dict[property.Name.GetHashCode()] = cachedProperty;
             }

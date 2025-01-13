@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Soenneker.Reflection.Cache.Fields;
 
 namespace Soenneker.Reflection.Cache.Extensions;
@@ -8,13 +7,12 @@ public static class CachedFieldsExtension
 {
     public static FieldInfo[] ToFieldInfos(this CachedField[] cachedFields)
     {
-        ReadOnlySpan<CachedField> span = cachedFields;
+        int length = cachedFields.Length;
+        var fieldInfos = new FieldInfo[length];
 
-        var fieldInfos = new FieldInfo[cachedFields.Length];
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < length; i++)
         {
-            fieldInfos[i] = span[i].FieldInfo;
+            fieldInfos[i] = cachedFields[i].FieldInfo;
         }
 
         return fieldInfos;

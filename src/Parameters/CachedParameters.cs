@@ -9,7 +9,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Parameters;
 
 ///<inheritdoc cref="ICachedParameters"/>
-public class CachedParameters : ICachedParameters
+public sealed class CachedParameters : ICachedParameters
 {
     private readonly CachedMethod? _cachedMethod;
     private readonly CachedConstructor? _cachedConstructor;
@@ -47,9 +47,10 @@ public class CachedParameters : ICachedParameters
     private CachedParameter[] SetArrayForConstructor(bool threadSafe)
     {
         ParameterInfo[] parameters = _cachedConstructor!.ConstructorInfo!.GetParameters();
-        var cachedParameters = new CachedParameter[parameters.Length];
+        int length = parameters.Length;
+        var cachedParameters = new CachedParameter[length];
 
-        for (var i = 0; i < parameters.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             cachedParameters[i] = new CachedParameter(parameters[i], _cachedTypes, threadSafe);
         }
@@ -60,9 +61,10 @@ public class CachedParameters : ICachedParameters
     private CachedParameter[] SetArrayForMethod(bool threadSafe)
     {
         ParameterInfo[] parameters = _cachedMethod!.MethodInfo!.GetParameters();
-        var cachedParameters = new CachedParameter[parameters.Length];
+        int length = parameters.Length;
+        var cachedParameters = new CachedParameter[length];  // Directly allocate the array
 
-        for (var i = 0; i < parameters.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             cachedParameters[i] = new CachedParameter(parameters[i], _cachedTypes, threadSafe);
         }

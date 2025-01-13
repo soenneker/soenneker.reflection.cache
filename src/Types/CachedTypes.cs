@@ -7,7 +7,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 namespace Soenneker.Reflection.Cache.Types;
 
 ///<inheritdoc cref="ICachedTypes"/>
-public class CachedTypes : ICachedTypes
+public sealed class CachedTypes : ICachedTypes
 {
     // We'll use two sets of dictionaries - one for fast integer lookups (hopefully, common), and the other for slower string lookups
     private readonly ConcurrentDictionary<string, CachedType>? _concurrentDict;

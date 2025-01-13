@@ -4,7 +4,7 @@ using Soenneker.Reflection.Cache.Constructors.Abstract;
 namespace Soenneker.Reflection.Cache.Constructors;
 
 ///<inheritdoc cref="ICachedConstructor"/>
-public partial class CachedConstructor
+public sealed partial class CachedConstructor
 {
     public bool IsStatic => _isStatic.Value;
     private Lazy<bool> _isStatic;

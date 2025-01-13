@@ -19,7 +19,7 @@ public class ConstructorsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -27,7 +27,7 @@ public class ConstructorsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<CachedConstructorBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -35,7 +35,7 @@ public class ConstructorsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorsBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -43,7 +43,7 @@ public class ConstructorsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -51,6 +51,6 @@ public class ConstructorsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeParametersBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 }

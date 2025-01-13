@@ -5,7 +5,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Properties;
 
-public class CachedProperty : ICachedProperty
+public sealed class CachedProperty : ICachedProperty
 {
     public PropertyInfo PropertyInfo { get; }
 

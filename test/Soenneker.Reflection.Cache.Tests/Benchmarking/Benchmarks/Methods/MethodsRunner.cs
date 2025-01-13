@@ -19,7 +19,7 @@ public class MethodsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetMethodBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -27,6 +27,6 @@ public class MethodsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetMethodsBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 }

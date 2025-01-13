@@ -5,7 +5,7 @@ using Serilog;
 
 namespace Soenneker.Reflection.Cache.Tests;
 
-public class Fixture : UnitFixture
+public sealed class Fixture : UnitFixture
 {
     public override ValueTask InitializeAsync()
     {

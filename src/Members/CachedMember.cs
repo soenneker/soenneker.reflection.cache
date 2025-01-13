@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Members;
 
 ///<inheritdoc cref="ICachedMember"/>
-public class CachedMember : ICachedMember
+public sealed class CachedMember : ICachedMember
 {
     public MemberInfo? MemberInfo { get; }
 

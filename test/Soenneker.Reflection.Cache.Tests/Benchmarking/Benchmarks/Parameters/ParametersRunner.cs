@@ -19,6 +19,6 @@ public class ParametersRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetParametersBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 }

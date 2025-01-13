@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 namespace Soenneker.Reflection.Cache.Types;
 
 ///<inheritdoc cref="ICachedIsAssignableFrom"/>
-public class CachedMakeGenericType : ICachedMakeGenericType
+public sealed class CachedMakeGenericType : ICachedMakeGenericType
 {
     private readonly ConcurrentDictionary<int, CachedType>? _cachedConcurrentDict;
     private readonly Dictionary<int, CachedType>? _cachedDict;

@@ -8,9 +8,11 @@ public static class CachedTypeExtension
     {
         CachedType? tempCachedType = sourceCachedType;
 
+        int length = targetCachedTypes.Length;
+
         while (tempCachedType != null)
         {
-            for (var index = 0; index < targetCachedTypes.Length; index++)
+            for (var index = 0; index < length; index++)
             {
                 CachedType targetCachedType = targetCachedTypes[index];
                 // Check if it's non-generic

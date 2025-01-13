@@ -2,11 +2,12 @@
 using BenchmarkDotNet.Attributes;
 using Perfolizer.Mathematics.OutlierDetection;
 using Soenneker.Reflection.Cache.Tests.Objects;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Types;
 
 [Outliers(OutlierMode.DontRemove)]
-public class GetTypeBenchmarks
+public class GetCachedTypeBenchmarks
 {
     private ReflectionCache _cache = default!;
     private ReflectionCache _threadSafeCache = default!;
@@ -20,21 +21,15 @@ public class GetTypeBenchmarks
         _type = typeof(TestType);
     }
 
-    [Benchmark(Baseline = true)]
-    public Type? GetType_string_NoCache()
+    [Benchmark]
+    public CachedType GetCachedType_type_Cache()
     {
-        return Type.GetType("TestType");
+        return _cache.GetCachedType(_type);
     }
 
     [Benchmark]
-    public Type? GetType_string_Cache()
+    public CachedType GetCachedType_type_ThreadSafe_Cache()
     {
-        return _cache.GetType("TestType");
-    }
-
-    [Benchmark]
-    public Type? GetType_string_ThreadSafe_Cache()
-    {
-        return _threadSafeCache.GetType("TestType");
+        return _threadSafeCache.GetCachedType(_type);
     }
 }

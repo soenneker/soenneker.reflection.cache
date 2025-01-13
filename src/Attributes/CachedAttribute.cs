@@ -5,7 +5,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Attributes;
 
 ///<inheritdoc cref="ICachedAttribute"/>
-public class CachedAttribute : ICachedAttribute
+public sealed class CachedAttribute : ICachedAttribute
 {
     public object Attribute { get; }
 

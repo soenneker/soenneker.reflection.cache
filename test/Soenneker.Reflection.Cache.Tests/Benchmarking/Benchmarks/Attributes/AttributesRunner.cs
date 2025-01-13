@@ -19,7 +19,7 @@ public class AttributesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetAttributesBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -27,6 +27,6 @@ public class AttributesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<CachedAttributesExtensionBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 }

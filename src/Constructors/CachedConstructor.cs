@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Constructors;
 
 ///<inheritdoc cref="ICachedConstructor"/>
-public partial class CachedConstructor : ICachedConstructor
+public sealed partial class CachedConstructor : ICachedConstructor
 {
     public ConstructorInfo? ConstructorInfo { get; }
 

@@ -6,7 +6,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Arguments;
 
 ///<inheritdoc cref="ICachedGenericArguments"/>
-public class CachedGenericArguments : ICachedGenericArguments
+public sealed class CachedGenericArguments : ICachedGenericArguments
 {
     private readonly CachedType _cachedType;
     private readonly Lazy<CachedType[]> _cachedGenericArguments;

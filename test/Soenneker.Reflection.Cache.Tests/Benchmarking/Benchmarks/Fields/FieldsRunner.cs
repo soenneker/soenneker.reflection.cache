@@ -19,7 +19,7 @@ public class FieldsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetFieldBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -27,6 +27,6 @@ public class FieldsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetFieldsBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 }

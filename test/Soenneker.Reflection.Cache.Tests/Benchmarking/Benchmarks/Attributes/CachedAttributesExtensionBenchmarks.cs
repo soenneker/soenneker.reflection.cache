@@ -1,34 +1,35 @@
 ﻿using BenchmarkDotNet.Attributes;
+using Perfolizer.Mathematics.OutlierDetection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types;
 
-namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Attributes
+namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Attributes;
+
+[Outliers(OutlierMode.DontRemove)]
+public class CachedAttributesExtensionBenchmarks
 {
-    public class CachedAttributesExtensionBenchmarks
+    private CachedAttribute[] _cachedAttributes;
+
+    [Params(10, 100, 1000, 10000)]
+    public int ArraySize;
+
+    [GlobalSetup]
+    public void Setup()
     {
-        private CachedAttribute[] _cachedAttributes;
+        _cachedAttributes = new CachedAttribute[ArraySize];
 
-        [Params(10, 100, 1000, 10000)]
-        public int ArraySize;
+        var cachedTypes = new CachedTypes();
 
-        [GlobalSetup]
-        public void Setup()
+        for (var i = 0; i < ArraySize; i++)
         {
-            _cachedAttributes = new CachedAttribute[ArraySize];
-
-            CachedTypes cachedTypes = new CachedTypes();
-
-            for (int i = 0; i < ArraySize; i++)
-            {
-                _cachedAttributes[i] = new CachedAttribute(new object(), cachedTypes, true);
-            }
+            _cachedAttributes[i] = new CachedAttribute(new object(), cachedTypes, true);
         }
+    }
 
-        [Benchmark(Baseline = true)]
-        public object[] ToObjects()
-        {
-            return _cachedAttributes.ToObjects();
-        }
+    [Benchmark(Baseline = true)]
+    public object[] ToObjects()
+    {
+        return _cachedAttributes.ToObjects();
     }
 }

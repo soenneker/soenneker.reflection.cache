@@ -9,7 +9,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Attributes;
 
 ///<inheritdoc cref="ICachedCustomAttributes"/>
-public class CachedCustomAttributes : ICachedCustomAttributes
+public sealed class CachedCustomAttributes : ICachedCustomAttributes
 {
     private readonly CachedType? _cachedType;
     private readonly CachedMethod? _cachedMethod;
@@ -56,9 +56,10 @@ public class CachedCustomAttributes : ICachedCustomAttributes
     private CachedAttribute[] SetArrayForType(bool threadSafe)
     {
         object[] attributes = _cachedType!.Type!.GetCustomAttributes(true);
-        var result = new CachedAttribute[attributes.Length];
+        int length = attributes.Length;
+        var result = new CachedAttribute[length];
 
-        for (var i = 0; i < attributes.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
         }
@@ -69,9 +70,11 @@ public class CachedCustomAttributes : ICachedCustomAttributes
     private CachedAttribute[] SetArrayForMethod(bool threadSafe)
     {
         object[] attributes = _cachedMethod!.MethodInfo!.GetCustomAttributes(true);
-        var result = new CachedAttribute[attributes.Length];
+        int length = attributes.Length;
 
-        for (var i = 0; i < attributes.Length; i++)
+        var result = new CachedAttribute[length];
+
+        for (var i = 0; i < length; i++)
         {
             result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
         }
@@ -82,9 +85,11 @@ public class CachedCustomAttributes : ICachedCustomAttributes
     private CachedAttribute[] SetArrayForConstructor(bool threadSafe)
     {
         object[] attributes = _cachedConstructor!.ConstructorInfo!.GetCustomAttributes(true);
-        var result = new CachedAttribute[attributes.Length];
+        int length = attributes.Length;
 
-        for (var i = 0; i < attributes.Length; i++)
+        var result = new CachedAttribute[length];
+
+        for (var i = 0; i < length; i++)
         {
             result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
         }

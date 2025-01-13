@@ -6,7 +6,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 namespace Soenneker.Reflection.Cache.Types;
 
 ///<inheritdoc cref="ICachedIsAssignableFrom"/>
-public class CachedIsAssignableFrom : ICachedIsAssignableFrom
+public sealed class CachedIsAssignableFrom : ICachedIsAssignableFrom
 {
     private readonly ConcurrentDictionary<int, bool>? _cachedConcurrentDict;
     private readonly Dictionary<int, bool>? _cachedDict;

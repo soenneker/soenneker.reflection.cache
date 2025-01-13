@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Properties;
 using Soenneker.Reflection.Cache.Types;
@@ -9,11 +8,10 @@ public static class PropertyInfosExtension
 {
     public static CachedProperty[] ToCachedProperties(this PropertyInfo[] properties, CachedTypes cachedTypes, bool threadSafe)
     {
-        ReadOnlySpan<PropertyInfo> propertiesArray = properties;
+        int length = properties.Length;
+        var cachedProperties = new CachedProperty[length];
 
-        var cachedProperties = new CachedProperty[propertiesArray.Length];
-
-        for (var i = 0; i < properties.Length; i++)
+        for (var i = 0; i < length; i++)
         {
             cachedProperties[i] = new CachedProperty(properties[i], cachedTypes, threadSafe);
         }

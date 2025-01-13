@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Soenneker.Reflection.Cache.Members;
 
 namespace Soenneker.Reflection.Cache.Extensions;
@@ -8,13 +7,12 @@ internal static class CachedMembersExtension
 {
     public static MemberInfo?[] ToMemberInfos(this CachedMember[] cachedMembers)
     {
-        ReadOnlySpan<CachedMember> span = cachedMembers;
+        int length = cachedMembers.Length;
+        var memberInfos = new MemberInfo?[length];
 
-        var memberInfos = new MemberInfo?[span.Length];
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < length; i++)
         {
-            memberInfos[i] = span[i].MemberInfo;
+            memberInfos[i] = cachedMembers[i].MemberInfo;
         }
 
         return memberInfos;

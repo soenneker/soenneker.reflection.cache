@@ -4,7 +4,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Fields;
 
-public class CachedField
+public sealed class CachedField
 {
     public FieldInfo FieldInfo { get; }
 

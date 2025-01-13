@@ -8,13 +8,12 @@ public static class CachedParameterArrayExtension
 {
     public static ParameterInfo[] ToParameterInfos(this CachedParameter[] cachedParameters)
     {
-        ReadOnlySpan<CachedParameter> span = cachedParameters;
+        int length = cachedParameters.Length;
+        var parameterInfosArray = new ParameterInfo[length];
 
-        var parameterInfosArray = new ParameterInfo[span.Length];
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < length; i++)
         {
-            parameterInfosArray[i] = span[i].ParameterInfo;
+            parameterInfosArray[i] = cachedParameters[i].ParameterInfo;
         }
 
         return parameterInfosArray;
@@ -22,13 +21,12 @@ public static class CachedParameterArrayExtension
 
     public static Type[] ToParametersTypes(this CachedParameter[] cachedParameters)
     {
-        ReadOnlySpan<CachedParameter> span = cachedParameters;
+        int length = cachedParameters.Length;
+        var typesArray = new Type[length];
 
-        var typesArray = new Type[span.Length];
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < length; i++)
         {
-            typesArray[i] = span[i].ParameterInfo.ParameterType;
+            typesArray[i] = cachedParameters[i].ParameterInfo.ParameterType;
         }
 
         return typesArray;

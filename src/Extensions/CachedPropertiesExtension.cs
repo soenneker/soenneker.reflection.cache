@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Properties;
 
@@ -8,13 +7,12 @@ public static class CachedPropertiesExtension
 {
     public static PropertyInfo[] ToPropertyInfos(this CachedProperty[] cachedProperties)
     {
-        ReadOnlySpan<CachedProperty> span = cachedProperties;
+        int length = cachedProperties.Length;
+        var propertyInfos = new PropertyInfo[length];  // Directly allocate the array
 
-        var propertyInfos = new PropertyInfo[cachedProperties.Length];
-
-        for (var i = 0; i < span.Length; i++)
+        for (var i = 0; i < length; i++)
         {
-            propertyInfos[i] = span[i].PropertyInfo;
+            propertyInfos[i] = cachedProperties[i].PropertyInfo;
         }
 
         return propertyInfos;

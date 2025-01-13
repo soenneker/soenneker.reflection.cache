@@ -1,12 +1,14 @@
 using System;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
+using Perfolizer.Mathematics.OutlierDetection;
 using Soenneker.Reflection.Cache.Constructors;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Constructors;
 
+[Outliers(OutlierMode.DontRemove)]
 public class CachedConstructorBenchmarks
 {
     private ReflectionCache _cache = default!;

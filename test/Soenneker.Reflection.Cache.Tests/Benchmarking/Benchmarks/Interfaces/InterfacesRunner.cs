@@ -19,7 +19,7 @@ public class InterfacesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetInterfaceBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 
     [LocalFact]
@@ -27,6 +27,6 @@ public class InterfacesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetInterfacesBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary);
+        await OutputSummaryToLog(summary, CancellationToken);
     }
 }

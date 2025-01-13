@@ -1,12 +1,14 @@
 using System;
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
+using Perfolizer.Mathematics.OutlierDetection;
 using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Members;
 
+[Outliers(OutlierMode.DontRemove)]
 public class GetMembersBenchmarks
 {
     private CachedType _cachedThreadSafeType = default!;

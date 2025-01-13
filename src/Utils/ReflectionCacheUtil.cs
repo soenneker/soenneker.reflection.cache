@@ -11,7 +11,7 @@ public static class ReflectionCacheUtil
     {
         int methodNameKey = methodName.GetHashCode();
 
-        if (parameterTypes == null || parameterTypes.Length == 0)
+        if (parameterTypes?.Length == 0)
             return methodNameKey;
 
         int arrayKey = parameterTypes.ToHashKey();
@@ -23,7 +23,7 @@ public static class ReflectionCacheUtil
     {
         int methodNameKey = methodName.GetHashCode();
 
-        if (parameterTypes == null || parameterTypes.Length == 0)
+        if (parameterTypes?.Length == 0)
             return methodNameKey;
 
         int arrayKey = parameterTypes.ToHashKey();

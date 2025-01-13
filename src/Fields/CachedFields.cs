@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Fields;
 
 ///<inheritdoc cref="ICachedFields"/>
-public class CachedFields : ICachedFields
+public sealed class CachedFields : ICachedFields
 {
     private readonly Lazy<Dictionary<int, CachedField?>> _cachedDict;
     private readonly Lazy<CachedField[]> _cachedArray;
@@ -50,7 +50,9 @@ public class CachedFields : ICachedFields
         // If the array is already populated, build the dictionary from the array
         if (_cachedArray.IsValueCreated)
         {
-            for (var index = 0; index < _cachedArray.Value.Length; index++)
+            int length = _cachedArray.Value.Length;
+
+            for (var index = 0; index < length; index++)
             {
                 CachedField cachedField = _cachedArray.Value[index];
                 dict[cachedField.FieldInfo.Name.GetHashCode()] = cachedField;
@@ -61,8 +63,11 @@ public class CachedFields : ICachedFields
             // If the array is not populated, build the dictionary directly
             FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
 
-            foreach (FieldInfo field in fields)
+            int length = fields.Length;
+
+            for (var i = 0; i < length; i++)
             {
+                FieldInfo field = fields[i];
                 var cachedField = new CachedField(field, _cachedTypes, _threadSafe);
                 dict[field.Name.GetHashCode()] = cachedField;
             }

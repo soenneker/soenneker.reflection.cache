@@ -9,7 +9,7 @@ using Soenneker.Reflection.Cache.Utils;
 namespace Soenneker.Reflection.Cache.Methods;
 
 ///<inheritdoc cref="ICachedMethods"/>
-public class CachedMethods : ICachedMethods
+public sealed class CachedMethods : ICachedMethods
 {
     private readonly Lazy<Dictionary<int, CachedMethod>> _cachedDict;
     private readonly Lazy<CachedMethod[]> _cachedArray;

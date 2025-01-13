@@ -6,7 +6,7 @@ namespace Soenneker.Reflection.Cache.Options;
 /// <summary>
 /// Represents options for configuring reflection cache behavior.
 /// </summary>
-public class ReflectionCacheOptions
+public sealed class ReflectionCacheOptions
 {
     /// <summary>
     /// Gets or sets the binding flags used for field reflection.

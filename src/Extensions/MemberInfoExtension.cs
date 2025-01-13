@@ -17,7 +17,7 @@ internal static class MemberInfoExtension
             var methodInfo = (MethodInfo)memberInfo;
             string originalName = methodInfo.ToOriginalMemberName();
 
-            result = ReflectionCacheUtil.GetCacheKeyForMethod(originalName, methodInfo.GetParameters().ToParametersTypes());
+            result = ReflectionCacheUtil.GetCacheKeyForMethod(originalName, methodInfo.GetParameters().ToTypes());
             return result;
         }
 

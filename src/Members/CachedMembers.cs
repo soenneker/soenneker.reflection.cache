@@ -29,11 +29,11 @@ public class CachedMembers : ICachedMembers
     private CachedMember[] SetArray(bool threadSafe)
     {
         MemberInfo[] memberInfos = _cachedType.Type!.GetMembers(_cachedTypes.Options.MemberFlags);
-        int count = memberInfos.Length;
+        int length = memberInfos.Length;
 
-        var cachedArray = new CachedMember[count];
+        var cachedArray = new CachedMember[length];
 
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < length; i++)
         {
             cachedArray[i] = new CachedMember(memberInfos[i], _cachedTypes, threadSafe);
         }

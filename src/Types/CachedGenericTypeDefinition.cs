@@ -4,7 +4,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 namespace Soenneker.Reflection.Cache.Types;
 
 ///<inheritdoc cref="ICachedGenericTypeDefinition"/>
-public class CachedGenericTypeDefinition : ICachedGenericTypeDefinition
+public sealed class CachedGenericTypeDefinition : ICachedGenericTypeDefinition
 {
     private readonly Lazy<CachedType> _cachedGenericTypeDefinition;
 

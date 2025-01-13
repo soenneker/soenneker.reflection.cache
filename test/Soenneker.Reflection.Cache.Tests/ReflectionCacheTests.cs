@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests;
 
-public class ReflectionCacheTests
+public sealed class ReflectionCacheTests
 {
     private readonly ReflectionCache _cache;
 
