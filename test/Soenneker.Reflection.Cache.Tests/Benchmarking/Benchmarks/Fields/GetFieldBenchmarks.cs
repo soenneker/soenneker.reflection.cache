@@ -11,8 +11,8 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Fields;
 [Outliers(OutlierMode.DontRemove)]
 public class GetFieldBenchmarks
 {
-    private CachedType _cachedType = default!;
-    private Type _type = default!;
+    private CachedType _cachedType = null!;
+    private Type _type = null!;
 
     [GlobalSetup]
     public void Setup()

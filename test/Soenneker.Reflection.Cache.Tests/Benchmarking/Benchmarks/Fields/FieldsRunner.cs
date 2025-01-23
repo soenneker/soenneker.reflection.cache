@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Local;
+using Soenneker.Tests.Benchmark;
 using Xunit;
 
 
@@ -19,7 +21,7 @@ public class FieldsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetFieldBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
     [LocalFact]
@@ -27,6 +29,6 @@ public class FieldsRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetFieldsBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 }

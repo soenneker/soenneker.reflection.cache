@@ -10,8 +10,8 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Methods;
 [Outliers(OutlierMode.DontRemove)]
 public class GetMethodBenchmarks
 {
-    private CachedType _cachedTyped = default!;
-    private Type _type = default!;
+    private CachedType _cachedTyped = null!;
+    private Type _type = null!;
 
     [GlobalSetup]
     public void Setup()

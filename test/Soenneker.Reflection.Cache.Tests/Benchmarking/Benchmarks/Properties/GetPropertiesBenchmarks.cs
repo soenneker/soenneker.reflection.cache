@@ -11,9 +11,9 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Properties;
 [Outliers(OutlierMode.DontRemove)]
 public class GetPropertiesBenchmarks
 {
-    private CachedType _cachedType = default!;
-    private CachedType _threadSafeCachedType = default!;
-    private Type _type = default!;
+    private CachedType _cachedType = null!;
+    private CachedType _threadSafeCachedType = null!;
+    private Type _type = null!;
 
 
     [GlobalSetup]

@@ -8,9 +8,9 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Types;
 [Outliers(OutlierMode.DontRemove)]
 public class GetTypeBenchmarks
 {
-    private ReflectionCache _cache = default!;
-    private ReflectionCache _threadSafeCache = default!;
-    private Type _type = default!;
+    private ReflectionCache _cache = null!;
+    private ReflectionCache _threadSafeCache = null!;
+    private Type _type = null!;
 
     [GlobalSetup]
     public void Setup()

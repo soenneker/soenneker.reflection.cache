@@ -11,7 +11,7 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Constructors;
 [Outliers(OutlierMode.DontRemove)]
 public class CachedConstructorBenchmarks
 {
-    private ReflectionCache _cache = default!;
+    private ReflectionCache _cache = null!;
 
     CachedConstructor _cachedConstructor;
 

@@ -9,8 +9,8 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Constructors;
 [Outliers(OutlierMode.DontRemove)]
 public class ConstructorInvokeBenchmarks
 {
-    private CachedType _cachedType = default!;
-    private Type _type = default!;
+    private CachedType _cachedType = null!;
+    private Type _type = null!;
 
     [GlobalSetup]
     public void Setup()

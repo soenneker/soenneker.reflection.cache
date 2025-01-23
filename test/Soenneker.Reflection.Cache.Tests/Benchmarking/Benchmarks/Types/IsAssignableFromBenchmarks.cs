@@ -9,11 +9,11 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Types;
 [Outliers(OutlierMode.DontRemove)]
 public class IsAssignableFromBenchmarks
 {
-    private Type _derivedType = default!;
-    private Type _sourceType = default!;
+    private Type _derivedType = null!;
+    private Type _sourceType = null!;
 
-    private ReflectionCache _cache = default!;
-    private CachedType _cachedType = default!;
+    private ReflectionCache _cache = null!;
+    private CachedType _cachedType = null!;
 
     [GlobalSetup]
     public void Setup()

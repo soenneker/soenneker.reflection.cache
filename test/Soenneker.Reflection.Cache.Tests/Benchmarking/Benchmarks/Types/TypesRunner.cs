@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
+using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Local;
+using Soenneker.Tests.Benchmark;
 using Xunit;
 
 
@@ -19,7 +21,7 @@ public class TypesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetTypeBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
     [LocalFact]
@@ -27,7 +29,7 @@ public class TypesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetCachedTypeBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
     [LocalFact]
@@ -35,7 +37,7 @@ public class TypesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetGenericTypeDefinitionBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
     [LocalFact]
@@ -43,7 +45,7 @@ public class TypesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<GetElementTypeBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
     [LocalFact]
@@ -51,7 +53,7 @@ public class TypesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<IsAssignableFromBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
     [LocalFact]
@@ -59,6 +61,6 @@ public class TypesRunner : BenchmarkTest
     {
         Summary summary = BenchmarkRunner.Run<CachedTypeBenchmarks>(DefaultConf);
 
-        await OutputSummaryToLog(summary, CancellationToken);
+        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 }

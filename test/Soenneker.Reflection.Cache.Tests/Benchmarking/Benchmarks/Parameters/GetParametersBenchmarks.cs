@@ -12,12 +12,12 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Parameters;
 [Outliers(OutlierMode.DontRemove)]
 public class GetParametersBenchmarks
 {
-    private CachedType _cachedType = default!;
+    private CachedType _cachedType = null!;
 
-    private Type _type = default!;
-    private CachedConstructor _cachedConstructor = default!;
+    private Type _type = null!;
+    private CachedConstructor _cachedConstructor = null!;
 
-    private ConstructorInfo _constructorInfo = default!;
+    private ConstructorInfo _constructorInfo = null!;
 
     [GlobalSetup]
     public void Setup()

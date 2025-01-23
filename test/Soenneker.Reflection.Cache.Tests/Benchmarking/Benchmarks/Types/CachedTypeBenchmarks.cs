@@ -11,11 +11,11 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Types;
 [Outliers(OutlierMode.DontRemove)]
 public class CachedTypeBenchmarks
 {
-    private ReflectionCache _cache = default!;
+    private ReflectionCache _cache = null!;
 
-    private CachedType _cachedType = default!;
-    private CachedType _doubleDerivedType = default!;
-    private Type _type = default!;
+    private CachedType _cachedType = null!;
+    private CachedType _doubleDerivedType = null!;
+    private Type _type = null!;
 
     CachedConstructor[]? cachedConstructors;
 

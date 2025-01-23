@@ -11,9 +11,9 @@ namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Members;
 [Outliers(OutlierMode.DontRemove)]
 public class GetMembersBenchmarks
 {
-    private CachedType _cachedThreadSafeType = default!;
-    private CachedType _cachedType = default!;
-    private Type _type = default!;
+    private CachedType _cachedThreadSafeType = null!;
+    private CachedType _cachedType = null!;
+    private Type _type = null!;
 
     [GlobalSetup]
     public void Setup()
