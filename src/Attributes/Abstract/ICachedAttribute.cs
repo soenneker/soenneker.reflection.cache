@@ -16,7 +16,9 @@ public interface ICachedAttribute
     /// <summary>
     /// Gets the type of the attribute.
     /// </summary>
-    Type AttributeType { get; }
+    Type Type { get; }
 
-    CachedType CachedAttributeType { get; }
+    CachedType CachedType { get; }
+
+    string Name { get; }
 }

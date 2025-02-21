@@ -30,7 +30,7 @@ public sealed class CachedMethods : ICachedMethods
         _cachedMethodsInfos = new Lazy<MethodInfo?[]>(() => _cachedArray.Value.ToMethods(), threadSafe);
     }
 
-    public CachedMethod GetCachedMethod(string name)
+    public CachedMethod? GetCachedMethod(string name)
     {
         int key = ReflectionCacheUtil.GetCacheKeyForMethod(name);
 
@@ -39,26 +39,26 @@ public sealed class CachedMethods : ICachedMethods
 
     public MethodInfo? GetMethod(string name)
     {
-        return GetCachedMethod(name).MethodInfo;
+        return GetCachedMethod(name)?.MethodInfo;
     }
 
-    public CachedMethod GetCachedMethod(string name, Type[] parameterTypes)
+    public CachedMethod? GetCachedMethod(string name, Type[] parameterTypes)
     {
         int key = ReflectionCacheUtil.GetCacheKeyForMethod(name, parameterTypes);
 
         return _cachedDict.Value.GetValueOrDefault(key);
     }
 
-    public CachedMethod GetCachedMethod(string name, CachedType[] cachedParameterTypes)
+    public CachedMethod? GetCachedMethod(string name, CachedType[] cachedParameterTypes)
     {
-        int key = ReflectionCacheUtil.GetCacheKeyForMethod(name, cachedParameterTypes);
+        int key = ReflectionCacheUtil.GetCacheKeyForMethodWithCachedParameterTypes(name, cachedParameterTypes);
 
         return _cachedDict.Value.GetValueOrDefault(key);
     }
 
     public MethodInfo? GetMethod(string name, Type[] types)
     {
-        return GetCachedMethod(name, types).MethodInfo;
+        return GetCachedMethod(name, types)?.MethodInfo;
     }
 
     private CachedMethod[] SetArray(bool threadSafe)

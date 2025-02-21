@@ -1,9 +1,10 @@
-using System.Threading.Tasks;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Local;
+using Soenneker.Facts.Manual;
 using Soenneker.Tests.Benchmark;
+using System.Threading.Tasks;
 using Xunit;
 
 
@@ -16,7 +17,8 @@ public class AttributesRunner : BenchmarkTest
     {
     }
 
-    [LocalFact]
+    [ManualFact]
+    //[LocalFact]
     public async Task GetAttributes()
     {
         Summary summary = BenchmarkRunner.Run<GetAttributesBenchmarks>(DefaultConf);
@@ -24,7 +26,8 @@ public class AttributesRunner : BenchmarkTest
         await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
-    [LocalFact]
+    [ManualFact]
+    //[LocalFact]
     public async Task CachedAttributesExtension()
     {
         Summary summary = BenchmarkRunner.Run<CachedAttributesExtensionBenchmarks>(DefaultConf);

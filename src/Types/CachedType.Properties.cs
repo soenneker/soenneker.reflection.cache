@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
+using Soenneker.Reflection.Cache.Attributes;
 
 namespace Soenneker.Reflection.Cache.Types;
 
@@ -88,6 +89,12 @@ public partial class CachedType
 
     public bool IsWeakReference => _isWeakReference.Value;
     private Lazy<bool> _isWeakReference;
+
+    public bool IsIntellenum => _isIntellenumLazy.Value;
+    private Lazy<bool> _isIntellenumLazy;
+
+    public bool IsSmartEnum => _isSmartEnumLazy.Value;
+    private Lazy<bool> _isSmartEnumLazy;
 
     private void InitializeProperties()
     {
@@ -209,7 +216,8 @@ public partial class CachedType
         _isValueType = new Lazy<bool>(() => Type is {IsValueType: true}, _threadSafe);
         _isPrimitive = new Lazy<bool>(() => Type is {IsPrimitive: true}, _threadSafe);
         _isStaticClass = new Lazy<bool>(() => Type is {IsAbstract: true, IsSealed: true}, _threadSafe);
-        _isTuple = new Lazy<bool>(() => Type is {IsGenericType: true} && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(ValueTuple<>)), _threadSafe);
+        _isTuple = new Lazy<bool>(() => Type is {IsGenericType: true} && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(ValueTuple<>)),
+            _threadSafe);
         _isDelegate = new Lazy<bool>(() => _cachedTypes.GetCachedType(typeof(Delegate)).IsAssignableFrom(this), _threadSafe);
 
         _isAnonymousType = new Lazy<bool>(() =>
@@ -222,7 +230,7 @@ public partial class CachedType
 
         _isRecord = new Lazy<bool>(() =>
         {
-            if (Type == null) 
+            if (Type == null)
                 return false;
 
             bool hasCloneMethod = GetCachedMethod("<Clone>$") != null;
@@ -238,8 +246,7 @@ public partial class CachedType
             return Nullable.GetUnderlyingType(Type)?.IsValueType == true;
         }, _threadSafe);
 
-        _isObsolete = new Lazy<bool>(() => { 
-            return Type?.GetCustomAttribute<ObsoleteAttribute>() != null; }, _threadSafe);
+        _isObsolete = new Lazy<bool>(() => { return Type?.GetCustomAttribute<ObsoleteAttribute>() != null; }, _threadSafe);
 
         _isConstructedGenericType = new Lazy<bool>(() => { return Type?.IsConstructedGenericType == true; }, _threadSafe);
 
@@ -257,6 +264,45 @@ public partial class CachedType
 
             if (IsGenericType && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(WeakReference<>)))
                 return true;
+
+            return false;
+        }, _threadSafe);
+
+        _isIntellenumLazy = new Lazy<bool>(() =>
+        {
+            if (!_isClass.Value)
+                return false;
+
+            CachedAttribute[]? attributes = GetCachedCustomAttributes();
+
+            if (attributes == null || attributes.Length == 0)
+                return false;
+
+            for (var x = 0; x < attributes.Length; x++)
+            {
+                CachedAttribute attribute = attributes[x];
+
+                if (attribute.Name.StartsWith("IntellenumAttribute"))
+                    return true;
+            }
+
+            return false;
+        }, _threadSafe);
+
+        _isSmartEnumLazy = new Lazy<bool>(() =>
+        {
+            if (!_isClass.Value)
+                return false;
+
+            CachedType[] interfaces = GetCachedInterfaces()!;
+
+            for (var index = 0; index < interfaces.Length; index++)
+            {
+                CachedType i = interfaces[index];
+
+                if (i.Type!.Name == "ISmartEnum")
+                    return true;
+            }
 
             return false;
         }, _threadSafe);

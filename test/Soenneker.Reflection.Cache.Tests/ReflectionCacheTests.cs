@@ -2,7 +2,6 @@ using FluentAssertions;
 using Soenneker.Reflection.Cache.Types.Abstract;
 using Xunit;
 
-
 namespace Soenneker.Reflection.Cache.Tests;
 
 public sealed class ReflectionCacheTests

@@ -1,20 +1,20 @@
 using FluentAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
-
 using Xunit;
 using System.Collections.Generic;
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using Soenneker.Reflection.Cache.Tests.Enums;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
-public class CacheTypeTests
+public class CachedTypePropertiesTests
 {
     private readonly ReflectionCache _cache;
 
-    public CacheTypeTests(ITestOutputHelper output)
+    public CachedTypePropertiesTests(ITestOutputHelper output)
     {
         _cache = new ReflectionCache();
     }
@@ -132,37 +132,23 @@ public class CacheTypeTests
     }
 
     [Fact]
-    public void MakeCachedGenericType_should_return_GenericType()
-    {
-        Type genericTypeDefinition = typeof(List<>);
-        Type[] typeArguments = [typeof(int)];
-
-        CachedType cachedType = _cache.GetCachedType(genericTypeDefinition);
-
-        Type? genericTypeInstance = cachedType.MakeGenericType(typeArguments);
-
-        genericTypeInstance.Should().NotBeNull();
-        genericTypeInstance.Should().Be(typeof(List<int>));
-    }
-
-    [Fact]
-    public void MakeCachedGenericType_with_CachedType_should_return_GenericType()
-    {
-        Type genericTypeDefinition = typeof(List<>);
-        CachedType cachedType = _cache.GetCachedType(genericTypeDefinition);
-
-        CachedType cachedTypeArgument = _cache.GetCachedType(typeof(int));
-
-        CachedType? cachedGenericType = cachedType.MakeCachedGenericType(cachedTypeArgument);
-
-        cachedGenericType.Should().NotBeNull();
-        cachedGenericType.Should().Be(_cache.GetCachedType(typeof(List<int>)));
-    }
-
-    [Fact]
     public void IsFunc_should_be_true()
     {
         CachedType result = _cache.GetCachedType(typeof(Func<int>));
         result.IsFunc.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsIntellenum_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(DayOfWeekTypeIntellenum));
+        result.IsIntellenum.Should().BeTrue();
+    }
+
+    [Fact]
+    public void IsSmartEnum_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(DayOfWeekTypeSmartEnum));
+        result.IsSmartEnum.Should().BeTrue();
     }
 }

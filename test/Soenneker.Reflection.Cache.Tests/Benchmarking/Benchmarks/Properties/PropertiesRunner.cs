@@ -1,9 +1,10 @@
-using System.Threading.Tasks;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Local;
+using Soenneker.Facts.Manual;
 using Soenneker.Tests.Benchmark;
+using System.Threading.Tasks;
 using Xunit;
 
 
@@ -16,7 +17,8 @@ public class PropertiesRunner : BenchmarkTest
     {
     }
 
-    [LocalFact]
+    [ManualFact]
+    //[LocalFact]
     public async Task GetProperty()
     {
         Summary summary = BenchmarkRunner.Run<GetPropertyBenchmarks>(DefaultConf);
@@ -24,7 +26,8 @@ public class PropertiesRunner : BenchmarkTest
         await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
-    [LocalFact]
+    [ManualFact]
+    //[LocalFact]
     public async Task GetProperties()
     {
         Summary summary = BenchmarkRunner.Run<GetPropertiesBenchmarks>(DefaultConf);

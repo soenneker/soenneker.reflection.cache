@@ -16,7 +16,7 @@ public interface ICachedMethods
     /// <param name="name">The name of the method.</param>
     /// <returns>The CachedMethod corresponding to the given name.</returns>
     [Pure]
-    CachedMethod GetCachedMethod(string name);
+    CachedMethod? GetCachedMethod(string name);
 
     /// <summary>
     /// Gets a regular MethodInfo by name.
@@ -33,10 +33,10 @@ public interface ICachedMethods
     /// <param name="parameterTypes">An array of parameter types.</param>
     /// <returns>The CachedMethod corresponding to the given name and parameter types.</returns>
     [Pure]
-    CachedMethod GetCachedMethod(string name, Type[] parameterTypes);
+    CachedMethod? GetCachedMethod(string name, Type[] parameterTypes);
 
     [Pure]
-    CachedMethod GetCachedMethod(string name, CachedType[] cachedParameterTypes);
+    CachedMethod? GetCachedMethod(string name, CachedType[] cachedParameterTypes);
 
     /// <summary>
     /// Gets a regular MethodInfo by name and parameter types.

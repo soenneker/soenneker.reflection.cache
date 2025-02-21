@@ -9,18 +9,23 @@ public sealed class CachedAttribute : ICachedAttribute
 {
     public object Attribute { get; }
 
-    public Type AttributeType => _attributeTypeLazy.Value;
-    private readonly Lazy<Type> _attributeTypeLazy;
+    public CachedType CachedType => _lazyCachedType.Value;
+    private readonly Lazy<CachedType> _lazyCachedType;
 
-    public CachedType CachedAttributeType => _lazyCachedAttributeType.Value;
-    private readonly Lazy<CachedType> _lazyCachedAttributeType;
+    public Type Type => _typeLazy.Value;
+    private readonly Lazy<Type> _typeLazy;
+
+    public string Name => _lazyName.Value;
+    private readonly Lazy<string> _lazyName;
 
     public CachedAttribute(object attribute, CachedTypes cachedTypes, bool threadSafe = true)
     {
         Attribute = attribute;
 
-        _lazyCachedAttributeType = new Lazy<CachedType>(() => cachedTypes.GetCachedType(AttributeType), threadSafe);
+        _lazyCachedType = new Lazy<CachedType>(() => cachedTypes.GetCachedType(Attribute.GetType()), threadSafe);
 
-        _attributeTypeLazy = new Lazy<Type>(() => _lazyCachedAttributeType.Value.Type!, threadSafe);
+        _typeLazy = new Lazy<Type>(() => _lazyCachedType.Value.Type!, threadSafe);
+
+        _lazyName = new Lazy<string>(() => _typeLazy.Value.Name, threadSafe);
     }
 }
