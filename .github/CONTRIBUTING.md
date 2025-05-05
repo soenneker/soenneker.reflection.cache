@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Reflection.Cache
+﻿# Contributing to Soenneker.Reflection.Cache
 
 We're excited that you're interested in contributing!
 
