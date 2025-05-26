@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+﻿using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using System;
 using Soenneker.Reflection.Cache.Types;

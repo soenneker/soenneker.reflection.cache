@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Constants;
 using System.Reflection;
 using System;

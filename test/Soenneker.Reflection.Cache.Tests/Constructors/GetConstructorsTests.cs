@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using FluentAssertions;
+using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;

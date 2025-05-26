@@ -1,5 +1,5 @@
 using System;
-using FluentAssertions;
+using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Types;
 
 using Xunit;
