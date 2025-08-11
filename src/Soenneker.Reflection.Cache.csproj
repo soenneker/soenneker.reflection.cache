@@ -44,7 +44,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
         <PackageReference Include="Soenneker.Extensions.Array.Object" Version="3.0.54" />
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="3.0.346" />
-        <PackageReference Include="Soenneker.Extensions.ParameterInfo" Version="3.0.51" />
+        <PackageReference Include="Soenneker.Extensions.ParameterInfo" Version="3.0.52" />
         <PackageReference Include="Soenneker.Extensions.Type.Array" Version="3.0.34" />
     </ItemGroup>
 </Project>
