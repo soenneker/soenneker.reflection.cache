@@ -1,157 +1,120 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Soenneker.Extensions.Array.Object;
+﻿using Soenneker.Extensions.Array.Object;
 using Soenneker.Extensions.Type.Array;
 using Soenneker.Reflection.Cache.Constructors.Abstract;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types;
+using System;
+using System.Collections.Frozen;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Soenneker.Reflection.Cache.Constructors;
 
-///<inheritdoc cref="ICachedConstructors"/>
+/// <inheritdoc cref="ICachedConstructors"/>
 public sealed class CachedConstructors : ICachedConstructors
 {
     private readonly Lazy<CachedConstructor[]> _cachedArray;
-    private readonly Lazy<Dictionary<int, CachedConstructor>> _cachedDict;
-
-    private readonly CachedType _cachedType;
-    private readonly CachedTypes _cachedTypes;
-
+    private readonly Lazy<FrozenDictionary<int, CachedConstructor>> _cachedDict;
     private readonly Lazy<ConstructorInfo?[]> _cachedConstructorInfos;
+
+    // Fast path for parameterless construction (if available)
+    private readonly Lazy<Func<object?>> _parameterlessActivator;
 
     public CachedConstructors(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedType = cachedType;
-        _cachedTypes = cachedTypes;
+        CachedType cachedType1 = cachedType;
+        CachedTypes cachedTypes1 = cachedTypes;
 
-        _cachedArray = new Lazy<CachedConstructor[]>(() => SetArray(threadSafe), threadSafe);
-        _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(() => SetDict(threadSafe), threadSafe);
-        _cachedDict = new Lazy<Dictionary<int, CachedConstructor>>(() => SetDict(threadSafe), threadSafe);
+        LazyThreadSafetyMode mode = threadSafe ? LazyThreadSafetyMode.ExecutionAndPublication : LazyThreadSafetyMode.None;
 
-        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(() => _cachedArray.Value.ToConstructorInfos(), threadSafe);
+        var constructorInfos = new Lazy<ConstructorInfo[]>(() => cachedType1.Type!.GetConstructors(cachedTypes1.Options.ConstructorFlags), mode);
+
+        _cachedArray = new Lazy<CachedConstructor[]>(() =>
+        {
+            ConstructorInfo[] infos = constructorInfos.Value;
+            var result = new CachedConstructor[infos.Length];
+            for (var i = 0; i < infos.Length; i++)
+            {
+                result[i] = new CachedConstructor(infos[i], cachedTypes1, threadSafe);
+            }
+
+            return result;
+        }, mode);
+
+        _cachedDict = new Lazy<FrozenDictionary<int, CachedConstructor>>(() =>
+        {
+            CachedConstructor[] arr = _cachedArray.Value;
+            var dict = new Dictionary<int, CachedConstructor>(arr.Length);
+            for (var i = 0; i < arr.Length; i++)
+            {
+                dict[arr[i].ToHashKey()] = arr[i]; // last-one-wins for duplicate sig hashes
+            }
+
+            return dict.ToFrozenDictionary();
+        }, mode);
+
+        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(() => _cachedArray.Value.ToConstructorInfos(), mode);
+
+        _parameterlessActivator = new Lazy<Func<object?>>(() =>
+        {
+            Type type = cachedType1.Type!;
+            ConstructorInfo? ctor = type.GetConstructor(Type.EmptyTypes);
+            if (ctor is null)
+                return static () => null;
+
+            try
+            {
+                // Build: () => new T()
+                NewExpression newExpr = Expression.New(ctor);
+                Expression<Func<object?>> lambda = Expression.Lambda<Func<object?>>(Expression.Convert(newExpr, typeof(object)));
+                return lambda.Compile();
+            }
+            catch
+            {
+                return () => Activator.CreateInstance(type);
+            }
+        }, mode);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
     {
         int key = parameterTypes.ToHashKey();
         return _cachedDict.Value.GetValueOrDefault(key);
     }
 
-    public ConstructorInfo? GetConstructor(Type[]? parameterTypes = null)
-    {
-        return GetCachedConstructor(parameterTypes)?.ConstructorInfo;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ConstructorInfo? GetConstructor(Type[]? parameterTypes = null) => GetCachedConstructor(parameterTypes)?.ConstructorInfo;
 
-    private CachedConstructor[] SetArray(bool threadSafe)
-    {
-        if (_cachedDict.IsValueCreated)
-        {
-            Dictionary<int, CachedConstructor>.ValueCollection cachedDictValues = _cachedDict.Value.Values;
-            var result = new CachedConstructor[cachedDictValues.Count];
-            var i = 0;
+    public CachedConstructor[] GetCachedConstructors() => _cachedArray.Value;
 
-            foreach (CachedConstructor constructor in cachedDictValues)
-            {
-                result[i++] = constructor;
-            }
-
-            return result;
-        }
-
-        ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(_cachedTypes.Options.ConstructorFlags);
-        int length = constructorInfos.Length;
-
-        var cachedConstructors = new CachedConstructor[length];
-
-        for (var i = 0; i < length; i++)
-        {
-            cachedConstructors[i] = new CachedConstructor(constructorInfos[i], _cachedTypes, threadSafe);
-        }
-
-        return cachedConstructors;
-    }
-
-    private Dictionary<int, CachedConstructor> SetDict(bool threadSafe)
-    {
-        if (_cachedArray.IsValueCreated)
-        {
-            CachedConstructor[] cachedArrayValue = _cachedArray.Value;
-            int length = cachedArrayValue.Length;
-
-            var dict = new Dictionary<int, CachedConstructor>(length);
-
-            for (var i = 0; i < length; i++)
-            {
-                int key = cachedArrayValue[i].ToHashKey();
-                dict[key] = cachedArrayValue[i];
-            }
-
-            return dict;
-        }
-
-        ConstructorInfo[] constructorInfos = _cachedType.Type!.GetConstructors(_cachedTypes.Options.ConstructorFlags);
-        int constructorInfosLength = constructorInfos.Length;
-
-        var constructorsDict = new Dictionary<int, CachedConstructor>(constructorInfosLength);
-
-        ReadOnlySpan<ConstructorInfo> constructorsSpan = constructorInfos;
-
-        for (var i = 0; i < constructorInfosLength; i++)
-        {
-            ConstructorInfo info = constructorsSpan[i];
-
-            ParameterInfo[] parameters = info.GetParameters();
-
-            int parametersLength = parameters.Length;
-
-            var parameterTypes = new Type[parametersLength];
-
-            ReadOnlySpan<ParameterInfo> parametersSpan = parameters;
-
-            for (var j = 0; j < parametersLength; j++)
-            {
-                parameterTypes[j] = parametersSpan[j].ParameterType;
-            }
-
-            int key = parameterTypes.ToHashKey();
-
-            constructorsDict[key] = new CachedConstructor(info, _cachedTypes, threadSafe);
-        }
-
-        return constructorsDict;
-    }
-
-    public CachedConstructor[] GetCachedConstructors()
-    {
-        return _cachedArray.Value;
-    }
-
-    public ConstructorInfo?[] GetConstructors()
-    {
-        return _cachedConstructorInfos.Value;
-    }
+    public ConstructorInfo?[] GetConstructors() => _cachedConstructorInfos.Value;
 
     public object? CreateInstance()
     {
-        //TODO: One day parameterless invoke of the constructorInfo may be faster than Activator.CreateInstance
-        return Activator.CreateInstance(_cachedType.Type!);
+        // Use the cached parameterless activator if present; otherwise null if no default ctor.
+        Func<object?> f = _parameterlessActivator.Value;
+        return f();
     }
 
     public T? CreateInstance<T>()
     {
-        return (T?)Activator.CreateInstance(_cachedType.Type!);
+        object? obj = CreateInstance();
+        return obj is null ? default : (T?) obj;
     }
-    
+
     public object? CreateInstance(params object[] parameters)
     {
         if (parameters.Length == 0)
             return CreateInstance();
 
+        // Avoid a LINQ pass; reuse your extension which is likely optimized.
         Type[] parameterTypes = parameters.ToTypes();
 
         CachedConstructor? cachedConstructor = GetCachedConstructor(parameterTypes);
-
         return cachedConstructor?.Invoke(parameters);
     }
 
@@ -163,10 +126,6 @@ public sealed class CachedConstructors : ICachedConstructors
         Type[] parameterTypes = parameters.ToTypes();
 
         CachedConstructor? cachedConstructor = GetCachedConstructor(parameterTypes);
-
-        if (cachedConstructor == null)
-            return default;
-
-        return cachedConstructor.Invoke<T>(parameters);
+        return cachedConstructor is null ? default : cachedConstructor.Invoke<T>(parameters);
     }
 }

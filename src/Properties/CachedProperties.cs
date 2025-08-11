@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Reflection;
-using Soenneker.Reflection.Cache.Extensions;
+using System.Runtime.CompilerServices;
 using Soenneker.Reflection.Cache.Properties.Abstract;
 using Soenneker.Reflection.Cache.Types;
 
@@ -10,94 +11,66 @@ namespace Soenneker.Reflection.Cache.Properties;
 ///<inheritdoc cref="ICachedProperties"/>
 public sealed class CachedProperties : ICachedProperties
 {
-    private readonly Lazy<Dictionary<int, CachedProperty?>> _cachedDict;
-    private readonly Lazy<CachedProperty[]> _cachedArray;
-
-    private readonly Lazy<PropertyInfo[]> _propertiesCache;
-
     private readonly CachedType _cachedType;
-
     private readonly CachedTypes _cachedTypes;
 
-    private readonly bool _threadSafe;
+    // Build once; immutable after warmup
+    private readonly Lazy<BuiltCache> _built;
+
+    private sealed class BuiltCache
+    {
+        public readonly CachedProperty[] CachedArray;
+        public readonly FrozenDictionary<string, CachedProperty> MapByName;
+        public readonly PropertyInfo[] PropertyInfos;
+
+        public BuiltCache(CachedProperty[] cachedArray, FrozenDictionary<string, CachedProperty> mapByName, PropertyInfo[] propertyInfos)
+        {
+            CachedArray = cachedArray;
+            MapByName = mapByName;
+            PropertyInfos = propertyInfos;
+        }
+    }
 
     public CachedProperties(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedType = cachedType;
-        _cachedTypes = cachedTypes;
-        _threadSafe = threadSafe;
+        _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
+        _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
 
-        _cachedDict = new Lazy<Dictionary<int, CachedProperty?>>(SetDict, threadSafe);
-        _cachedArray = new Lazy<CachedProperty[]>(SetArray, threadSafe);
-        _propertiesCache = new Lazy<PropertyInfo[]>(() => GetCachedProperties().ToPropertyInfos(), threadSafe);
+        _built = new Lazy<BuiltCache>(BuildAll, threadSafe);
     }
 
-    public PropertyInfo? GetProperty(string name)
+    private BuiltCache BuildAll()
     {
-        CachedProperty? cachedProperty = GetCachedProperty(name);
-        return cachedProperty?.PropertyInfo;
-    }
+        // Single reflection hit; reuse array
+        PropertyInfo[] props = _cachedType.Type!.GetProperties(_cachedTypes.Options.PropertyFlags);
+        int len = props.Length;
 
-    public CachedProperty? GetCachedProperty(string name)
-    {
-        return _cachedDict.Value.GetValueOrDefault(name.GetHashCode());
-    }
+        var cached = new CachedProperty[len];
+        var dict = new Dictionary<string, CachedProperty>(len, StringComparer.Ordinal);
 
-    private Dictionary<int, CachedProperty?> SetDict()
-    {
-        var dict = new Dictionary<int, CachedProperty?>();
-
-        // If the array is already populated, build the dictionary from the array
-        if (_cachedArray.IsValueCreated)
+        for (var i = 0; i < len; i++)
         {
-            int length = _cachedArray.Value.Length;
+            PropertyInfo pi = props[i];
+            var cp = new CachedProperty(pi, _cachedTypes, threadSafe: true);
+            cached[i] = cp;
 
-            for (var i = 0; i < length; i++)
-            {
-                CachedProperty cachedProperty = _cachedArray.Value[i];
-                dict[cachedProperty.PropertyInfo.Name.GetHashCode()] = cachedProperty;
-            }
-        }
-        else
-        {
-            // If the array is not populated, build the dictionary directly
-            PropertyInfo[] properties = _cachedType.Type!.GetProperties(_cachedTypes.Options.PropertyFlags);
-            int length = properties.Length;
-
-            for (var i = 0; i < length; i++)
-            {
-                PropertyInfo property = properties[i];
-                var cachedProperty = new CachedProperty(property, _cachedTypes, _threadSafe);
-                dict[property.Name.GetHashCode()] = cachedProperty;
-            }
+            // Property names are unique per declaring type for given flags; using name matches original behavior.
+            // If you want to guard against rare name collisions across hides/new, consider key $"{pi.DeclaringType!.FullName}|{pi.Name}".
+            dict[pi.Name] = cp;
         }
 
-        return dict;
+        return new BuiltCache(cached, dict.ToFrozenDictionary(StringComparer.Ordinal), props);
     }
 
-    private CachedProperty[] SetArray()
-    {
-        if (_cachedDict.IsValueCreated)
-        {
-            Dictionary<int, CachedProperty?>.ValueCollection values = _cachedDict.Value.Values;
-            int count = values.Count;
-            var result = new CachedProperty[count];
-            values.CopyTo(result, 0);
-            return result;
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public PropertyInfo? GetProperty(string name) => GetCachedProperty(name)?.PropertyInfo;
 
-        PropertyInfo[] properties = _cachedType.Type!.GetProperties(_cachedTypes.Options.PropertyFlags);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedProperty? GetCachedProperty(string name) => _built.Value.MapByName.GetValueOrDefault(name);
 
-        return properties.ToCachedProperties(_cachedTypes, _threadSafe);
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public PropertyInfo[] GetProperties() => _built.Value.PropertyInfos;
 
-    public PropertyInfo[] GetProperties()
-    {
-        return _propertiesCache.Value;
-    }
-
-    public CachedProperty[] GetCachedProperties()
-    {
-        return _cachedArray.Value;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedProperty[] GetCachedProperties() => _built.Value.CachedArray;
 }

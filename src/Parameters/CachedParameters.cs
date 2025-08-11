@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Soenneker.Reflection.Cache.Constructors;
-using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Methods;
 using Soenneker.Reflection.Cache.Parameters.Abstract;
 using Soenneker.Reflection.Cache.Types;
@@ -11,84 +11,91 @@ namespace Soenneker.Reflection.Cache.Parameters;
 ///<inheritdoc cref="ICachedParameters"/>
 public sealed class CachedParameters : ICachedParameters
 {
-    private readonly CachedMethod? _cachedMethod;
-    private readonly CachedConstructor? _cachedConstructor;
-
-    private readonly Lazy<CachedParameter[]> _cachedArray;
-    private readonly Lazy<ParameterInfo[]> _cachedParameterInfos;
-
-    private readonly Lazy<CachedType[]> _cachedParameterTypes;
-    private readonly Lazy<Type[]> _parameterTypes;
-
+    private readonly Func<ParameterInfo[]> _getParameterInfos; // unified source for ctor/method
     private readonly CachedTypes _cachedTypes;
+
+    private readonly Lazy<BuiltCache> _built; // build once, reuse everywhere
+
+    private sealed class BuiltCache
+    {
+        public readonly CachedParameter[] CachedParams;
+        public readonly ParameterInfo[] ParamInfos;
+        public readonly CachedType[] CachedTypes;
+        public readonly Type[] Types;
+
+        public BuiltCache(CachedParameter[] cp, ParameterInfo[] pis, CachedType[] cts, Type[] ts)
+        {
+            CachedParams = cp;
+            ParamInfos = pis;
+            CachedTypes = cts;
+            Types = ts;
+        }
+    }
 
     public CachedParameters(CachedMethod cachedMethod, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedMethod = cachedMethod;
-        _cachedTypes = cachedTypes;
+        if (cachedMethod is null) throw new ArgumentNullException(nameof(cachedMethod));
+        _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
 
-        _cachedArray = new Lazy<CachedParameter[]>(() => SetArrayForMethod(threadSafe), threadSafe);
+        _getParameterInfos = () =>
+            cachedMethod.MethodInfo is null ? []
+                                            : cachedMethod.MethodInfo.GetParameters();
 
-        _cachedParameterInfos = new Lazy<ParameterInfo[]>(_cachedArray.Value.ToParameterInfos, threadSafe);
-        _parameterTypes = new Lazy<Type[]>(_cachedArray.Value.ToParametersTypes, threadSafe);
+        _built = new Lazy<BuiltCache>(BuildAll, threadSafe);
     }
 
     public CachedParameters(CachedConstructor cachedConstructor, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedConstructor = cachedConstructor;
-        _cachedTypes = cachedTypes;
+        if (cachedConstructor is null) throw new ArgumentNullException(nameof(cachedConstructor));
+        _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
 
-        _cachedArray = new Lazy<CachedParameter[]>(() => SetArrayForConstructor(threadSafe), threadSafe);
+        _getParameterInfos = () =>
+            cachedConstructor.ConstructorInfo is null ? []
+                                                      : cachedConstructor.ConstructorInfo.GetParameters();
 
-        _cachedParameterInfos = new Lazy<ParameterInfo[]>(_cachedArray.Value.ToParameterInfos, threadSafe);
-        _parameterTypes = new Lazy<Type[]>(_cachedArray.Value.ToParametersTypes, threadSafe);
+        _built = new Lazy<BuiltCache>(BuildAll, threadSafe);
     }
 
-    private CachedParameter[] SetArrayForConstructor(bool threadSafe)
+    private BuiltCache BuildAll()
     {
-        ParameterInfo[] parameters = _cachedConstructor!.ConstructorInfo!.GetParameters();
-        int length = parameters.Length;
-        var cachedParameters = new CachedParameter[length];
+        ParameterInfo[] paramInfos = _getParameterInfos();
+        int len = paramInfos.Length;
 
-        for (var i = 0; i < length; i++)
+        if (len == 0)
         {
-            cachedParameters[i] = new CachedParameter(parameters[i], _cachedTypes, threadSafe);
+            return new BuiltCache(
+                [],
+                [],
+                [],
+                []
+            );
         }
 
-        return cachedParameters;
-    }
+        var cachedParams = new CachedParameter[len];
+        var cachedTypes = new CachedType[len];
+        var types = new Type[len];
 
-    private CachedParameter[] SetArrayForMethod(bool threadSafe)
-    {
-        ParameterInfo[] parameters = _cachedMethod!.MethodInfo!.GetParameters();
-        int length = parameters.Length;
-        var cachedParameters = new CachedParameter[length];  // Directly allocate the array
-
-        for (var i = 0; i < length; i++)
+        for (var i = 0; i < len; i++)
         {
-            cachedParameters[i] = new CachedParameter(parameters[i], _cachedTypes, threadSafe);
+            ParameterInfo pi = paramInfos[i];
+            cachedParams[i] = new CachedParameter(pi, _cachedTypes, threadSafe: true);
+            CachedType ct = _cachedTypes.GetCachedType(pi.ParameterType);
+            cachedTypes[i] = ct;
+            types[i] = ct.Type!; // cachedTypes guarantees non-null Type
         }
 
-        return cachedParameters;
+        return new BuiltCache(cachedParams, paramInfos, cachedTypes, types);
     }
 
-    public CachedParameter[] GetCachedParameters()
-    {
-        return _cachedArray.Value;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedParameter[] GetCachedParameters() => _built.Value.CachedParams;
 
-    public ParameterInfo[] GetParameters()
-    {
-        return _cachedParameterInfos.Value;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ParameterInfo[] GetParameters() => _built.Value.ParamInfos;
 
-    public Type[] GetParameterTypes()
-    {
-        return _parameterTypes.Value;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Type[] GetParameterTypes() => _built.Value.Types;
 
-    public CachedType[] GetCachedParameterTypes()
-    {
-        return _cachedParameterTypes.Value;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedType[] GetCachedParameterTypes() => _built.Value.CachedTypes;
 }

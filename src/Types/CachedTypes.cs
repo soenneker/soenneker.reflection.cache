@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Soenneker.Reflection.Cache.Options;
 using Soenneker.Reflection.Cache.Types.Abstract;
 
@@ -9,97 +10,105 @@ namespace Soenneker.Reflection.Cache.Types;
 ///<inheritdoc cref="ICachedTypes"/>
 public sealed class CachedTypes : ICachedTypes
 {
-    // We'll use two sets of dictionaries - one for fast integer lookups (hopefully, common), and the other for slower string lookups
-    private readonly ConcurrentDictionary<string, CachedType>? _concurrentDict;
-    private readonly ConcurrentDictionary<int, CachedType>? _concurrentDictByType;
-
-    private readonly Dictionary<string, CachedType>? _dict;
-    private readonly Dictionary<int, CachedType>? _dictByType;
-
     private readonly bool _threadSafe;
+
+    // canonical: type -> CachedType
+    private readonly ConcurrentDictionary<Type, CachedType>? _concurrentByType;
+    private readonly Dictionary<Type, CachedType>? _byType;
+
+    // name cache: input string -> CachedType (can be null-type for misses)
+    private readonly ConcurrentDictionary<string, CachedType>? _concurrentByName;
+    private readonly Dictionary<string, CachedType>? _byName;
 
     public ReflectionCacheOptions Options { get; private set; }
 
     public CachedTypes(ReflectionCacheOptions? options = null, bool threadSafe = true)
     {
-        options ??= new ReflectionCacheOptions();
-        Options = options;
-
+        Options = options ?? new ReflectionCacheOptions();
         _threadSafe = threadSafe;
 
-        if (_threadSafe)
+        if (threadSafe)
         {
-            _concurrentDict = [];
-            _concurrentDictByType = [];
+            _concurrentByType = new ConcurrentDictionary<Type, CachedType>();
+            _concurrentByName = new ConcurrentDictionary<string, CachedType>(StringComparer.Ordinal);
         }
         else
         {
-            _dict = [];
-            _dictByType = [];
+            _byType = new Dictionary<Type, CachedType>();
+            _byName = new Dictionary<string, CachedType>(StringComparer.Ordinal);
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType GetCachedType(string typeName)
     {
         if (string.IsNullOrEmpty(typeName))
-            throw new ArgumentException("typeName cannot be null or empty");
+            throw new ArgumentException("typeName cannot be null or empty", nameof(typeName));
 
         if (_threadSafe)
         {
-            return _concurrentDict!.GetOrAdd(typeName, _ =>
-            {
-                var type = Type.GetType(typeName);
+            ConcurrentDictionary<string, CachedType>? byName = _concurrentByName!;
+            if (byName.TryGetValue(typeName, out CachedType? cached))
+                return cached;
 
-                var newCachedType = new CachedType(type, this, _threadSafe);
+            var type = Type.GetType(typeName, throwOnError: false, ignoreCase: false);
+            cached = type is null
+                ? new CachedType(null, this, _threadSafe)          // negative cache
+                : GetCachedType(type);                             // canonical path
 
-                if (type == null)
-                    _concurrentDict.TryAdd(typeName, newCachedType);
-                else
-                    _concurrentDict.TryAdd(type.FullName!, newCachedType);
-
-                return newCachedType;
-            });
+            byName.TryAdd(typeName, cached);
+            return cached;
         }
-
-        if (_dict!.TryGetValue(typeName, out CachedType? result))
-            return result;
-
-        var type = Type.GetType(typeName);
-
-        var newCachedType = new CachedType(type, this, _threadSafe);
-
-        if (type == null)
-            _dict.TryAdd(typeName, newCachedType);
         else
-            _dict.TryAdd(type.FullName!, newCachedType);
+        {
+            Dictionary<string, CachedType>? byName = _byName!;
+            if (byName.TryGetValue(typeName, out CachedType? cached))
+                return cached;
 
-        return newCachedType;
+            var type = Type.GetType(typeName, throwOnError: false, ignoreCase: false);
+            cached = type is null
+                ? new CachedType(null, this, _threadSafe)
+                : GetCachedType(type);
+
+            byName.TryAdd(typeName, cached);
+            return cached;
+        }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType GetCachedType(Type type)
     {
-        int key = type.GetHashCode();
+        if (type is null)
+            throw new ArgumentNullException(nameof(type));
 
         if (_threadSafe)
-            return _concurrentDictByType!.GetOrAdd(key, _ => new CachedType(type, this, _threadSafe));
+        {
+            ConcurrentDictionary<Type, CachedType>? map = _concurrentByType!;
+            if (map.TryGetValue(type, out CachedType? cached))
+                return cached;
 
-        if (_dictByType!.TryGetValue(key, out CachedType? result))
-            return result;
+            var created = new CachedType(type, this, _threadSafe);
+            if (map.TryAdd(type, created))
+                return created;
 
-        var newCachedType = new CachedType(type, this, _threadSafe);
+            // rare race: someone else added first
+            return map[type];
+        }
+        else
+        {
+            Dictionary<Type, CachedType>? map = _byType!;
+            if (map.TryGetValue(type, out CachedType? cached))
+                return cached;
 
-        _dictByType.TryAdd(key, newCachedType);
-
-        return newCachedType;
+            var created = new CachedType(type, this, _threadSafe);
+            map.TryAdd(type, created);
+            return created;
+        }
     }
 
-    public Type? GetType(string typeName)
-    {
-        return GetCachedType(typeName).Type;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Type? GetType(string typeName) => GetCachedType(typeName).Type;
 
-    public Type? GetType(Type type)
-    {
-        return GetCachedType(type).Type;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Type? GetType(Type type) => GetCachedType(type).Type;
 }

@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Reflection;
-using Soenneker.Reflection.Cache.Extensions;
+using System.Runtime.CompilerServices;
 using Soenneker.Reflection.Cache.Fields.Abstract;
 using Soenneker.Reflection.Cache.Types;
 
@@ -10,95 +11,73 @@ namespace Soenneker.Reflection.Cache.Fields;
 ///<inheritdoc cref="ICachedFields"/>
 public sealed class CachedFields : ICachedFields
 {
-    private readonly Lazy<Dictionary<int, CachedField?>> _cachedDict;
-    private readonly Lazy<CachedField[]> _cachedArray;
-
-    private readonly Lazy<FieldInfo[]> _fieldsCache;
-
     private readonly CachedType _cachedType;
-
     private readonly CachedTypes _cachedTypes;
 
-    private readonly bool _threadSafe;
+    private readonly Lazy<BuiltCache> _built; // single source of truth
+
+    private sealed class BuiltCache
+    {
+        public readonly CachedField[] CachedArray;
+        public readonly FrozenDictionary<string, CachedField> MapByName;
+        public readonly FieldInfo[] FieldInfos;
+
+        public BuiltCache(CachedField[] cachedArray, FrozenDictionary<string, CachedField> mapByName, FieldInfo[] fieldInfos)
+        {
+            CachedArray = cachedArray;
+            MapByName = mapByName;
+            FieldInfos = fieldInfos;
+        }
+    }
 
     public CachedFields(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedType = cachedType;
-        _cachedTypes = cachedTypes;
-        _threadSafe = threadSafe;
+        _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
+        _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
 
-        _cachedDict = new Lazy<Dictionary<int, CachedField?>>(SetDict, threadSafe);
-        _cachedArray = new Lazy<CachedField[]>(SetArray, threadSafe);
-        _fieldsCache = new Lazy<FieldInfo[]>(() => GetCachedFields().ToFieldInfos(), threadSafe);
+        _built = new Lazy<BuiltCache>(BuildAll, threadSafe);
     }
 
-    public FieldInfo? GetField(string name)
+    private BuiltCache BuildAll()
     {
-        CachedField? cachedField = GetCachedField(name);
-        return cachedField?.FieldInfo;
+        // One reflection hit + one allocation of FieldInfo[]
+        FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
+        int len = fields.Length;
+
+        var cached = new CachedField[len];
+        var dict = new Dictionary<string, CachedField>(len, StringComparer.Ordinal);
+
+        for (var i = 0; i < len; i++)
+        {
+            FieldInfo fi = fields[i];
+            var cf = new CachedField(fi, _cachedTypes, threadSafe: true); // thread safety here matches previous behavior
+            cached[i] = cf;
+            dict[fi.Name] = cf; // field names are unique per type for given BindingFlags
+        }
+
+        return new BuiltCache(
+            cached,
+            dict.ToFrozenDictionary(StringComparer.Ordinal),
+            fields // keep original FieldInfo[] so we don't re-convert later
+        );
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public FieldInfo? GetField(string name)
+        => GetCachedField(name)?.FieldInfo;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedField? GetCachedField(string name)
     {
-        return _cachedDict.Value.GetValueOrDefault(name.GetHashCode());
+        // Fast, allocation-free lookup
+        return _built.Value.MapByName.GetValueOrDefault(name);
     }
 
-    private Dictionary<int, CachedField?> SetDict()
-    {
-        var dict = new Dictionary<int, CachedField?>();
-
-        // If the array is already populated, build the dictionary from the array
-        if (_cachedArray.IsValueCreated)
-        {
-            int length = _cachedArray.Value.Length;
-
-            for (var index = 0; index < length; index++)
-            {
-                CachedField cachedField = _cachedArray.Value[index];
-                dict[cachedField.FieldInfo.Name.GetHashCode()] = cachedField;
-            }
-        }
-        else
-        {
-            // If the array is not populated, build the dictionary directly
-            FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
-
-            int length = fields.Length;
-
-            for (var i = 0; i < length; i++)
-            {
-                FieldInfo field = fields[i];
-                var cachedField = new CachedField(field, _cachedTypes, _threadSafe);
-                dict[field.Name.GetHashCode()] = cachedField;
-            }
-        }
-
-        return dict;
-    }
-
-    private CachedField[] SetArray()
-    {
-        if (_cachedDict.IsValueCreated)
-        {
-            Dictionary<int, CachedField?>.ValueCollection values = _cachedDict.Value.Values;
-            int count = values.Count;
-            var result = new CachedField[count];
-            values.CopyTo(result, 0);
-            return result;
-        }
-
-        FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
-
-        return fields.ToCachedFields(_cachedTypes, _threadSafe);
-    }
-
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public FieldInfo[] GetFields()
-    {
-        return _fieldsCache.Value;
-    }
+        => _built.Value.FieldInfos;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedField[] GetCachedFields()
-    {
-        return _cachedArray.Value;
-    }
+        => _built.Value.CachedArray;
 }

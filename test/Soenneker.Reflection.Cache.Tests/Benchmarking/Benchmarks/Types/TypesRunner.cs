@@ -18,7 +18,7 @@ public class TypesRunner : BenchmarkTest
     }
 
     [ManualFact]
-    //[LocalFact]
+    //   [LocalFact]
     public async Task GetTypeBenchmarks()
     {
         Summary summary = BenchmarkRunner.Run<GetTypeBenchmarks>(DefaultConf);
@@ -27,7 +27,7 @@ public class TypesRunner : BenchmarkTest
     }
 
     [ManualFact]
-    //[LocalFact]
+    //   [LocalFact]
     public async Task GetCachedTypeBenchmarks()
     {
         Summary summary = BenchmarkRunner.Run<GetCachedTypeBenchmarks>(DefaultConf);
@@ -36,7 +36,7 @@ public class TypesRunner : BenchmarkTest
     }
 
     [ManualFact]
-    //[LocalFact]
+    //  [LocalFact]
     public async Task GetGenericTypeDefinition()
     {
         Summary summary = BenchmarkRunner.Run<GetGenericTypeDefinitionBenchmarks>(DefaultConf);
@@ -45,7 +45,7 @@ public class TypesRunner : BenchmarkTest
     }
 
     [ManualFact]
-    //[LocalFact]
+    //  [LocalFact]
     public async Task GetElementType()
     {
         Summary summary = BenchmarkRunner.Run<GetElementTypeBenchmarks>(DefaultConf);
@@ -54,7 +54,7 @@ public class TypesRunner : BenchmarkTest
     }
 
     [ManualFact]
-    //[LocalFact]
+    //  [LocalFact]
     public async Task IsAssignableFrom()
     {
         Summary summary = BenchmarkRunner.Run<IsAssignableFromBenchmarks>(DefaultConf);
@@ -62,8 +62,8 @@ public class TypesRunner : BenchmarkTest
         await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
     }
 
-    [ManualFact]
-    //[LocalFact]
+    // [ManualFact]
+    [LocalFact]
     public async Task CachedType()
     {
         Summary summary = BenchmarkRunner.Run<CachedTypeBenchmarks>(DefaultConf);
