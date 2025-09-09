@@ -34,7 +34,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Soenneker.Reflection.Cache.csproj" />
-        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.135" />
+        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.136" />
     </ItemGroup>
 
     <ItemGroup>
