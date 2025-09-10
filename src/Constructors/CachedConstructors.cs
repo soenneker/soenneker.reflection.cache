@@ -17,7 +17,7 @@ namespace Soenneker.Reflection.Cache.Constructors;
 public sealed class CachedConstructors : ICachedConstructors
 {
     private readonly Lazy<CachedConstructor[]> _cachedArray;
-    private readonly Lazy<FrozenDictionary<int, CachedConstructor>> _cachedDict;
+    private readonly Lazy<FrozenDictionary<string, CachedConstructor[]>> _byName;
     private readonly Lazy<ConstructorInfo?[]> _cachedConstructorInfos;
 
     // Fast path for parameterless construction (if available)
@@ -44,16 +44,27 @@ public sealed class CachedConstructors : ICachedConstructors
             return result;
         }, mode);
 
-        _cachedDict = new Lazy<FrozenDictionary<int, CachedConstructor>>(() =>
+        _byName = new Lazy<FrozenDictionary<string, CachedConstructor[]>>(() =>
         {
             CachedConstructor[] arr = _cachedArray.Value;
-            var dict = new Dictionary<int, CachedConstructor>(arr.Length);
+            var map = new Dictionary<string, List<CachedConstructor>>(StringComparer.Ordinal);
             for (var i = 0; i < arr.Length; i++)
             {
-                dict[arr[i].ToHashKey()] = arr[i]; // last-one-wins for duplicate sig hashes
+                ConstructorInfo? ci = arr[i].ConstructorInfo;
+                string name = ci is null ? string.Empty : ci.Name; // .ctor/.cctor
+                if (!map.TryGetValue(name, out List<CachedConstructor>? list))
+                {
+                    list = new List<CachedConstructor>();
+                    map[name] = list;
+                }
+                list.Add(arr[i]);
             }
 
-            return dict.ToFrozenDictionary();
+            var frozen = new Dictionary<string, CachedConstructor[]>(map.Count, StringComparer.Ordinal);
+            foreach (KeyValuePair<string, List<CachedConstructor>> kvp in map)
+                frozen[kvp.Key] = kvp.Value.ToArray();
+
+            return frozen.ToFrozenDictionary(StringComparer.Ordinal);
         }, mode);
 
         _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(() => _cachedArray.Value.ToConstructorInfos(), mode);
@@ -82,8 +93,44 @@ public sealed class CachedConstructors : ICachedConstructors
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
     {
-        int key = parameterTypes.ToHashKey();
-        return _cachedDict.Value.GetValueOrDefault(key);
+        if (parameterTypes == null || parameterTypes.Length == 0)
+        {
+            // Prefer parameterless .ctor if present
+            if (_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? ctors))
+            {
+                for (var i = 0; i < ctors.Length; i++)
+                {
+                    if (ctors[i].GetParameters().Length == 0)
+                        return ctors[i];
+                }
+            }
+            return null;
+        }
+
+        if (!_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? candidates) || candidates.Length == 0)
+            return null;
+
+        for (var i = 0; i < candidates.Length; i++)
+        {
+            var ps = candidates[i].GetParameters();
+            if (ps.Length != parameterTypes.Length)
+                continue;
+
+            var match = true;
+            for (var j = 0; j < ps.Length; j++)
+            {
+                if (!ReferenceEquals(ps[j].ParameterType, parameterTypes[j]))
+                {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match)
+                return candidates[i];
+        }
+
+        return null;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

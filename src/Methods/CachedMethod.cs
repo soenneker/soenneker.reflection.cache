@@ -55,7 +55,7 @@ public sealed class CachedMethod : ICachedMethod
         );
 
         _invoker = new Lazy<Func<object?, object?[]?, object?>>(
-            () => BuildInvoker(methodInfo),
+            () => BuildSafeInvoker(methodInfo),
             threadSafe
         );
     }
@@ -144,13 +144,29 @@ public sealed class CachedMethod : ICachedMethod
 
     // -------- internals --------
 
-    private static Func<object?, object?[]?, object?> BuildInvoker(MethodInfo mi)
+    private static Func<object?, object?[]?, object?> BuildSafeInvoker(MethodInfo mi)
     {
+        // Fallback to MethodInfo.Invoke for byref/byref-like signatures or on any compile failure
+        ParameterInfo[] parmsProbe = mi.GetParameters();
+        for (var i = 0; i < parmsProbe.Length; i++)
+        {
+            Type pt = parmsProbe[i].ParameterType;
+            if (pt.IsByRef)
+            {
+                return (instance, args) => mi.Invoke(instance, args ?? Array.Empty<object?>());
+            }
+            // .NET doesn't expose IsByRefLike directly pre .NET 7 on Type, but common cases are Span/ReadOnlySpan
+            if (pt.FullName is not null && (pt.FullName.StartsWith("System.Span`1", StringComparison.Ordinal) || pt.FullName.StartsWith("System.ReadOnlySpan`1", StringComparison.Ordinal)))
+            {
+                return (instance, args) => mi.Invoke(instance, args ?? Array.Empty<object?>());
+            }
+        }
+
         // Build: (object? instance, object?[]? args) => (object?) <call>
         ParameterExpression instParam = Expression.Parameter(typeof(object), "instance");
         ParameterExpression argsParam = Expression.Parameter(typeof(object[]), "args");
 
-        ParameterInfo[] parms = mi.GetParameters();
+        ParameterInfo[] parms = parmsProbe;
         var callArgs = new Expression[parms.Length];
 
         for (var i = 0; i < parms.Length; i++)
@@ -176,8 +192,16 @@ public sealed class CachedMethod : ICachedMethod
             body = Expression.Block(body); // nothing extra; CreateDelegate handles fine with null args
         }
 
-        Expression<Func<object?, object?[]?, object?>> lambda = Expression.Lambda<Func<object?, object?[]?, object?>>(body, instParam, argsParam);
-        return lambda.Compile(); // Tiered JIT will optimize quickly under load
+        try
+        {
+            Expression<Func<object?, object?[]?, object?>> lambda = Expression.Lambda<Func<object?, object?[]?, object?>>(body, instParam, argsParam);
+            return lambda.Compile(); // Tiered JIT will optimize quickly under load
+        }
+        catch
+        {
+            // Safe fallback
+            return (instance, args) => mi.Invoke(instance, args ?? Array.Empty<object?>());
+        }
     }
 
     /// Abstraction so we can use the fastest structure depending on thread-safety.
