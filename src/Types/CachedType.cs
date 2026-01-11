@@ -307,6 +307,62 @@ public partial class CachedType : ICachedType
         return _cachedConstructors!.Value.CreateInstance<T>(parameters);
     }
 
+    public object? CreateInstance(object? arg0)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.CreateInstance(arg0);
+    }
+
+    public object? CreateInstance(object? arg0, object? arg1)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.CreateInstance(arg0, arg1);
+    }
+
+    public object? CreateInstance(object? arg0, object? arg1, object? arg2)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.CreateInstance(arg0, arg1, arg2);
+    }
+
+    public object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.CreateInstance(arg0, arg1, arg2, arg3);
+    }
+
+    public T? CreateInstance<T>(object? arg0)
+    {
+        object? obj = CreateInstance(arg0);
+        return obj is null ? default : (T?) obj;
+    }
+
+    public T? CreateInstance<T>(object? arg0, object? arg1)
+    {
+        object? obj = CreateInstance(arg0, arg1);
+        return obj is null ? default : (T?) obj;
+    }
+
+    public T? CreateInstance<T>(object? arg0, object? arg1, object? arg2)
+    {
+        object? obj = CreateInstance(arg0, arg1, arg2);
+        return obj is null ? default : (T?) obj;
+    }
+
+    public T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3)
+    {
+        object? obj = CreateInstance(arg0, arg1, arg2, arg3);
+        return obj is null ? default : (T?) obj;
+    }
+
     public CachedType? GetCachedGenericTypeDefinition()
     {
         if (Type == null)
@@ -395,6 +451,28 @@ public partial class CachedType : ICachedType
     public CachedType? MakeCachedGenericType(params CachedType[] typeArguments)
     {
         return _cachedMakeGenericType!.Value.MakeGenericCachedType(typeArguments);
+    }
+
+    // ---- allocation-reducing overloads (avoid params CachedType[] allocations) ----
+
+    public CachedType? MakeCachedGenericType(CachedType t0)
+    {
+        return _cachedMakeGenericType!.Value.MakeGenericCachedType(t0);
+    }
+
+    public CachedType? MakeCachedGenericType(CachedType t0, CachedType t1)
+    {
+        return _cachedMakeGenericType!.Value.MakeGenericCachedType(t0, t1);
+    }
+
+    public CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2)
+    {
+        return _cachedMakeGenericType!.Value.MakeGenericCachedType(t0, t1, t2);
+    }
+
+    public CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2, CachedType t3)
+    {
+        return _cachedMakeGenericType!.Value.MakeGenericCachedType(t0, t1, t2, t3);
     }
 
     public Type? MakeGenericType(params Type[] typeArguments)

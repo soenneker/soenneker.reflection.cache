@@ -34,13 +34,37 @@ public interface ICachedMethod
 
     CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes);
 
+    CachedMethod? MakeCachedGenericMethod(CachedType t0);
+
+    CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1);
+
+    CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2);
+
+    CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
+
     object[] GetCustomAttributes();
 
     object? Invoke(object instance);
 
     object? Invoke(object instance, params object[] param);
 
+    object? Invoke(object instance, object? arg0);
+
+    object? Invoke(object instance, object? arg0, object? arg1);
+
+    object? Invoke(object instance, object? arg0, object? arg1, object? arg2);
+
+    object? Invoke(object instance, object? arg0, object? arg1, object? arg2, object? arg3);
+
     T? Invoke<T>(object instance);
 
     T? Invoke<T>(params object[] param);
+
+    T? Invoke<T>(object instance, object? arg0);
+
+    T? Invoke<T>(object instance, object? arg0, object? arg1);
+
+    T? Invoke<T>(object instance, object? arg0, object? arg1, object? arg2);
+
+    T? Invoke<T>(object instance, object? arg0, object? arg1, object? arg2, object? arg3);
 }

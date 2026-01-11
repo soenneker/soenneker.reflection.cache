@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
@@ -8,6 +6,7 @@ using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Methods.Abstract;
 using Soenneker.Reflection.Cache.Parameters;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Methods;
 
@@ -32,6 +31,12 @@ public sealed class CachedMethod : ICachedMethod
     // Fast, untyped invoker compiled once per method
     private readonly Lazy<Func<object?, object?[]?, object?>>? _invoker;
 
+    // Arity-specialized invokers avoid params object[] allocations for common cases (1..4 args).
+    private readonly Lazy<Func<object?, object?, object?>?>? _invoker1;
+    private readonly Lazy<Func<object?, object?, object?, object?>?>? _invoker2;
+    private readonly Lazy<Func<object?, object?, object?, object?, object?>?>? _invoker3;
+    private readonly Lazy<Func<object?, object?, object?, object?, object?, object?>?>? _invoker4;
+
     public CachedMethod(MethodInfo? methodInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MethodInfo = methodInfo;
@@ -42,61 +47,54 @@ public sealed class CachedMethod : ICachedMethod
 
         _cachedTypes = cachedTypes;
 
-        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, cachedTypes, threadSafe),
-                                                 threadSafe);
+        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, cachedTypes, threadSafe), threadSafe);
 
-        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe),
-                                                       threadSafe);
+        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
 
         _genericMethodCache = new Lazy<IConstructedGenericCache>(
-            () => threadSafe ? new ConcurrentConstructedGenericCache()
-                             : new NonConcurrentConstructedGenericCache(),
-            threadSafe
-        );
+            () => threadSafe ? new ConcurrentConstructedGenericCache() : new NonConcurrentConstructedGenericCache(), threadSafe);
 
-        _invoker = new Lazy<Func<object?, object?[]?, object?>>(
-            () => BuildSafeInvoker(methodInfo),
-            threadSafe
-        );
+        _invoker = new Lazy<Func<object?, object?[]?, object?>>(() => BuildSafeInvoker(methodInfo), threadSafe);
+        _invoker1 = new Lazy<Func<object?, object?, object?>?>(() => BuildSafeInvoker1(methodInfo), threadSafe);
+        _invoker2 = new Lazy<Func<object?, object?, object?, object?>?>(() => BuildSafeInvoker2(methodInfo), threadSafe);
+        _invoker3 = new Lazy<Func<object?, object?, object?, object?, object?>?>(() => BuildSafeInvoker3(methodInfo), threadSafe);
+        _invoker4 = new Lazy<Func<object?, object?, object?, object?, object?, object?>?>(() => BuildSafeInvoker4(methodInfo), threadSafe);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedParameters? GetCachedParameters()
     {
-        if (MethodInfo is null) return null;
+        if (MethodInfo is null)
+            return null;
+
         return _parameters!.Value;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ParameterInfo[] GetParameters()
     {
-        if (MethodInfo is null) return [];
+        if (MethodInfo is null)
+            return [];
+
         return _parameters!.Value.GetParameters();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedCustomAttributes? GetCachedCustomAttributes()
     {
-        if (MethodInfo is null) return null;
+        if (MethodInfo is null)
+            return null;
+
         return _attributes!.Value;
     }
 
     public CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes)
     {
-        if (MethodInfo is null) return null;
+        if (MethodInfo is null)
+            return null;
 
-        // Compute both key and concrete Type[] in one pass to avoid multiple walks.
-        var key = 17;
         var typeArr = new Type[cachedTypes.Length];
-
-        for (var i = 0; i < cachedTypes.Length; i++)
-        {
-            CachedType ct = cachedTypes[i];
-            Type t = ct.Type!;                // assuming ct.Type is non-null for generic args
-            typeArr[i] = t;
-            // simple order-sensitive rolling hash; must match your keying rules
-            key = unchecked(key * 31 + t.GetHashCode());
-        }
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.FromCachedTypes(cachedTypes, typeArr);
 
         IConstructedGenericCache cache = _genericMethodCache!.Value;
 
@@ -112,17 +110,103 @@ public sealed class CachedMethod : ICachedMethod
         return newCached;
     }
 
+    // ---- allocation-reducing overloads (avoid params CachedType[] allocations) ----
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(CachedType t0)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Type type0 = t0.Type!;
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From1(type0.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([type0]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Type type0 = t0.Type!;
+        Type type1 = t1.Type!;
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From2(type0.TypeHandle, type1.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([type0, type1]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Type type0 = t0.Type!;
+        Type type1 = t1.Type!;
+        Type type2 = t2.Type!;
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From3(type0.TypeHandle, type1.TypeHandle, type2.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([type0, type1, type2]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2, CachedType t3)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Type type0 = t0.Type!;
+        Type type1 = t1.Type!;
+        Type type2 = t2.Type!;
+        Type type3 = t3.Type!;
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From4(type0.TypeHandle, type1.TypeHandle, type2.TypeHandle, type3.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([type0, type1, type2, type3]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object[] GetCustomAttributes()
     {
-        if (MethodInfo is null) return [];
+        if (MethodInfo is null)
+            return [];
         return _attributes!.Value.GetCustomAttributes();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object? Invoke(object instance)
     {
-        if (MethodInfo is null) return null;
+        if (MethodInfo is null)
+            return null;
         // Use compiled invoker; pass null args to avoid allocating empty array.
         return _invoker!.Value(instance, null);
     }
@@ -130,17 +214,80 @@ public sealed class CachedMethod : ICachedMethod
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object? Invoke(object instance, params object[] param)
     {
-        if (MethodInfo is null) return null;
+        if (MethodInfo is null)
+            return null;
         return _invoker!.Value(instance, param);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T? Invoke<T>(object instance)
-        => (T?)Invoke(instance);
+    public object? Invoke(object instance, object? arg0)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Func<object?, object?, object?>? f = _invoker1!.Value;
+        if (f is not null)
+            return f(instance, arg0);
+
+        return _invoker!.Value(instance, [arg0]);
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public T? Invoke<T>(params object[] param)
-        => (T?)Invoke(null!, param);
+    public object? Invoke(object instance, object? arg0, object? arg1)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Func<object?, object?, object?, object?>? f = _invoker2!.Value;
+        if (f is not null)
+            return f(instance, arg0, arg1);
+
+        return _invoker!.Value(instance, [arg0, arg1]);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public object? Invoke(object instance, object? arg0, object? arg1, object? arg2)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Func<object?, object?, object?, object?, object?>? f = _invoker3!.Value;
+        if (f is not null)
+            return f(instance, arg0, arg1, arg2);
+
+        return _invoker!.Value(instance, [arg0, arg1, arg2]);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public object? Invoke(object instance, object? arg0, object? arg1, object? arg2, object? arg3)
+    {
+        if (MethodInfo is null)
+            return null;
+
+        Func<object?, object?, object?, object?, object?, object?>? f = _invoker4!.Value;
+        if (f is not null)
+            return f(instance, arg0, arg1, arg2, arg3);
+
+        return _invoker!.Value(instance, [arg0, arg1, arg2, arg3]);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T? Invoke<T>(object instance) => (T?)Invoke(instance);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T? Invoke<T>(params object[] param) => (T?)Invoke(null!, param);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T? Invoke<T>(object instance, object? arg0) => (T?)Invoke(instance, arg0);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T? Invoke<T>(object instance, object? arg0, object? arg1) => (T?)Invoke(instance, arg0, arg1);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T? Invoke<T>(object instance, object? arg0, object? arg1, object? arg2) => (T?)Invoke(instance, arg0, arg1, arg2);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T? Invoke<T>(object instance, object? arg0, object? arg1, object? arg2, object? arg3) => (T?)Invoke(instance, arg0, arg1, arg2, arg3);
 
     // -------- internals --------
 
@@ -155,8 +302,10 @@ public sealed class CachedMethod : ICachedMethod
             {
                 return (instance, args) => mi.Invoke(instance, args ?? Array.Empty<object?>());
             }
+
             // .NET doesn't expose IsByRefLike directly pre .NET 7 on Type, but common cases are Span/ReadOnlySpan
-            if (pt.FullName is not null && (pt.FullName.StartsWith("System.Span`1", StringComparison.Ordinal) || pt.FullName.StartsWith("System.ReadOnlySpan`1", StringComparison.Ordinal)))
+            if (pt.FullName is not null && (pt.FullName.StartsWith("System.Span`1", StringComparison.Ordinal) ||
+                                            pt.FullName.StartsWith("System.ReadOnlySpan`1", StringComparison.Ordinal)))
             {
                 return (instance, args) => mi.Invoke(instance, args ?? Array.Empty<object?>());
             }
@@ -166,14 +315,13 @@ public sealed class CachedMethod : ICachedMethod
         ParameterExpression instParam = Expression.Parameter(typeof(object), "instance");
         ParameterExpression argsParam = Expression.Parameter(typeof(object[]), "args");
 
-        ParameterInfo[] parms = parmsProbe;
-        var callArgs = new Expression[parms.Length];
+        var callArgs = new Expression[parmsProbe.Length];
 
-        for (var i = 0; i < parms.Length; i++)
+        for (var i = 0; i < parmsProbe.Length; i++)
         {
             // args[i] == null is allowed for ref types/nullable; runtime will throw when invalid
             BinaryExpression index = Expression.ArrayIndex(argsParam, Expression.Constant(i));
-            UnaryExpression cast = Expression.Convert(index, parms[i].ParameterType);
+            UnaryExpression cast = Expression.Convert(index, parmsProbe[i].ParameterType);
             callArgs[i] = cast;
         }
 
@@ -186,7 +334,7 @@ public sealed class CachedMethod : ICachedMethod
             : Expression.Convert(call, typeof(object));
 
         // Handle zero-arg invocations by allowing args to be null
-        if (parms.Length == 0)
+        if (parmsProbe.Length == 0)
         {
             // guard: args == null ? call() : call()
             body = Expression.Block(body); // nothing extra; CreateDelegate handles fine with null args
@@ -204,33 +352,142 @@ public sealed class CachedMethod : ICachedMethod
         }
     }
 
-    /// Abstraction so we can use the fastest structure depending on thread-safety.
-    private interface IConstructedGenericCache
+    private static bool IsByRefLikeOrByRef(Type t)
     {
-        bool TryGet(int key, out CachedMethod? value);
-        void SetIfAbsent(int key, CachedMethod value);
+        if (t.IsByRef)
+            return true;
+
+        string? fullName = t.FullName;
+        return fullName is not null && (fullName.StartsWith("System.Span`1", StringComparison.Ordinal) ||
+                                        fullName.StartsWith("System.ReadOnlySpan`1", StringComparison.Ordinal));
     }
 
-    // Non-thread-safe, minimal overhead
-    private sealed class NonConcurrentConstructedGenericCache : IConstructedGenericCache
+    private static bool CanUseFastInvoker(MethodInfo mi, out ParameterInfo[] parameters)
     {
-        private readonly Dictionary<int, CachedMethod> _map = new(capacity: 4); // small seed
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool TryGet(int key, out CachedMethod? value) => _map.TryGetValue(key, out value);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetIfAbsent(int key, CachedMethod value)
+        parameters = mi.GetParameters();
+        for (var i = 0; i < parameters.Length; i++)
         {
-            _map.TryAdd(key, value);
+            if (IsByRefLikeOrByRef(parameters[i].ParameterType))
+                return false;
+        }
+
+        return true;
+    }
+
+    private static Func<object?, object?, object?>? BuildSafeInvoker1(MethodInfo mi)
+    {
+        try
+        {
+            if (!CanUseFastInvoker(mi, out ParameterInfo[] ps) || ps.Length != 1)
+                return null;
+
+            ParameterExpression instParam = Expression.Parameter(typeof(object), "instance");
+            ParameterExpression a0 = Expression.Parameter(typeof(object), "a0");
+
+            Expression? instanceExpr = mi.IsStatic ? null : Expression.Convert(instParam, mi.DeclaringType!);
+            UnaryExpression arg0 = Expression.Convert(a0, ps[0].ParameterType);
+            Expression call = Expression.Call(instanceExpr, mi, arg0);
+
+            Expression body = mi.ReturnType == typeof(void)
+                ? Expression.Block(call, Expression.Constant(null, typeof(object)))
+                : Expression.Convert(call, typeof(object));
+
+            return Expression.Lambda<Func<object?, object?, object?>>(body, instParam, a0).Compile();
+        }
+        catch
+        {
+            return null;
         }
     }
 
-    // Thread-safe without external locks
-    private sealed class ConcurrentConstructedGenericCache : IConstructedGenericCache
+    private static Func<object?, object?, object?, object?>? BuildSafeInvoker2(MethodInfo mi)
     {
-        private readonly ConcurrentDictionary<int, CachedMethod> _map = new(concurrencyLevel: Environment.ProcessorCount, capacity: 4);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool TryGet(int key, out CachedMethod? value) => _map.TryGetValue(key, out value);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetIfAbsent(int key, CachedMethod value) => _map.TryAdd(key, value);
+        try
+        {
+            if (!CanUseFastInvoker(mi, out ParameterInfo[] ps) || ps.Length != 2)
+                return null;
+
+            ParameterExpression instParam = Expression.Parameter(typeof(object), "instance");
+            ParameterExpression a0 = Expression.Parameter(typeof(object), "a0");
+            ParameterExpression a1 = Expression.Parameter(typeof(object), "a1");
+
+            Expression? instanceExpr = mi.IsStatic ? null : Expression.Convert(instParam, mi.DeclaringType!);
+            UnaryExpression arg0 = Expression.Convert(a0, ps[0].ParameterType);
+            UnaryExpression arg1 = Expression.Convert(a1, ps[1].ParameterType);
+            Expression call = Expression.Call(instanceExpr, mi, arg0, arg1);
+
+            Expression body = mi.ReturnType == typeof(void)
+                ? Expression.Block(call, Expression.Constant(null, typeof(object)))
+                : Expression.Convert(call, typeof(object));
+
+            return Expression.Lambda<Func<object?, object?, object?, object?>>(body, instParam, a0, a1).Compile();
+        }
+        catch
+        {
+            return null;
+        }
     }
+
+    private static Func<object?, object?, object?, object?, object?>? BuildSafeInvoker3(MethodInfo mi)
+    {
+        try
+        {
+            if (!CanUseFastInvoker(mi, out ParameterInfo[] ps) || ps.Length != 3)
+                return null;
+
+            ParameterExpression instParam = Expression.Parameter(typeof(object), "instance");
+            ParameterExpression a0 = Expression.Parameter(typeof(object), "a0");
+            ParameterExpression a1 = Expression.Parameter(typeof(object), "a1");
+            ParameterExpression a2 = Expression.Parameter(typeof(object), "a2");
+
+            Expression? instanceExpr = mi.IsStatic ? null : Expression.Convert(instParam, mi.DeclaringType!);
+            UnaryExpression arg0 = Expression.Convert(a0, ps[0].ParameterType);
+            UnaryExpression arg1 = Expression.Convert(a1, ps[1].ParameterType);
+            UnaryExpression arg2 = Expression.Convert(a2, ps[2].ParameterType);
+            Expression call = Expression.Call(instanceExpr, mi, arg0, arg1, arg2);
+
+            Expression body = mi.ReturnType == typeof(void)
+                ? Expression.Block(call, Expression.Constant(null, typeof(object)))
+                : Expression.Convert(call, typeof(object));
+
+            return Expression.Lambda<Func<object?, object?, object?, object?, object?>>(body, instParam, a0, a1, a2).Compile();
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static Func<object?, object?, object?, object?, object?, object?>? BuildSafeInvoker4(MethodInfo mi)
+    {
+        try
+        {
+            if (!CanUseFastInvoker(mi, out ParameterInfo[] ps) || ps.Length != 4)
+                return null;
+
+            ParameterExpression instParam = Expression.Parameter(typeof(object), "instance");
+            ParameterExpression a0 = Expression.Parameter(typeof(object), "a0");
+            ParameterExpression a1 = Expression.Parameter(typeof(object), "a1");
+            ParameterExpression a2 = Expression.Parameter(typeof(object), "a2");
+            ParameterExpression a3 = Expression.Parameter(typeof(object), "a3");
+
+            Expression? instanceExpr = mi.IsStatic ? null : Expression.Convert(instParam, mi.DeclaringType!);
+            UnaryExpression arg0 = Expression.Convert(a0, ps[0].ParameterType);
+            UnaryExpression arg1 = Expression.Convert(a1, ps[1].ParameterType);
+            UnaryExpression arg2 = Expression.Convert(a2, ps[2].ParameterType);
+            UnaryExpression arg3 = Expression.Convert(a3, ps[3].ParameterType);
+            Expression call = Expression.Call(instanceExpr, mi, arg0, arg1, arg2, arg3);
+
+            Expression body = mi.ReturnType == typeof(void)
+                ? Expression.Block(call, Expression.Constant(null, typeof(object)))
+                : Expression.Convert(call, typeof(object));
+
+            return Expression.Lambda<Func<object?, object?, object?, object?, object?, object?>>(body, instParam, a0, a1, a2, a3).Compile();
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
 }

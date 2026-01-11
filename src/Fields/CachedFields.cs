@@ -14,31 +14,17 @@ public sealed class CachedFields : ICachedFields
     private readonly CachedType _cachedType;
     private readonly CachedTypes _cachedTypes;
 
-    private readonly Lazy<BuiltCache> _built; // single source of truth
-
-    private sealed class BuiltCache
-    {
-        public readonly CachedField[] CachedArray;
-        public readonly FrozenDictionary<string, CachedField> MapByName;
-        public readonly FieldInfo[] FieldInfos;
-
-        public BuiltCache(CachedField[] cachedArray, FrozenDictionary<string, CachedField> mapByName, FieldInfo[] fieldInfos)
-        {
-            CachedArray = cachedArray;
-            MapByName = mapByName;
-            FieldInfos = fieldInfos;
-        }
-    }
+    private readonly Lazy<CachedFieldsCache> _built; // single source of truth
 
     public CachedFields(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
         _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
 
-        _built = new Lazy<BuiltCache>(BuildAll, threadSafe);
+        _built = new Lazy<CachedFieldsCache>(BuildAll, threadSafe);
     }
 
-    private BuiltCache BuildAll()
+    private CachedFieldsCache BuildAll()
     {
         // One reflection hit + one allocation of FieldInfo[]
         FieldInfo[] fields = _cachedType.Type!.GetFields(_cachedTypes.Options.FieldFlags);
@@ -55,7 +41,7 @@ public sealed class CachedFields : ICachedFields
             dict[fi.Name] = cf; // field names are unique per type for given BindingFlags
         }
 
-        return new BuiltCache(
+        return new CachedFieldsCache(
             cached,
             dict.ToFrozenDictionary(StringComparer.Ordinal),
             fields // keep original FieldInfo[] so we don't re-convert later

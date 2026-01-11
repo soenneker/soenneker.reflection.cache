@@ -36,6 +36,18 @@ public interface ICachedMethods
     CachedMethod? GetCachedMethod(string name, Type[] parameterTypes);
 
     [Pure]
+    CachedMethod? GetCachedMethod(string name, Type t0);
+
+    [Pure]
+    CachedMethod? GetCachedMethod(string name, Type t0, Type t1);
+
+    [Pure]
+    CachedMethod? GetCachedMethod(string name, Type t0, Type t1, Type t2);
+
+    [Pure]
+    CachedMethod? GetCachedMethod(string name, Type t0, Type t1, Type t2, Type t3);
+
+    [Pure]
     CachedMethod? GetCachedMethod(string name, CachedType[] cachedParameterTypes);
 
     /// <summary>
@@ -46,6 +58,18 @@ public interface ICachedMethods
     /// <returns>The MethodInfo corresponding to the given name and parameter types.</returns>
     [Pure]
     MethodInfo? GetMethod(string name, Type[] types);
+
+    [Pure]
+    MethodInfo? GetMethod(string name, Type t0);
+
+    [Pure]
+    MethodInfo? GetMethod(string name, Type t0, Type t1);
+
+    [Pure]
+    MethodInfo? GetMethod(string name, Type t0, Type t1, Type t2);
+
+    [Pure]
+    MethodInfo? GetMethod(string name, Type t0, Type t1, Type t2, Type t3);
 
     /// <summary>
     /// Gets an array of CachedMethods.

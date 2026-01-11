@@ -17,6 +17,18 @@ public interface ICachedConstructors
     [Pure]
     CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null);
 
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0);
+
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0, Type t1);
+
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2);
+
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3);
+
     /// <summary>
     /// Gets the constructor for the specified parameter types.
     /// </summary>
@@ -24,6 +36,18 @@ public interface ICachedConstructors
     /// <returns>The constructor, or <c>null</c> if not found.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type[]? parameterTypes = null);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0, Type t1);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3);
 
     /// <summary>
     /// Gets an array of cached constructors.
@@ -61,6 +85,18 @@ public interface ICachedConstructors
     [Pure]
     object? CreateInstance(params object[] parameters);
 
+    [Pure]
+    object? CreateInstance(object? arg0);
+
+    [Pure]
+    object? CreateInstance(object? arg0, object? arg1);
+
+    [Pure]
+    object? CreateInstance(object? arg0, object? arg1, object? arg2);
+
+    [Pure]
+    object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3);
+
     /// <summary>
     /// Creates an instance of the type with specified parameters and casts it to type <typeparamref name="T"/>.
     /// </summary>
@@ -69,4 +105,16 @@ public interface ICachedConstructors
     /// <returns>An instance of the type <typeparamref name="T"/>.</returns>
     [Pure]
     T? CreateInstance<T>(params object[] parameters);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0, object? arg1);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0, object? arg1, object? arg2);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 }

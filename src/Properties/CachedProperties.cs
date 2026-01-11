@@ -15,31 +15,17 @@ public sealed class CachedProperties : ICachedProperties
     private readonly CachedTypes _cachedTypes;
 
     // Build once; immutable after warmup
-    private readonly Lazy<BuiltCache> _built;
-
-    private sealed class BuiltCache
-    {
-        public readonly CachedProperty[] CachedArray;
-        public readonly FrozenDictionary<string, CachedProperty> MapByName;
-        public readonly PropertyInfo[] PropertyInfos;
-
-        public BuiltCache(CachedProperty[] cachedArray, FrozenDictionary<string, CachedProperty> mapByName, PropertyInfo[] propertyInfos)
-        {
-            CachedArray = cachedArray;
-            MapByName = mapByName;
-            PropertyInfos = propertyInfos;
-        }
-    }
+    private readonly Lazy<CachedPropertiesCache> _built;
 
     public CachedProperties(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
         _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
 
-        _built = new Lazy<BuiltCache>(BuildAll, threadSafe);
+        _built = new Lazy<CachedPropertiesCache>(BuildAll, threadSafe);
     }
 
-    private BuiltCache BuildAll()
+    private CachedPropertiesCache BuildAll()
     {
         // Single reflection hit; reuse array
         PropertyInfo[] props = _cachedType.Type!.GetProperties(_cachedTypes.Options.PropertyFlags);
@@ -59,7 +45,7 @@ public sealed class CachedProperties : ICachedProperties
             dict[pi.Name] = cp;
         }
 
-        return new BuiltCache(cached, dict.ToFrozenDictionary(StringComparer.Ordinal), props);
+        return new CachedPropertiesCache(cached, dict.ToFrozenDictionary(StringComparer.Ordinal), props);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

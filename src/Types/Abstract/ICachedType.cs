@@ -195,6 +195,30 @@ public interface ICachedType
     [Pure]
     T? CreateInstance<T>(params object[] parameters);
 
+    [Pure]
+    object? CreateInstance(object? arg0);
+
+    [Pure]
+    object? CreateInstance(object? arg0, object? arg1);
+
+    [Pure]
+    object? CreateInstance(object? arg0, object? arg1, object? arg2);
+
+    [Pure]
+    object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0, object? arg1);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0, object? arg1, object? arg2);
+
+    [Pure]
+    T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3);
+
     /// <summary>
     /// Gets information about the cached generic type definition.
     /// </summary>
@@ -260,6 +284,18 @@ public interface ICachedType
 
     [Pure]
     CachedType? MakeCachedGenericType(params CachedType[] typeArguments);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(CachedType t0);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(CachedType t0, CachedType t1);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
 
     [Pure]
     Type? MakeGenericType(params Type[] typeArguments);

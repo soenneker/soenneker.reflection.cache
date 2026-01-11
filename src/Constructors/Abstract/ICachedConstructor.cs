@@ -51,6 +51,18 @@ public interface ICachedConstructor
     [Pure]
     object? Invoke(params object[] param);
 
+    [Pure]
+    object? Invoke(object? arg0);
+
+    [Pure]
+    object? Invoke(object? arg0, object? arg1);
+
+    [Pure]
+    object? Invoke(object? arg0, object? arg1, object? arg2);
+
+    [Pure]
+    object? Invoke(object? arg0, object? arg1, object? arg2, object? arg3);
+
     /// <summary>
     /// Invokes the constructor and casts the result to type <typeparamref name="T"/>.
     /// </summary>
@@ -67,4 +79,16 @@ public interface ICachedConstructor
     /// <returns>The result of invoking the constructor cast to type <typeparamref name="T"/>.</returns>
     [Pure]
     T? Invoke<T>(params object[] param);
+
+    [Pure]
+    T? Invoke<T>(object? arg0);
+
+    [Pure]
+    T? Invoke<T>(object? arg0, object? arg1);
+
+    [Pure]
+    T? Invoke<T>(object? arg0, object? arg1, object? arg2);
+
+    [Pure]
+    T? Invoke<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 }

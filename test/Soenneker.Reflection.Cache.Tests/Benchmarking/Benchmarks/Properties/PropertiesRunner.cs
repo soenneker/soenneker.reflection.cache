@@ -4,7 +4,6 @@ using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Manual;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
-using Soenneker.Facts.Local;
 using Xunit;
 
 
