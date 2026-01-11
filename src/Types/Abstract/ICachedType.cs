@@ -142,6 +142,18 @@ public interface ICachedType
     [Pure]
     CachedConstructor? GetCachedConstructor(Type[] parameterTypes);
 
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0);
+
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0, Type t1);
+
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2);
+
+    [Pure]
+    CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3);
+
     /// <summary>
     /// Gets information about all constructors.
     /// </summary>
@@ -156,6 +168,18 @@ public interface ICachedType
     /// <returns>ConstructorInfo object representing the specified constructor.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type[]? parameterTypes = null);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0, Type t1);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2);
+
+    [Pure]
+    ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3);
 
     /// <summary>
     /// Gets information about all constructors using reflection.

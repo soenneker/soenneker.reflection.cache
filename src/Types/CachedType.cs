@@ -251,12 +251,76 @@ public partial class CachedType : ICachedType
         return _cachedConstructors!.Value.GetCachedConstructor(parameterTypes);
     }
 
+    public CachedConstructor? GetCachedConstructor(Type t0)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetCachedConstructor(t0);
+    }
+
+    public CachedConstructor? GetCachedConstructor(Type t0, Type t1)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetCachedConstructor(t0, t1);
+    }
+
+    public CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetCachedConstructor(t0, t1, t2);
+    }
+
+    public CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetCachedConstructor(t0, t1, t2, t3);
+    }
+
     public ConstructorInfo? GetConstructor(Type[]? parameterTypes = null)
     {
         if (Type == null)
             return null;
 
         return _cachedConstructors!.Value.GetConstructor(parameterTypes);
+    }
+
+    public ConstructorInfo? GetConstructor(Type t0)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetConstructor(t0);
+    }
+
+    public ConstructorInfo? GetConstructor(Type t0, Type t1)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetConstructor(t0, t1);
+    }
+
+    public ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetConstructor(t0, t1, t2);
+    }
+
+    public ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3)
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedConstructors!.Value.GetConstructor(t0, t1, t2, t3);
     }
 
     public CachedConstructor[]? GetCachedConstructors()
