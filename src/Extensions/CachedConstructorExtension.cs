@@ -1,5 +1,5 @@
 ﻿using System;
-using Soenneker.Extensions.Type.Array;
+using Soenneker.Extensions.Spans.Readonly.Types;
 using Soenneker.Reflection.Cache.Constructors;
 
 namespace Soenneker.Reflection.Cache.Extensions;

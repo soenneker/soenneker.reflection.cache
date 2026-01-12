@@ -1,7 +1,7 @@
 ﻿using Soenneker.Reflection.Cache.Utils;
 using System.Reflection;
-using Soenneker.Extensions.ParameterInfo;
 using Soenneker.Extensions.MethodInfo;
+using Soenneker.Extensions.Spans.Readonly.ParameterInfos;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
