@@ -344,7 +344,10 @@ public sealed class CachedConstructors : ICachedConstructors
         }
         finally
         {
-            ArrayPool<Type>.Shared.Return(rented, clearArray: true);
+            // Avoid clearing the entire rented buffer (which may be larger than 'length').
+            // Clear only the used segment to prevent retaining Type references.
+            Array.Clear(rented, 0, length);
+            ArrayPool<Type>.Shared.Return(rented, clearArray: false);
         }
     }
 

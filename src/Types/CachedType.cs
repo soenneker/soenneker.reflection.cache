@@ -517,7 +517,6 @@ public partial class CachedType : ICachedType
         return _cachedMakeGenericType!.Value.MakeGenericCachedType(typeArguments);
     }
 
-
     public CachedType? MakeCachedGenericType(Type t0) => _cachedMakeGenericType!.Value.MakeGenericCachedType(t0);
 
     public CachedType? MakeCachedGenericType(Type t0, Type t1) => _cachedMakeGenericType!.Value.MakeGenericCachedType(t0, t1);

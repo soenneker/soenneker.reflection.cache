@@ -322,7 +322,31 @@ public interface ICachedType
     CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
 
     [Pure]
+    CachedType? MakeCachedGenericType(Type t0);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(Type t0, Type t1);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2);
+
+    [Pure]
+    CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2, Type t3);
+
+    [Pure]
     Type? MakeGenericType(params Type[] typeArguments);
+
+    [Pure]
+    Type? MakeGenericType(Type t0);
+
+    [Pure]
+    Type? MakeGenericType(Type t0, Type t1);
+
+    [Pure]
+    Type? MakeGenericType(Type t0, Type t1, Type t2);
+
+    [Pure]
+    Type? MakeGenericType(Type t0, Type t1, Type t2, Type t3);
 
     [Pure]
     CachedType? GetCachedElementType();
