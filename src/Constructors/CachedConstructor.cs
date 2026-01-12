@@ -26,6 +26,12 @@ public sealed partial class CachedConstructor : ICachedConstructor
     private readonly Lazy<Func<object?, object?, object?, object?>?>? _invoke3;
     private readonly Lazy<Func<object?, object?, object?, object?, object?>?>? _invoke4;
 
+    // Thread-static exact-length arrays for fallback Invoke paths (reflection requires exact parameter count).
+    [ThreadStatic] private static object?[]? _tsArgs1;
+    [ThreadStatic] private static object?[]? _tsArgs2;
+    [ThreadStatic] private static object?[]? _tsArgs3;
+    [ThreadStatic] private static object?[]? _tsArgs4;
+
     public CachedConstructor(ConstructorInfo? constructorInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         ConstructorInfo = constructorInfo;
@@ -105,8 +111,90 @@ public sealed partial class CachedConstructor : ICachedConstructor
     {
         if (ConstructorInfo == null)
             return null;
+        if (param.Length == 0)
+            return Invoke();
 
         return ConstructorInfo.Invoke(param);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(ConstructorInfo ctor, object? arg0)
+    {
+        object?[] arr = _tsArgs1 ??= new object?[1];
+        _tsArgs1 = null;
+        try
+        {
+            arr[0] = arg0;
+            return ctor.Invoke(arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            _tsArgs1 ??= arr;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(ConstructorInfo ctor, object? arg0, object? arg1)
+    {
+        object?[] arr = _tsArgs2 ??= new object?[2];
+        _tsArgs2 = null;
+        try
+        {
+            arr[0] = arg0;
+            arr[1] = arg1;
+            return ctor.Invoke(arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            arr[1] = null;
+            _tsArgs2 ??= arr;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(ConstructorInfo ctor, object? arg0, object? arg1, object? arg2)
+    {
+        object?[] arr = _tsArgs3 ??= new object?[3];
+        _tsArgs3 = null;
+        try
+        {
+            arr[0] = arg0;
+            arr[1] = arg1;
+            arr[2] = arg2;
+            return ctor.Invoke(arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            arr[1] = null;
+            arr[2] = null;
+            _tsArgs3 ??= arr;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(ConstructorInfo ctor, object? arg0, object? arg1, object? arg2, object? arg3)
+    {
+        object?[] arr = _tsArgs4 ??= new object?[4];
+        _tsArgs4 = null;
+        try
+        {
+            arr[0] = arg0;
+            arr[1] = arg1;
+            arr[2] = arg2;
+            arr[3] = arg3;
+            return ctor.Invoke(arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            arr[1] = null;
+            arr[2] = null;
+            arr[3] = null;
+            _tsArgs4 ??= arr;
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -119,7 +207,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (f is not null)
             return f(arg0);
 
-        return ConstructorInfo.Invoke([arg0]);
+        return InvokeThreadStatic(ConstructorInfo, arg0);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -132,7 +220,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (f is not null)
             return f(arg0, arg1);
 
-        return ConstructorInfo.Invoke([arg0, arg1]);
+        return InvokeThreadStatic(ConstructorInfo, arg0, arg1);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -145,7 +233,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (f is not null)
             return f(arg0, arg1, arg2);
 
-        return ConstructorInfo.Invoke([arg0, arg1, arg2]);
+        return InvokeThreadStatic(ConstructorInfo, arg0, arg1, arg2);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -158,7 +246,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (f is not null)
             return f(arg0, arg1, arg2, arg3);
 
-        return ConstructorInfo.Invoke([arg0, arg1, arg2, arg3]);
+        return InvokeThreadStatic(ConstructorInfo, arg0, arg1, arg2, arg3);
     }
 
     public T? Invoke<T>()

@@ -517,6 +517,15 @@ public partial class CachedType : ICachedType
         return _cachedMakeGenericType!.Value.MakeGenericCachedType(typeArguments);
     }
 
+
+    public CachedType? MakeCachedGenericType(Type t0) => _cachedMakeGenericType!.Value.MakeGenericCachedType(t0);
+
+    public CachedType? MakeCachedGenericType(Type t0, Type t1) => _cachedMakeGenericType!.Value.MakeGenericCachedType(t0, t1);
+
+    public CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2) => _cachedMakeGenericType!.Value.MakeGenericCachedType(t0, t1, t2);
+
+    public CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2, Type t3) => _cachedMakeGenericType!.Value.MakeGenericCachedType(t0, t1, t2, t3);
+
     // ---- allocation-reducing overloads (avoid params CachedType[] allocations) ----
 
     public CachedType? MakeCachedGenericType(CachedType t0)
@@ -543,6 +552,16 @@ public partial class CachedType : ICachedType
     {
         return _cachedMakeGenericType!.Value.MakeGenericType(typeArguments);
     }
+
+    // ---- allocation-reducing overloads (avoid params Type[] allocations) ----
+
+    public Type? MakeGenericType(Type t0) => _cachedMakeGenericType!.Value.MakeGenericType(t0);
+
+    public Type? MakeGenericType(Type t0, Type t1) => _cachedMakeGenericType!.Value.MakeGenericType(t0, t1);
+
+    public Type? MakeGenericType(Type t0, Type t1, Type t2) => _cachedMakeGenericType!.Value.MakeGenericType(t0, t1, t2);
+
+    public Type? MakeGenericType(Type t0, Type t1, Type t2, Type t3) => _cachedMakeGenericType!.Value.MakeGenericType(t0, t1, t2, t3);
 
     public CachedType? GetCachedElementType()
     {

@@ -29,6 +29,10 @@ public static class CachedTypeArrayExtension
     public static Type[] ToTypes(this CachedType[] cachedTypes)
     {
         int length = cachedTypes.Length;
+
+        if (length == 0)
+            return [];
+
         var result = new Type[length];
 
         for (var i = 0; i < length; i++)

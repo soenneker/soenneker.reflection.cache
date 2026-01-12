@@ -37,6 +37,12 @@ public sealed class CachedMethod : ICachedMethod
     private readonly Lazy<Func<object?, object?, object?, object?, object?>?>? _invoker3;
     private readonly Lazy<Func<object?, object?, object?, object?, object?, object?>?>? _invoker4;
 
+    // Thread-static exact-length arrays for fallback invocations (reflection requires exact parameter count).
+    [ThreadStatic] private static object?[]? _tsArgs1;
+    [ThreadStatic] private static object?[]? _tsArgs2;
+    [ThreadStatic] private static object?[]? _tsArgs3;
+    [ThreadStatic] private static object?[]? _tsArgs4;
+
     public CachedMethod(MethodInfo? methodInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MethodInfo = methodInfo;
@@ -93,13 +99,25 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        var typeArr = new Type[cachedTypes.Length];
-        TypeHandleSequenceKey key = TypeHandleSequenceKey.FromCachedTypes(cachedTypes, typeArr);
+        if (cachedTypes is null)
+            throw new ArgumentNullException(nameof(cachedTypes));
+
+        int len = cachedTypes.Length;
+
+        if (len == 0)
+            return MethodInfo.IsGenericMethodDefinition ? null : this;
+
+        // Probe cache without allocating/filling a Type[] (allocate only on miss)
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.FromCachedTypes(cachedTypes);
 
         IConstructedGenericCache cache = _genericMethodCache!.Value;
 
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
+
+        var typeArr = new Type[len];
+        for (var i = 0; i < len; i++)
+            typeArr[i] = cachedTypes[i].Type!;
 
         MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod(typeArr);
         var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
@@ -194,6 +212,104 @@ public sealed class CachedMethod : ICachedMethod
         return newCached;
     }
 
+    // ---- allocation-reducing overloads (avoid CachedType wrapper/params allocations) ----
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(Type t0)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+
+        if (MethodInfo is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From1(t0.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([t0]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(Type t0, Type t1)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+        if (t1 is null)
+            throw new ArgumentNullException(nameof(t1));
+
+        if (MethodInfo is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From2(t0.TypeHandle, t1.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([t0, t1]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(Type t0, Type t1, Type t2)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+        if (t1 is null)
+            throw new ArgumentNullException(nameof(t1));
+        if (t2 is null)
+            throw new ArgumentNullException(nameof(t2));
+
+        if (MethodInfo is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From3(t0.TypeHandle, t1.TypeHandle, t2.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([t0, t1, t2]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedMethod? MakeCachedGenericMethod(Type t0, Type t1, Type t2, Type t3)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+        if (t1 is null)
+            throw new ArgumentNullException(nameof(t1));
+        if (t2 is null)
+            throw new ArgumentNullException(nameof(t2));
+        if (t3 is null)
+            throw new ArgumentNullException(nameof(t3));
+
+        if (MethodInfo is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From4(t0.TypeHandle, t1.TypeHandle, t2.TypeHandle, t3.TypeHandle);
+
+        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        if (cache.TryGet(key, out CachedMethod? found))
+            return found;
+
+        MethodInfo genericMethodInfo = MethodInfo.MakeGenericMethod([t0, t1, t2, t3]);
+        var newCached = new CachedMethod(genericMethodInfo, _cachedTypes, _threadSafe);
+        cache.SetIfAbsent(key, newCached);
+        return newCached;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public object[] GetCustomAttributes()
     {
@@ -216,7 +332,89 @@ public sealed class CachedMethod : ICachedMethod
     {
         if (MethodInfo is null)
             return null;
+        if (param.Length == 0)
+            return _invoker!.Value(instance, null);
         return _invoker!.Value(instance, param);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(Func<object?, object?[]?, object?> invoker, object? instance, object? arg0)
+    {
+        object?[] arr = _tsArgs1 ??= new object?[1];
+        _tsArgs1 = null;
+        try
+        {
+            arr[0] = arg0;
+            return invoker(instance, arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            _tsArgs1 ??= arr;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(Func<object?, object?[]?, object?> invoker, object? instance, object? arg0, object? arg1)
+    {
+        object?[] arr = _tsArgs2 ??= new object?[2];
+        _tsArgs2 = null;
+        try
+        {
+            arr[0] = arg0;
+            arr[1] = arg1;
+            return invoker(instance, arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            arr[1] = null;
+            _tsArgs2 ??= arr;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(Func<object?, object?[]?, object?> invoker, object? instance, object? arg0, object? arg1, object? arg2)
+    {
+        object?[] arr = _tsArgs3 ??= new object?[3];
+        _tsArgs3 = null;
+        try
+        {
+            arr[0] = arg0;
+            arr[1] = arg1;
+            arr[2] = arg2;
+            return invoker(instance, arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            arr[1] = null;
+            arr[2] = null;
+            _tsArgs3 ??= arr;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static object? InvokeThreadStatic(Func<object?, object?[]?, object?> invoker, object? instance, object? arg0, object? arg1, object? arg2, object? arg3)
+    {
+        object?[] arr = _tsArgs4 ??= new object?[4];
+        _tsArgs4 = null;
+        try
+        {
+            arr[0] = arg0;
+            arr[1] = arg1;
+            arr[2] = arg2;
+            arr[3] = arg3;
+            return invoker(instance, arr);
+        }
+        finally
+        {
+            arr[0] = null;
+            arr[1] = null;
+            arr[2] = null;
+            arr[3] = null;
+            _tsArgs4 ??= arr;
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -229,7 +427,7 @@ public sealed class CachedMethod : ICachedMethod
         if (f is not null)
             return f(instance, arg0);
 
-        return _invoker!.Value(instance, [arg0]);
+        return InvokeThreadStatic(_invoker!.Value, instance, arg0);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -242,7 +440,7 @@ public sealed class CachedMethod : ICachedMethod
         if (f is not null)
             return f(instance, arg0, arg1);
 
-        return _invoker!.Value(instance, [arg0, arg1]);
+        return InvokeThreadStatic(_invoker!.Value, instance, arg0, arg1);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -255,7 +453,7 @@ public sealed class CachedMethod : ICachedMethod
         if (f is not null)
             return f(instance, arg0, arg1, arg2);
 
-        return _invoker!.Value(instance, [arg0, arg1, arg2]);
+        return InvokeThreadStatic(_invoker!.Value, instance, arg0, arg1, arg2);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -268,7 +466,7 @@ public sealed class CachedMethod : ICachedMethod
         if (f is not null)
             return f(instance, arg0, arg1, arg2, arg3);
 
-        return _invoker!.Value(instance, [arg0, arg1, arg2, arg3]);
+        return InvokeThreadStatic(_invoker!.Value, instance, arg0, arg1, arg2, arg3);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

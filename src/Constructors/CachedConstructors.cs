@@ -1,8 +1,8 @@
-﻿using Soenneker.Extensions.Array.Object;
-using Soenneker.Reflection.Cache.Constructors.Abstract;
+﻿using Soenneker.Reflection.Cache.Constructors.Abstract;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types;
 using System;
+using System.Buffers;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -105,7 +105,16 @@ public sealed class CachedConstructors : ICachedConstructors
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
     {
-        if (parameterTypes == null || parameterTypes.Length == 0)
+        if (parameterTypes == null)
+            return GetCachedConstructor(Array.Empty<Type>(), 0);
+
+        return GetCachedConstructor(parameterTypes, parameterTypes.Length);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedConstructor? GetCachedConstructor(Type[] parameterTypes, int length)
+    {
+        if (length == 0)
         {
             // Prefer parameterless .ctor if present
             if (_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? ctors))
@@ -116,6 +125,7 @@ public sealed class CachedConstructors : ICachedConstructors
                         return ctors[i];
                 }
             }
+
             return null;
         }
 
@@ -124,12 +134,12 @@ public sealed class CachedConstructors : ICachedConstructors
 
         for (var i = 0; i < candidates.Length; i++)
         {
-            var ps = candidates[i].GetParameters();
-            if (ps.Length != parameterTypes.Length)
+            ParameterInfo[] ps = candidates[i].GetParameters();
+            if (ps.Length != length)
                 continue;
 
             var match = true;
-            for (var j = 0; j < ps.Length; j++)
+            for (var j = 0; j < length; j++)
             {
                 if (!ReferenceEquals(ps[j].ParameterType, parameterTypes[j]))
                 {
@@ -283,11 +293,59 @@ public sealed class CachedConstructors : ICachedConstructors
         if (parameters.Length == 0)
             return CreateInstance();
 
-        // Avoid a LINQ pass; reuse your extension which is likely optimized.
-        Type[] parameterTypes = parameters.ToTypes();
+        // For common arities, avoid allocating Type[] and avoid params-object[] fallbacks.
+        // Treat null arguments as typeof(object) (preserves current behavior of ToTypes()).
+        switch (parameters.Length)
+        {
+            case 1:
+            {
+                object? a0 = parameters[0];
+                CachedConstructor? ctor = GetCachedConstructor(a0?.GetType() ?? typeof(object));
+                return ctor?.Invoke(a0);
+            }
+            case 2:
+            {
+                object? a0 = parameters[0];
+                object? a1 = parameters[1];
+                CachedConstructor? ctor = GetCachedConstructor(a0?.GetType() ?? typeof(object), a1?.GetType() ?? typeof(object));
+                return ctor?.Invoke(a0, a1);
+            }
+            case 3:
+            {
+                object? a0 = parameters[0];
+                object? a1 = parameters[1];
+                object? a2 = parameters[2];
+                CachedConstructor? ctor = GetCachedConstructor(a0?.GetType() ?? typeof(object), a1?.GetType() ?? typeof(object), a2?.GetType() ?? typeof(object));
+                return ctor?.Invoke(a0, a1, a2);
+            }
+            case 4:
+            {
+                object? a0 = parameters[0];
+                object? a1 = parameters[1];
+                object? a2 = parameters[2];
+                object? a3 = parameters[3];
+                CachedConstructor? ctor = GetCachedConstructor(a0?.GetType() ?? typeof(object), a1?.GetType() ?? typeof(object), a2?.GetType() ?? typeof(object),
+                    a3?.GetType() ?? typeof(object));
+                return ctor?.Invoke(a0, a1, a2, a3);
+            }
+        }
 
-        CachedConstructor? cachedConstructor = GetCachedConstructor(parameterTypes);
-        return cachedConstructor?.Invoke(parameters);
+        int length = parameters.Length;
+
+        // For larger arities, avoid allocating a Type[] by renting and passing an explicit length.
+        Type[] rented = ArrayPool<Type>.Shared.Rent(length);
+        try
+        {
+            for (var i = 0; i < length; i++)
+                rented[i] = parameters[i]?.GetType() ?? typeof(object);
+
+            CachedConstructor? cachedConstructor = GetCachedConstructor(rented, length);
+            return cachedConstructor?.Invoke(parameters);
+        }
+        finally
+        {
+            ArrayPool<Type>.Shared.Return(rented, clearArray: true);
+        }
     }
 
     public object? CreateInstance(object? arg0)
@@ -331,10 +389,8 @@ public sealed class CachedConstructors : ICachedConstructors
         if (parameters.Length == 0)
             return CreateInstance<T>();
 
-        Type[] parameterTypes = parameters.ToTypes();
-
-        CachedConstructor? cachedConstructor = GetCachedConstructor(parameterTypes);
-        return cachedConstructor is null ? default : cachedConstructor.Invoke<T>(parameters);
+        object? obj = CreateInstance(parameters);
+        return obj is null ? default : (T?) obj;
     }
 
     public T? CreateInstance<T>(object? arg0) => (T?) CreateInstance(arg0);

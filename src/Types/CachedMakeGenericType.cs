@@ -66,6 +66,156 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         }
     }
 
+    // ---- allocation-reducing overloads (avoid params Type[] allocations) ----
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedType? MakeGenericCachedType(Type t0)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+
+        Type? baseType = _cachedType.Type;
+        if (baseType is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From1(t0.TypeHandle);
+
+        if (_threadSafe)
+        {
+            ConcurrentDictionary<TypeHandleSequenceKey, CachedType>? map = _concurrent!;
+            if (map.TryGetValue(key, out CachedType? hit))
+                return hit;
+
+            Type constructed = baseType.MakeGenericType([t0]);
+            CachedType wrapped = _cachedTypes.GetCachedType(constructed);
+            map.TryAdd(key, wrapped);
+            return wrapped;
+        }
+
+        Dictionary<TypeHandleSequenceKey, CachedType>? dict = _dict!;
+        if (dict.TryGetValue(key, out CachedType? hit2))
+            return hit2;
+
+        Type constructed2 = baseType.MakeGenericType([t0]);
+        CachedType wrapped2 = _cachedTypes.GetCachedType(constructed2);
+        dict.TryAdd(key, wrapped2);
+        return wrapped2;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedType? MakeGenericCachedType(Type t0, Type t1)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+        if (t1 is null)
+            throw new ArgumentNullException(nameof(t1));
+
+        Type? baseType = _cachedType.Type;
+        if (baseType is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From2(t0.TypeHandle, t1.TypeHandle);
+
+        if (_threadSafe)
+        {
+            ConcurrentDictionary<TypeHandleSequenceKey, CachedType>? map = _concurrent!;
+            if (map.TryGetValue(key, out CachedType? hit))
+                return hit;
+
+            Type constructed = baseType.MakeGenericType([t0, t1]);
+            CachedType wrapped = _cachedTypes.GetCachedType(constructed);
+            map.TryAdd(key, wrapped);
+            return wrapped;
+        }
+
+        Dictionary<TypeHandleSequenceKey, CachedType>? dict = _dict!;
+        if (dict.TryGetValue(key, out CachedType? hit2))
+            return hit2;
+
+        Type constructed2 = baseType.MakeGenericType([t0, t1]);
+        CachedType wrapped2 = _cachedTypes.GetCachedType(constructed2);
+        dict.TryAdd(key, wrapped2);
+        return wrapped2;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedType? MakeGenericCachedType(Type t0, Type t1, Type t2)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+        if (t1 is null)
+            throw new ArgumentNullException(nameof(t1));
+        if (t2 is null)
+            throw new ArgumentNullException(nameof(t2));
+
+        Type? baseType = _cachedType.Type;
+        if (baseType is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From3(t0.TypeHandle, t1.TypeHandle, t2.TypeHandle);
+
+        if (_threadSafe)
+        {
+            ConcurrentDictionary<TypeHandleSequenceKey, CachedType>? map = _concurrent!;
+            if (map.TryGetValue(key, out CachedType? hit))
+                return hit;
+
+            Type constructed = baseType.MakeGenericType([t0, t1, t2]);
+            CachedType wrapped = _cachedTypes.GetCachedType(constructed);
+            map.TryAdd(key, wrapped);
+            return wrapped;
+        }
+
+        Dictionary<TypeHandleSequenceKey, CachedType>? dict = _dict!;
+        if (dict.TryGetValue(key, out CachedType? hit2))
+            return hit2;
+
+        Type constructed2 = baseType.MakeGenericType([t0, t1, t2]);
+        CachedType wrapped2 = _cachedTypes.GetCachedType(constructed2);
+        dict.TryAdd(key, wrapped2);
+        return wrapped2;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CachedType? MakeGenericCachedType(Type t0, Type t1, Type t2, Type t3)
+    {
+        if (t0 is null)
+            throw new ArgumentNullException(nameof(t0));
+        if (t1 is null)
+            throw new ArgumentNullException(nameof(t1));
+        if (t2 is null)
+            throw new ArgumentNullException(nameof(t2));
+        if (t3 is null)
+            throw new ArgumentNullException(nameof(t3));
+
+        Type? baseType = _cachedType.Type;
+        if (baseType is null)
+            return null;
+
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.From4(t0.TypeHandle, t1.TypeHandle, t2.TypeHandle, t3.TypeHandle);
+
+        if (_threadSafe)
+        {
+            ConcurrentDictionary<TypeHandleSequenceKey, CachedType>? map = _concurrent!;
+            if (map.TryGetValue(key, out CachedType? hit))
+                return hit;
+
+            Type constructed = baseType.MakeGenericType([t0, t1, t2, t3]);
+            CachedType wrapped = _cachedTypes.GetCachedType(constructed);
+            map.TryAdd(key, wrapped);
+            return wrapped;
+        }
+
+        Dictionary<TypeHandleSequenceKey, CachedType>? dict = _dict!;
+        if (dict.TryGetValue(key, out CachedType? hit2))
+            return hit2;
+
+        Type constructed2 = baseType.MakeGenericType([t0, t1, t2, t3]);
+        CachedType wrapped2 = _cachedTypes.GetCachedType(constructed2);
+        dict.TryAdd(key, wrapped2);
+        return wrapped2;
+    }
+
     /// <summary>
     /// CachedType overload. Avoids string building and other intermediate work, but still requires a Type[]
     /// for MakeGenericType.
@@ -77,14 +227,26 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         if (baseType is null)
             return null;
 
-        var typeArguments = new Type[cachedTypeArguments.Length];
-        TypeHandleSequenceKey key = TypeHandleSequenceKey.FromCachedTypes(cachedTypeArguments, typeArguments);
+        if (cachedTypeArguments is null)
+            throw new ArgumentNullException(nameof(cachedTypeArguments));
+
+        int len = cachedTypeArguments.Length;
+
+        if (len == 0)
+            return baseType.IsGenericTypeDefinition ? null : _cachedType;
+
+        // Probe cache without allocating/filling a Type[] (allocate only on miss)
+        TypeHandleSequenceKey key = TypeHandleSequenceKey.FromCachedTypes(cachedTypeArguments);
 
         if (_threadSafe)
         {
             ConcurrentDictionary<TypeHandleSequenceKey, CachedType>? map = _concurrent!;
             if (map.TryGetValue(key, out CachedType? hit))
                 return hit;
+
+            var typeArguments = new Type[len];
+            for (var i = 0; i < len; i++)
+                typeArguments[i] = cachedTypeArguments[i].Type!;
 
             Type constructed = baseType.MakeGenericType(typeArguments);
             CachedType wrapped = _cachedTypes.GetCachedType(constructed);
@@ -98,6 +260,10 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
             Dictionary<TypeHandleSequenceKey, CachedType>? map = _dict!;
             if (map.TryGetValue(key, out CachedType? hit))
                 return hit;
+
+            var typeArguments = new Type[len];
+            for (var i = 0; i < len; i++)
+                typeArguments[i] = cachedTypeArguments[i].Type!;
 
             Type constructed = baseType.MakeGenericType(typeArguments);
             CachedType wrapped = _cachedTypes.GetCachedType(constructed);
@@ -246,4 +412,16 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(params Type[] typeArguments)
         => MakeGenericCachedType(typeArguments)?.Type;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Type? MakeGenericType(Type t0) => MakeGenericCachedType(t0)?.Type;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Type? MakeGenericType(Type t0, Type t1) => MakeGenericCachedType(t0, t1)?.Type;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Type? MakeGenericType(Type t0, Type t1, Type t2) => MakeGenericCachedType(t0, t1, t2)?.Type;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Type? MakeGenericType(Type t0, Type t1, Type t2, Type t3) => MakeGenericCachedType(t0, t1, t2, t3)?.Type;
 }

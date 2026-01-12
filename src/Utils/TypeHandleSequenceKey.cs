@@ -126,6 +126,53 @@ internal readonly struct TypeHandleSequenceKey : IEquatable<TypeHandleSequenceKe
         return new TypeHandleSequenceKey(length, h0, h1, h2, h3, rest, hc.ToHashCode());
     }
 
+    /// <summary>
+    /// Creates a key from CachedTypes without allocating/filling a Type[].
+    /// Useful when you want to probe a cache first and only allocate the Type[] on a miss.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static TypeHandleSequenceKey FromCachedTypes(CachedType[] cachedTypes)
+    {
+        if (cachedTypes is null)
+            throw new ArgumentNullException(nameof(cachedTypes));
+
+        int length = cachedTypes.Length;
+
+        RuntimeTypeHandle h0 = default, h1 = default, h2 = default, h3 = default;
+        RuntimeTypeHandle[]? rest = null;
+
+        var hc = new HashCode();
+        hc.Add(length);
+
+        for (var i = 0; i < length; i++)
+        {
+            RuntimeTypeHandle h = cachedTypes[i].Type!.TypeHandle;
+            hc.Add(h);
+
+            switch (i)
+            {
+                case 0:
+                    h0 = h;
+                    break;
+                case 1:
+                    h1 = h;
+                    break;
+                case 2:
+                    h2 = h;
+                    break;
+                case 3:
+                    h3 = h;
+                    break;
+                default:
+                    rest ??= new RuntimeTypeHandle[length - 4];
+                    rest[i - 4] = h;
+                    break;
+            }
+        }
+
+        return new TypeHandleSequenceKey(length, h0, h1, h2, h3, rest, hc.ToHashCode());
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static TypeHandleSequenceKey From1(RuntimeTypeHandle h0)
     {
