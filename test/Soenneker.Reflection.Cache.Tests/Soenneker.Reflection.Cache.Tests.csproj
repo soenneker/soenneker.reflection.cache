@@ -22,7 +22,7 @@
         <PackageReference Include="AwesomeAssertions" Version="9.3.0" /><PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Soenneker.Facts.Local" Version="4.0.558" />
         <PackageReference Include="Soenneker.Facts.Manual" Version="4.0.164" />
-        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.62" /><PackageReference Include="xUnit.v3" Version="3.2.2" /></ItemGroup>
+        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.63" /><PackageReference Include="xUnit.v3" Version="3.2.2" /></ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Soenneker.Reflection.Cache.csproj" />
