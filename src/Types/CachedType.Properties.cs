@@ -1,310 +1,258 @@
-﻿using System;
+﻿using Soenneker.Reflection.Cache.Attributes;
+using Soenneker.Utils.LazyBools;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
-using Soenneker.Reflection.Cache.Attributes;
 
 namespace Soenneker.Reflection.Cache.Types;
 
 public partial class CachedType
 {
-    public bool IsAbstract => _isAbstractLazy.Value;
-    private Lazy<bool> _isAbstractLazy;
+    public bool IsAbstract => Type is { IsAbstract: true };
+    public bool IsInterface => Type is { IsInterface: true };
+    public bool IsGenericType => Type is { IsGenericType: true };
+    public bool IsEnum => Type is { IsEnum: true };
+    public bool IsByRef => Type is { IsByRef: true };
+    public bool IsArray => Type is { IsArray: true };
+    public bool IsSealed => Type is { IsSealed: true };
+    public bool IsClass => Type is { IsClass: true };
+    public bool IsValueType => Type is { IsValueType: true };
+    public bool IsPrimitive => Type is { IsPrimitive: true };
+    public bool IsStaticClass => Type is { IsAbstract: true, IsSealed: true };
+    public bool IsConstructedGenericType => Type?.IsConstructedGenericType == true;
+    public bool IsAbstractAndSealed => Type is { IsAbstract: true, IsSealed: true };
 
-    public bool IsInterface => _isInterfaceLazy.Value;
-    private Lazy<bool> _isInterfaceLazy;
+    private int _isNullable;
+    public bool IsNullable =>
+        LazyBoolUtil.GetOrInit(ref _isNullable, _threadSafe, this, static self =>
+        {
+            Type? t = self.Type;
+            return t != null && Nullable.GetUnderlyingType(t) != null;
+        });
 
-    public bool IsGenericType => _isGenericTypeLazy.Value;
-    private Lazy<bool> _isGenericTypeLazy;
+    private int _isDictionary;
+    public bool IsDictionary =>
+        LazyBoolUtil.GetOrInit(ref _isDictionary, _threadSafe, this, static self => self.ComputeIsDictionary());
 
-    public bool IsEnum => _isEnumLazy.Value;
-    private Lazy<bool> _isEnumLazy;
+    private int _isCollection;
+    public bool IsCollection =>
+        LazyBoolUtil.GetOrInit(ref _isCollection, _threadSafe, this, static self => self.ComputeIsCollection());
 
-    public bool IsNullable => _isNullable.Value;
-    private Lazy<bool> _isNullable;
+    private int _isEnumerable;
+    public bool IsEnumerable =>
+        LazyBoolUtil.GetOrInit(ref _isEnumerable, _threadSafe, this, static self => self.ComputeIsEnumerable());
 
-    public bool IsByRef => _isByRef.Value;
-    private Lazy<bool> _isByRef;
+    private int _isReadOnlyDictionary;
+    public bool IsReadOnlyDictionary =>
+        LazyBoolUtil.GetOrInit(ref _isReadOnlyDictionary, _threadSafe, this, static self => self.ComputeIsReadOnlyDictionary());
 
-    public bool IsArray => _isArray.Value;
-    private Lazy<bool> _isArray;
+    private int _isExpandoObject;
+    public bool IsExpandoObject =>
+        LazyBoolUtil.GetOrInit(ref _isExpandoObject, _threadSafe, this, static self =>
+        {
+            Type? t = self.Type;
+            return t != null && t == typeof(ExpandoObject);
+        });
 
-    public bool IsDictionary => _isDictionary.Value;
-    private Lazy<bool> _isDictionary;
+    private int _isFunc;
+    public bool IsFunc =>
+        LazyBoolUtil.GetOrInit(ref _isFunc, _threadSafe, this, static self => self.ComputeIsFunc());
 
-    public bool IsCollection => _isCollection.Value;
-    private Lazy<bool> _isCollection;
+    private int _isTuple;
+    public bool IsTuple =>
+        LazyBoolUtil.GetOrInit(ref _isTuple, _threadSafe, this, static self => self.ComputeIsTuple());
 
-    public bool IsEnumerable => _isEnumerable.Value;
-    private Lazy<bool> _isEnumerable;
+    private int _isDelegate;
+    public bool IsDelegate =>
+        LazyBoolUtil.GetOrInit(ref _isDelegate, _threadSafe, this, static self =>
+            self._cachedTypes.GetCachedType(typeof(Delegate)).IsAssignableFrom(self));
 
-    public bool IsReadOnlyDictionary => _isReadOnlyDictionary.Value;
-    private Lazy<bool> _isReadOnlyDictionary;
+    private int _isAnonymousType;
+    public bool IsAnonymousType =>
+        LazyBoolUtil.GetOrInit(ref _isAnonymousType, _threadSafe, this, static self =>
+        {
+            Type? t = self.Type;
+            return t != null && t.Name.Contains("AnonymousType") && t.IsSealed && t.IsGenericType;
+        });
 
-    public bool IsExpandoObject => _isExpandoObject.Value;
-    private Lazy<bool> _isExpandoObject;
+    private int _isRecord;
+    public bool IsRecord =>
+        LazyBoolUtil.GetOrInit(ref _isRecord, _threadSafe, this, static self => self.ComputeIsRecord());
 
-    public bool IsSealed => _isSealed.Value;
-    private Lazy<bool> _isSealed;
+    private int _isNullableValueType;
+    public bool IsNullableValueType =>
+        LazyBoolUtil.GetOrInit(ref _isNullableValueType, _threadSafe, this, static self =>
+        {
+            Type? t = self.Type;
+            return t != null && Nullable.GetUnderlyingType(t)?.IsValueType == true;
+        });
 
-    public bool IsFunc => _isFunc.Value;
-    private Lazy<bool> _isFunc;
+    private int _isObsolete;
+    public bool IsObsolete =>
+        LazyBoolUtil.GetOrInit(ref _isObsolete, _threadSafe, this, static self =>
+            self.Type?.GetCustomAttribute<ObsoleteAttribute>() != null);
 
-    public bool IsClass => _isClass.Value;
-    private Lazy<bool> _isClass;
+    private int _isWeakReference;
+    public bool IsWeakReference =>
+        LazyBoolUtil.GetOrInit(ref _isWeakReference, _threadSafe, this, static self => self.ComputeIsWeakReference());
 
-    public bool IsValueType => _isValueType.Value;
-    private Lazy<bool> _isValueType;
+    private int _isIntellenum;
+    public bool IsIntellenum =>
+        LazyBoolUtil.GetOrInit(ref _isIntellenum, _threadSafe, this, static self => self.ComputeIsIntellenum());
 
-    public bool IsPrimitive => _isPrimitive.Value;
-    private Lazy<bool> _isPrimitive;
-
-    public bool IsStaticClass => _isStaticClass.Value;
-    private Lazy<bool> _isStaticClass;
-
-    public bool IsTuple => _isTuple.Value;
-    private Lazy<bool> _isTuple;
-
-    public bool IsDelegate => _isDelegate.Value;
-    private Lazy<bool> _isDelegate;
-
-    public bool IsAnonymousType => _isAnonymousType.Value;
-    private Lazy<bool> _isAnonymousType;
-
-    public bool IsRecord => _isRecord.Value;
-    private Lazy<bool> _isRecord;
-
-    public bool IsNullableValueType => _isNullableValueType.Value;
-    private Lazy<bool> _isNullableValueType;
-
-    public bool IsObsolete => _isObsolete.Value;
-    private Lazy<bool> _isObsolete;
-
-    public bool IsConstructedGenericType => _isConstructedGenericType.Value;
-    private Lazy<bool> _isConstructedGenericType;
-
-    public bool IsAbstractAndSealed => _isAbstractAndSealed.Value;
-    private Lazy<bool> _isAbstractAndSealed;
-
-    public bool IsWeakReference => _isWeakReference.Value;
-    private Lazy<bool> _isWeakReference;
-
-    public bool IsIntellenum => _isIntellenumLazy.Value;
-    private Lazy<bool> _isIntellenumLazy;
-
-    public bool IsSmartEnum => _isSmartEnumLazy.Value;
-    private Lazy<bool> _isSmartEnumLazy;
-
-    private void InitializeProperties()
+    private int _isSmartEnum;
+    public bool IsSmartEnum =>
+        LazyBoolUtil.GetOrInit(ref _isSmartEnum, _threadSafe, this, static self => self.ComputeIsSmartEnum());
+    
+    private bool ComputeIsDictionary()
     {
-        _isAbstractLazy = new Lazy<bool>(() => Type is {IsAbstract: true}, _threadSafe);
-        _isInterfaceLazy = new Lazy<bool>(() => Type is {IsInterface: true}, _threadSafe);
-        _isGenericTypeLazy = new Lazy<bool>(() => Type is {IsGenericType: true}, _threadSafe);
-        _isEnumLazy = new Lazy<bool>(() => Type is {IsEnum: true}, _threadSafe);
+        if (Type == null)
+            return false;
 
-        _isNullable = new Lazy<bool>(() =>
+        if (IsGenericType)
         {
-            if (Type == null)
-                return false;
+            CachedType genericDictionary = _cachedTypes.GetCachedType(typeof(IDictionary<,>));
 
-            return Nullable.GetUnderlyingType(Type) != null;
-        }, _threadSafe);
-
-        _isByRef = new Lazy<bool>(() => Type is {IsByRef: true}, _threadSafe);
-        _isArray = new Lazy<bool>(() => Type is {IsArray: true}, _threadSafe);
-
-        _isDictionary = new Lazy<bool>(() =>
-        {
-            if (Type == null)
-                return false;
-
-            if (IsGenericType)
-            {
-                CachedType genericDictionary = _cachedTypes.GetCachedType(typeof(IDictionary<,>));
-
-                if (GetCachedGenericTypeDefinition() == genericDictionary.GetCachedGenericTypeDefinition())
-                    return true;
-            }
-
-            CachedType dictionaryType = _cachedTypes.GetCachedType(typeof(IDictionary));
-
-            if (dictionaryType.IsAssignableFrom(this))
+            if (GetCachedGenericTypeDefinition() == genericDictionary.GetCachedGenericTypeDefinition())
                 return true;
+        }
 
+        CachedType dictionaryType = _cachedTypes.GetCachedType(typeof(IDictionary));
+        return dictionaryType.IsAssignableFrom(this);
+    }
+
+    private bool ComputeIsCollection()
+    {
+        if (Type == null)
             return false;
-        }, _threadSafe);
 
-        _isCollection = new Lazy<bool>(() =>
+        if (Type.Name == "ICollection`1")
+            return true;
+
+        CachedType[] interfaces = GetCachedInterfaces()!;
+
+        for (var index = 0; index < interfaces.Length; index++)
         {
-            if (Type == null)
-                return false;
+            CachedType i = interfaces[index];
 
-            if (Type.Name == "ICollection`1")
+            if (i.Type!.Name == "ICollection`1")
                 return true;
+        }
 
-            CachedType[] interfaces = GetCachedInterfaces()!;
+        return false;
+    }
 
-            for (var index = 0; index < interfaces.Length; index++)
-            {
-                CachedType i = interfaces[index];
-
-                if (i.Type!.Name == "ICollection`1")
-                    return true;
-            }
-
+    private bool ComputeIsEnumerable()
+    {
+        if (Type == null)
             return false;
-        }, _threadSafe);
 
-        _isEnumerable = new Lazy<bool>(() =>
+        CachedType enumerableType = _cachedTypes.GetCachedType(typeof(IEnumerable));
+        return enumerableType.IsAssignableFrom(this);
+    }
+
+    private bool ComputeIsReadOnlyDictionary()
+    {
+        // Not fun that ReadOnlyDictionary can't use IsAssignableFrom
+        if (Type == null)
+            return false;
+
+        if (Type.Name == "ReadOnlyDictionary")
+            return true;
+
+        CachedType[] interfaces = GetCachedInterfaces()!;
+
+        for (var index = 0; index < interfaces.Length; index++)
         {
-            if (Type == null)
-                return false;
+            CachedType i = interfaces[index];
 
-            CachedType enumerableType = _cachedTypes.GetCachedType(typeof(IEnumerable));
-
-            if (enumerableType.IsAssignableFrom(this))
+            if (i.Type!.Name == "IReadOnlyDictionary`2")
                 return true;
+        }
 
+        return false;
+    }
+
+    private bool ComputeIsFunc()
+    {
+        if (Type == null)
             return false;
-        }, _threadSafe);
 
-        _isReadOnlyDictionary = new Lazy<bool>(() =>
+        if (IsGenericType && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(Func<>)))
+            return true;
+
+        return false;
+    }
+
+    private bool ComputeIsTuple()
+    {
+        return Type is { IsGenericType: true } &&
+               GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(ValueTuple<>));
+    }
+
+    private bool ComputeIsRecord()
+    {
+        if (Type == null)
+            return false;
+
+        bool hasCloneMethod = GetCachedMethod("<Clone>$") != null;
+
+        return Type.IsClass && hasCloneMethod;
+    }
+
+    private bool ComputeIsWeakReference()
+    {
+        if (Type == null)
+            return false;
+
+        // WeakReference is sealed, cannot derive
+        if (Type == typeof(WeakReference))
+            return true;
+
+        if (IsGenericType && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(WeakReference<>)))
+            return true;
+
+        return false;
+    }
+
+    private bool ComputeIsIntellenum()
+    {
+        if (!IsClass)
+            return false;
+
+        CachedAttribute[]? attributes = GetCachedCustomAttributes();
+
+        if (attributes == null || attributes.Length == 0)
+            return false;
+
+        for (var x = 0; x < attributes.Length; x++)
         {
-            // Not fun that ReadOnlyDictionary can't use IsAssignableFrom
-            if (Type == null)
-                return false;
+            CachedAttribute attribute = attributes[x];
 
-            if (Type.Name == "ReadOnlyDictionary")
+            if (attribute.Name.StartsWith("IntellenumAttribute"))
                 return true;
+        }
 
-            CachedType[] interfaces = GetCachedInterfaces()!;
+        return false;
+    }
 
-            for (var index = 0; index < interfaces.Length; index++)
-            {
-                CachedType i = interfaces[index];
-
-                if (i.Type!.Name == "IReadOnlyDictionary`2")
-                    return true;
-            }
-
+    private bool ComputeIsSmartEnum()
+    {
+        if (!IsClass)
             return false;
-        }, _threadSafe);
 
-        _isExpandoObject = new Lazy<bool>(() =>
+        CachedType[] interfaces = GetCachedInterfaces()!;
+
+        for (var index = 0; index < interfaces.Length; index++)
         {
-            if (Type == null)
-                return false;
+            CachedType i = interfaces[index];
 
-            return Type == typeof(ExpandoObject);
-        }, _threadSafe);
-
-        _isSealed = new Lazy<bool>(() => Type is {IsSealed: true}, _threadSafe);
-
-        _isFunc = new Lazy<bool>(() =>
-        {
-            if (Type == null)
-                return false;
-
-            if (IsGenericType && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(Func<>)))
+            if (i.Type!.Name == "ISmartEnum")
                 return true;
+        }
 
-            return false;
-        }, _threadSafe);
-
-        _isClass = new Lazy<bool>(() => Type is {IsClass: true}, _threadSafe);
-        _isValueType = new Lazy<bool>(() => Type is {IsValueType: true}, _threadSafe);
-        _isPrimitive = new Lazy<bool>(() => Type is {IsPrimitive: true}, _threadSafe);
-        _isStaticClass = new Lazy<bool>(() => Type is {IsAbstract: true, IsSealed: true}, _threadSafe);
-        _isTuple = new Lazy<bool>(() => Type is {IsGenericType: true} && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(ValueTuple<>)),
-            _threadSafe);
-        _isDelegate = new Lazy<bool>(() => _cachedTypes.GetCachedType(typeof(Delegate)).IsAssignableFrom(this), _threadSafe);
-
-        _isAnonymousType = new Lazy<bool>(() =>
-        {
-            if (Type == null)
-                return false;
-
-            return Type.Name.Contains("AnonymousType") && Type.IsSealed && Type.IsGenericType;
-        }, _threadSafe);
-
-        _isRecord = new Lazy<bool>(() =>
-        {
-            if (Type == null)
-                return false;
-
-            bool hasCloneMethod = GetCachedMethod("<Clone>$") != null;
-
-            return Type.IsClass && hasCloneMethod;
-        }, _threadSafe);
-
-        _isNullableValueType = new Lazy<bool>(() =>
-        {
-            if (Type == null)
-                return false;
-
-            return Nullable.GetUnderlyingType(Type)?.IsValueType == true;
-        }, _threadSafe);
-
-        _isObsolete = new Lazy<bool>(() => { return Type?.GetCustomAttribute<ObsoleteAttribute>() != null; }, _threadSafe);
-
-        _isConstructedGenericType = new Lazy<bool>(() => { return Type?.IsConstructedGenericType == true; }, _threadSafe);
-
-        _isAbstractAndSealed = new Lazy<bool>(() => Type is {IsAbstract: true, IsSealed: true}, _threadSafe);
-
-        _isWeakReference = new Lazy<bool>(() =>
-        {
-            if (Type == null)
-                return false;
-
-            // WeakReference is sealed, cannot derive
-
-            if (Type == typeof(WeakReference))
-                return true;
-
-            if (IsGenericType && GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(WeakReference<>)))
-                return true;
-
-            return false;
-        }, _threadSafe);
-
-        _isIntellenumLazy = new Lazy<bool>(() =>
-        {
-            if (!_isClass.Value)
-                return false;
-
-            CachedAttribute[]? attributes = GetCachedCustomAttributes();
-
-            if (attributes == null || attributes.Length == 0)
-                return false;
-
-            for (var x = 0; x < attributes.Length; x++)
-            {
-                CachedAttribute attribute = attributes[x];
-
-                if (attribute.Name.StartsWith("IntellenumAttribute"))
-                    return true;
-            }
-
-            return false;
-        }, _threadSafe);
-
-        _isSmartEnumLazy = new Lazy<bool>(() =>
-        {
-            if (!_isClass.Value)
-                return false;
-
-            CachedType[] interfaces = GetCachedInterfaces()!;
-
-            for (var index = 0; index < interfaces.Length; index++)
-            {
-                CachedType i = interfaces[index];
-
-                if (i.Type!.Name == "ISmartEnum")
-                    return true;
-            }
-
-            return false;
-        }, _threadSafe);
+        return false;
     }
 }

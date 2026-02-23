@@ -37,8 +37,6 @@ public sealed partial class CachedConstructor : ICachedConstructor
         ConstructorInfo = constructorInfo;
         _threadSafe = threadSafe;
 
-        InitializeProperties();
-
         if (constructorInfo == null)
             return;
 

@@ -1,9 +1,10 @@
-using System;
-using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Members.Abstract;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Utils.LazyBools;
+using System;
+using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Members;
 
@@ -16,6 +17,8 @@ public sealed class CachedMember : ICachedMember
 
     private readonly Lazy<CachedCustomAttributes>? _attributes;
 
+    private readonly bool _threadSafe;
+
     public CachedType CachedType { get; }
 
     public Type Type => CachedType.Type!;
@@ -24,15 +27,18 @@ public sealed class CachedMember : ICachedMember
 
     public MemberTypes MemberType { get; }
 
-    public bool IsProperty => _isPropertyLazy.Value;
-    private readonly Lazy<bool> _isPropertyLazy;
+    private int _isProperty;
+    public bool IsProperty =>
+        LazyBoolUtil.GetOrInit(ref _isProperty, _threadSafe, this, static self => self.MemberType == MemberTypes.Property);
 
-    public bool IsField => _isFieldLazy.Value;
-    private readonly Lazy<bool> _isFieldLazy;
+    private int _isField;
+    public bool IsField =>
+        LazyBoolUtil.GetOrInit(ref _isField, _threadSafe, this, static self => self.MemberType == MemberTypes.Field);
 
     public CachedMember(MemberInfo memberInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MemberType = memberInfo.MemberType;
+        _threadSafe = threadSafe;
 
         CacheKey = memberInfo.ToHashKey();
 
@@ -40,9 +46,6 @@ public sealed class CachedMember : ICachedMember
         MemberInfo = memberInfo;
 
         _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
-        
-        _isPropertyLazy = new Lazy<bool>(() => MemberType == MemberTypes.Property, threadSafe);
-        _isFieldLazy = new Lazy<bool>(() => MemberType == MemberTypes.Field, threadSafe);
     }
 
     public CachedCustomAttributes? GetCachedCustomAttributes()

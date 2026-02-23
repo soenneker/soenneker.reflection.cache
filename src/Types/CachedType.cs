@@ -50,8 +50,6 @@ public partial class CachedType : ICachedType
 
         _cacheKeyLazy = new Lazy<int?>(() => type?.GetHashCode(), threadSafe);
 
-        InitializeProperties();
-
         if (Type == null)
             return;
 

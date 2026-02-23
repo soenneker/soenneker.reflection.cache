@@ -1,20 +1,17 @@
-﻿using System;
-using Soenneker.Reflection.Cache.Constructors.Abstract;
+﻿using Soenneker.Reflection.Cache.Constructors.Abstract;
+using Soenneker.Utils.LazyBools;
 
 namespace Soenneker.Reflection.Cache.Constructors;
 
-///<inheritdoc cref="ICachedConstructor"/>
+/// <inheritdoc cref="ICachedConstructor"/>
 public sealed partial class CachedConstructor
 {
-    public bool IsStatic => _isStatic.Value;
-    private Lazy<bool> _isStatic;
+    private int _isStatic;
+    private int _isPublic;
 
-    public bool IsPublic => _isPublic.Value;
-    private Lazy<bool> _isPublic;
+    public bool IsStatic =>
+        LazyBoolUtil.GetOrInit(ref _isStatic, _threadSafe, this, static self => self.ConstructorInfo is { IsStatic: true });
 
-    private void InitializeProperties()
-    {
-        _isStatic = new Lazy<bool>(() => ConstructorInfo is {IsStatic: true }, _threadSafe);
-        _isPublic = new Lazy<bool>(() => ConstructorInfo is {IsPublic: true }, _threadSafe);
-    }
+    public bool IsPublic =>
+        LazyBoolUtil.GetOrInit(ref _isPublic, _threadSafe, this, static self => self.ConstructorInfo is { IsPublic: true });
 }

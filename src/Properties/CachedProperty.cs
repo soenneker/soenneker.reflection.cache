@@ -1,68 +1,58 @@
-using System;
-using System.Reflection;
 using Soenneker.Reflection.Cache.Properties.Abstract;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Utils.LazyBools;
+using System;
+using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Properties;
 
+/// <inheritdoc cref="ICachedProperty"/>
 public sealed class CachedProperty : ICachedProperty
 {
     public PropertyInfo PropertyInfo { get; }
 
-    public bool IsDelegate => _isDelegate.Value;
-    private readonly Lazy<bool> _isDelegate;
+    private readonly CachedTypes _cachedTypes;
+    private readonly bool _threadSafe;
 
-    public bool IsEqualityContract => _isEqualityContract.Value;
-    private readonly Lazy<bool> _isEqualityContract;
+    private int _isDelegate;
 
-    public bool IsStatic => _isStatic.Value;
-    private readonly Lazy<bool> _isStatic;
+    public bool IsDelegate =>
+        LazyBoolUtil.GetOrInit(ref _isDelegate, _threadSafe, this, static self => self._cachedTypes.GetCachedType(typeof(Delegate))
+                                                                                      .IsAssignableFrom(self.PropertyInfo.PropertyType));
 
-    public bool IsVirtual => _isVirtual.Value;
-    private readonly Lazy<bool> _isVirtual;
+    private int _isCompilerGenerated;
 
-    public bool IsIndexer => _isIndexer.Value;
-    private readonly Lazy<bool> _isIndexer;
+    public bool IsCompilerGenerated =>
+        LazyBoolUtil.GetOrInit(ref _isCompilerGenerated, _threadSafe, this,
+            static self => Attribute.IsDefined(self.PropertyInfo, typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute)));
 
-    public bool IsCompilerGenerated => _isCompilerGenerated.Value;
-    private readonly Lazy<bool> _isCompilerGenerated;
-
-    public bool IsReadOnly => _isReadOnly.Value;
-    private readonly Lazy<bool> _isReadOnly;
-
-    public bool IsPublic => _isPublic.Value;
-    private readonly Lazy<bool> _isPublic;
-
-    public bool IsProtected => _isProtected.Value;
-    private readonly Lazy<bool> _isProtected;
-
-    public bool IsPrivate => _isPrivate.Value;
-    private readonly Lazy<bool> _isPrivate;
+    public bool IsEqualityContract { get; }
+    public bool IsStatic { get; }
+    public bool IsVirtual { get; }
+    public bool IsIndexer { get; }
+    public bool IsReadOnly { get; }
+    public bool IsPublic { get; }
+    public bool IsProtected { get; }
+    public bool IsPrivate { get; }
 
     public CachedProperty(PropertyInfo propertyInfo, CachedTypes cachedTypes, bool threadSafe)
     {
         PropertyInfo = propertyInfo;
+        _cachedTypes = cachedTypes;
+        _threadSafe = threadSafe;
 
-        _isDelegate = new Lazy<bool>(() => cachedTypes.GetCachedType(typeof(Delegate)).IsAssignableFrom(PropertyInfo.PropertyType), threadSafe);
+        // Cheap checks are evaluated once during construction.
+        MethodInfo? getMethod = PropertyInfo.GetMethod;
+        MethodInfo? setMethod = PropertyInfo.SetMethod;
 
-        _isEqualityContract = new Lazy<bool>(() => PropertyInfo.Name == "EqualityContract", threadSafe);
-
-        _isStatic = new Lazy<bool>(() => PropertyInfo.GetMethod?.IsStatic ?? false, threadSafe);
-
-        _isVirtual = new Lazy<bool>(() => PropertyInfo.GetMethod?.IsVirtual ?? false, threadSafe);
-
-        _isIndexer = new Lazy<bool>(() => PropertyInfo.GetIndexParameters().Length > 0, threadSafe);
-
-        _isCompilerGenerated = new Lazy<bool>(() => Attribute.IsDefined(PropertyInfo, typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute)), threadSafe);
-
-        _isReadOnly = new Lazy<bool>(() => PropertyInfo.SetMethod == null, threadSafe);
-
-        _isPublic = new Lazy<bool>(() => PropertyInfo.GetMethod?.IsPublic == true, threadSafe);
-
-        _isProtected = new Lazy<bool>(() => PropertyInfo.GetMethod?.IsFamily == true, threadSafe);
-
-        _isPrivate = new Lazy<bool>(() =>
-                PropertyInfo.GetMethod?.IsPrivate == true && (PropertyInfo.SetMethod == null || PropertyInfo.SetMethod?.IsPrivate == true),
-            threadSafe);
+        IsEqualityContract = PropertyInfo.Name == "EqualityContract";
+        IsStatic = getMethod?.IsStatic ?? false;
+        IsVirtual = getMethod?.IsVirtual ?? false;
+        IsIndexer = PropertyInfo.GetIndexParameters()
+                                .Length > 0;
+        IsReadOnly = setMethod == null;
+        IsPublic = getMethod?.IsPublic == true;
+        IsProtected = getMethod?.IsFamily == true;
+        IsPrivate = getMethod?.IsPrivate == true && (setMethod == null || setMethod.IsPrivate);
     }
 }
