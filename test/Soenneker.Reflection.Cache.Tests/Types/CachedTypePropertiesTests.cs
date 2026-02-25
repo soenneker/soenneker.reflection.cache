@@ -139,6 +139,13 @@ public class CachedTypePropertiesTests
     }
 
     [Fact]
+    public void IsEnumValue_should_be_true()
+    {
+        CachedType result = _cache.GetCachedType(typeof(DayOfWeekTypeEnumValue));
+        result.IsEnumValue.Should().BeTrue();
+    }
+
+    [Fact]
     public void IsIntellenum_should_be_true()
     {
         CachedType result = _cache.GetCachedType(typeof(DayOfWeekTypeIntellenum));

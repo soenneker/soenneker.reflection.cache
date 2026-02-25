@@ -8,7 +8,7 @@ namespace Soenneker.Reflection.Cache.Fields;
 public sealed class CachedField
 {
     public FieldInfo FieldInfo { get; }
-
+    
     private readonly CachedTypes _cachedTypes;
     private readonly bool _threadSafe;
 

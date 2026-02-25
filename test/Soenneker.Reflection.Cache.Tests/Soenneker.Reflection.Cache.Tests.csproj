@@ -5,24 +5,28 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-            <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-            <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
-            <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+        <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
 
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="NewFolder\**" />
-      <EmbeddedResource Remove="NewFolder\**" />
-      <None Remove="NewFolder\**" />
+        <Compile Remove="NewFolder\**" />
+        <EmbeddedResource Remove="NewFolder\**" />
+        <None Remove="NewFolder\**" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
-        <PackageReference Include="AwesomeAssertions" Version="9.4.0" /><PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+        <PackageReference Include="AwesomeAssertions" Version="9.4.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Soenneker.Facts.Local" Version="4.0.566" />
         <PackageReference Include="Soenneker.Facts.Manual" Version="4.0.164" />
-        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.63" /><PackageReference Include="xUnit.v3" Version="3.2.2" /></ItemGroup>
+        <PackageReference Include="Soenneker.Gen.EnumValues" Version="4.0.4" />
+        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.63" />
+        <PackageReference Include="xUnit.v3" Version="3.2.2" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Soenneker.Reflection.Cache.csproj" />
@@ -30,13 +34,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Benchmarking\Benchmarks\Arguments\" />
-      <Folder Include="Arguments\" />
+        <Folder Include="Benchmarking\Benchmarks\Arguments\" />
+        <Folder Include="Arguments\" />
     </ItemGroup>
 
     <ItemGroup>
         <Content Include="testconfig.json">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

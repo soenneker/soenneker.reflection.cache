@@ -98,6 +98,10 @@ public partial class CachedType
     public bool IsWeakReference =>
         LazyBoolUtil.GetOrInit(ref _isWeakReference, _threadSafe, this, static self => self.ComputeIsWeakReference());
 
+    private int _isEnumValue;
+    public bool IsEnumValue =>
+        LazyBoolUtil.GetOrInit(ref _isEnumValue, _threadSafe, this, static self => self.ComputeIsEnumValue());
+
     private int _isIntellenum;
     public bool IsIntellenum =>
         LazyBoolUtil.GetOrInit(ref _isIntellenum, _threadSafe, this, static self => self.ComputeIsIntellenum());
@@ -232,6 +236,27 @@ public partial class CachedType
             CachedAttribute attribute = attributes[x];
 
             if (attribute.Name.StartsWith("IntellenumAttribute"))
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool ComputeIsEnumValue()
+    {
+        if (!IsClass)
+            return false;
+
+        CachedAttribute[]? attributes = GetCachedCustomAttributes();
+
+        if (attributes == null || attributes.Length == 0)
+            return false;
+
+        for (var x = 0; x < attributes.Length; x++)
+        {
+            CachedAttribute attribute = attributes[x];
+
+            if (attribute.Name.StartsWith("EnumValueAttribute"))
                 return true;
         }
 
