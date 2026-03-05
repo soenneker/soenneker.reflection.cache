@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -8,35 +8,22 @@
         <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
         <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
         <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
-
     </PropertyGroup>
-
-    <ItemGroup>
-        <Compile Remove="NewFolder\**" />
-        <EmbeddedResource Remove="NewFolder\**" />
-        <None Remove="NewFolder\**" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
         <PackageReference Include="AwesomeAssertions" Version="9.4.0" />
         <PackageReference Include="Intellenum" Version="2.0.1" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
-        <PackageReference Include="Soenneker.Facts.Local" Version="4.0.577" />
-        <PackageReference Include="Soenneker.Facts.Manual" Version="4.0.165" />
-        <PackageReference Include="Soenneker.Gen.EnumValues" Version="4.0.15" />
-        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.65" />
+        <PackageReference Include="Soenneker.Facts.Local" Version="4.0.582" />
+        <PackageReference Include="Soenneker.Facts.Manual" Version="4.0.166" />
+        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.66" />
         <PackageReference Include="xUnit.v3" Version="3.2.2" />
+        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.188" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\Soenneker.Reflection.Cache.csproj" />
-        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.185" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Benchmarking\Benchmarks\Arguments\" />
-        <Folder Include="Arguments\" />
     </ItemGroup>
 
     <ItemGroup>
