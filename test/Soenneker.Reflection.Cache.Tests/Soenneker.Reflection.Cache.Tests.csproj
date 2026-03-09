@@ -19,7 +19,7 @@
         <PackageReference Include="Soenneker.Facts.Manual" Version="4.0.166" />
         <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.66" />
         <PackageReference Include="xUnit.v3" Version="3.2.2" />
-        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.188" />
+        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.189" />
     </ItemGroup>
 
     <ItemGroup>
