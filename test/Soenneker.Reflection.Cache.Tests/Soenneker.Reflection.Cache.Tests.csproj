@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Reflection.Cache.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Reflection.Cache\Soenneker.Reflection.Cache.csproj" />
     </ItemGroup>
 
     <ItemGroup>
