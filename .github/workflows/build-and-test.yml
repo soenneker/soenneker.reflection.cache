@@ -40,5 +40,11 @@ jobs:
       - name: Test
         run: dotnet test test/Soenneker.Reflection.Cache.Tests/Soenneker.Reflection.Cache.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
 
+      - name: Restore library
+        run: dotnet restore src/Soenneker.Reflection.Cache/Soenneker.Reflection.Cache.csproj --verbosity minimal
+
+      - name: Build library
+        run: dotnet build src/Soenneker.Reflection.Cache/Soenneker.Reflection.Cache.csproj --configuration Release --no-restore --verbosity minimal
+
       - name: Pack
         run: dotnet pack src/Soenneker.Reflection.Cache/Soenneker.Reflection.Cache.csproj --configuration Release --no-build --no-restore --output . --verbosity minimal
