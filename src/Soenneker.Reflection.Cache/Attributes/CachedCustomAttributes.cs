@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes.Abstract;
 using Soenneker.Reflection.Cache.Constructors;
 using Soenneker.Reflection.Cache.Extensions;
@@ -49,7 +50,7 @@ public sealed class CachedCustomAttributes : ICachedCustomAttributes
     {
         _cachedTypes = cachedTypes;
         _cachedMember = cachedMember;
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForType(threadSafe), threadSafe);
+        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForMember(threadSafe), threadSafe);
         _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
     }
 
@@ -95,6 +96,51 @@ public sealed class CachedCustomAttributes : ICachedCustomAttributes
         }
 
         return result;
+    }
+
+    private CachedAttribute[] SetArrayForMember(bool threadSafe)
+    {
+        object[] attributes = _cachedMember!.MemberInfo!.GetCustomAttributes(true);
+        int length = attributes.Length;
+
+        var result = new CachedAttribute[length];
+
+        for (var i = 0; i < length; i++)
+        {
+            result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
+        }
+
+        return result;
+    }
+
+    public T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute
+    {
+        if (inherit)
+        {
+            CachedAttribute[] attrs = _cachedCustomAttributes.Value;
+
+            for (var i = 0; i < attrs.Length; i++)
+            {
+                if (attrs[i].Attribute is T match)
+                    return match;
+            }
+
+            return null;
+        }
+
+        if (_cachedType?.Type is { } type)
+            return type.GetCustomAttribute<T>(inherit: false);
+
+        if (_cachedMethod?.MethodInfo is { } method)
+            return method.GetCustomAttribute<T>(inherit: false);
+
+        if (_cachedConstructor?.ConstructorInfo is { } ctor)
+            return ctor.GetCustomAttribute<T>(inherit: false);
+
+        if (_cachedMember?.MemberInfo is { } member)
+            return member.GetCustomAttribute<T>(inherit: false);
+
+        return null;
     }
 
     public CachedAttribute[] GetCachedCustomAttributes()

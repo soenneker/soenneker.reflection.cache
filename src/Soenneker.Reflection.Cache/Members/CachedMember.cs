@@ -63,4 +63,13 @@ public sealed class CachedMember : ICachedMember
 
         return _attributes!.Value.GetCustomAttributes();
     }
+
+    public T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute
+    {
+        if (MemberInfo == null)
+            return null;
+
+        return _attributes!.Value.GetCachedCustomAttribute<T>(inherit);
+    }
 }
+

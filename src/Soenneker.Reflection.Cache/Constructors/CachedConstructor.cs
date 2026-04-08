@@ -81,6 +81,14 @@ public sealed partial class CachedConstructor : ICachedConstructor
         return _attributes!.Value.GetCustomAttributes();
     }
 
+    public T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute
+    {
+        if (ConstructorInfo == null)
+            return null;
+
+        return _attributes!.Value.GetCachedCustomAttribute<T>(inherit);
+    }
+
     public Type[] GetParametersTypes()
     {
         if (ConstructorInfo == null)

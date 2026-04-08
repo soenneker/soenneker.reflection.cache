@@ -94,6 +94,15 @@ public sealed class CachedMethod : ICachedMethod
         return _attributes!.Value;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute
+    {
+        if (MethodInfo is null)
+            return null;
+
+        return _attributes!.Value.GetCachedCustomAttribute<T>(inherit);
+    }
+
     public CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes)
     {
         if (MethodInfo is null)

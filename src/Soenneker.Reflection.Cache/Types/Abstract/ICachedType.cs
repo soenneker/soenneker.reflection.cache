@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
+using Soenneker.Reflection.Cache.Attributes.Abstract;
 using Soenneker.Reflection.Cache.Constructors;
 using Soenneker.Reflection.Cache.Fields;
 using Soenneker.Reflection.Cache.Members;
@@ -145,6 +146,10 @@ public partial interface ICachedType
     /// <returns>An array of object representing custom attributes.</returns>
     [Pure]
     object[]? GetCustomAttributes();
+
+    /// <inheritdoc cref="ICachedCustomAttributes.GetCachedCustomAttribute{T}(bool)" />
+    [Pure]
+    T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 
     /// <summary>
     /// Gets the cached constructor with the specified parameter types.

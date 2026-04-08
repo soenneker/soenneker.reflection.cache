@@ -41,4 +41,7 @@ public interface ICachedMember
     CachedCustomAttributes? GetCachedCustomAttributes();
 
     object[] GetCustomAttributes();
+
+    T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 }
+

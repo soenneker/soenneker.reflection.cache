@@ -32,6 +32,8 @@ public interface ICachedMethod
 
     CachedCustomAttributes? GetCachedCustomAttributes();
 
+    T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
+
     CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes);
 
     CachedMethod? MakeCachedGenericMethod(CachedType t0);

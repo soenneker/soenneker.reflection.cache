@@ -241,6 +241,14 @@ public partial class CachedType : ICachedType
         return _cachedAttributes!.Value.GetCustomAttributes();
     }
 
+    public T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute
+    {
+        if (Type == null)
+            return null;
+
+        return _cachedAttributes!.Value.GetCachedCustomAttribute<T>(inherit);
+    }
+
     public CachedConstructor? GetCachedConstructor(Type[] parameterTypes)
     {
         if (Type == null)

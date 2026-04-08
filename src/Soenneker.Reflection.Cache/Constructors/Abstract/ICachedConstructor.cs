@@ -31,6 +31,9 @@ public interface ICachedConstructor
     object[] GetCustomAttributes();
 
     [Pure]
+    T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
+
+    [Pure]
     Type[] GetParametersTypes();
 
     [Pure]
