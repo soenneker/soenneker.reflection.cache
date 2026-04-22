@@ -12,7 +12,7 @@ public class GetConstructorsTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetConstructorsTests( output)
+    public GetConstructorsTests()
     {
         _cache = new ReflectionCache();
     }

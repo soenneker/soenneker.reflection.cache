@@ -11,7 +11,7 @@ public class GetFieldTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetFieldTests( output)
+    public GetFieldTests()
     {
         _cache = new ReflectionCache();
     }

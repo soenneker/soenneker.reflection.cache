@@ -14,7 +14,7 @@ public class GetMethodsTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetMethodsTests( output)
+    public GetMethodsTests()
     {
         _cache = new ReflectionCache();
     }

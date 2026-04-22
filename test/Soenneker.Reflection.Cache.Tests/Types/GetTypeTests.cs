@@ -9,7 +9,7 @@ public class GetTypeTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetTypeTests( output)
+    public GetTypeTests()
     {
         _cache = new ReflectionCache();
     }

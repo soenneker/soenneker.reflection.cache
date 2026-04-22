@@ -3,60 +3,58 @@ using BenchmarkDotNet.Running;
 using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
-using Soenneker.Facts.Manual;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Constructors;
 
-[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class ConstructorsRunner : BenchmarkTest
 {
     public ConstructorsRunner() : base()
     {
     }
 
-    [ManualFact]
+    [Skip("Manual")]
     //[LocalOnly]
     public async Task GetConstructor()
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorBenchmarks>(DefaultConf);
 
-        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
+        await summary.OutputSummaryToLog();
     }
 
-    [ManualFact]
+    [Skip("Manual")]
    // [LocalOnly]
     public async Task CachedConstructors()
     {
         Summary summary = BenchmarkRunner.Run<CachedConstructorBenchmarks>(DefaultConf);
 
-        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
+        await summary.OutputSummaryToLog();
     }
 
-    [ManualFact]
+    [Skip("Manual")]
    // [LocalOnly]
     public async Task GetConstructors()
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorsBenchmarks>(DefaultConf);
 
-        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
+        await summary.OutputSummaryToLog();
     }
 
-     [ManualFact]
+     [Skip("Manual")]
     //[LocalOnly]
     public async Task ConstructorInvoke()
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeBenchmarks>(DefaultConf);
 
-        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
+        await summary.OutputSummaryToLog();
     }
 
-    [ManualFact]
+    [Skip("Manual")]
    // [LocalOnly]
     public async Task CreateInstanceParameters()
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeParametersBenchmarks>(DefaultConf);
 
-        await summary.OutputSummaryToLog(OutputHelper, CancellationToken);
+        await summary.OutputSummaryToLog();
     }
 }

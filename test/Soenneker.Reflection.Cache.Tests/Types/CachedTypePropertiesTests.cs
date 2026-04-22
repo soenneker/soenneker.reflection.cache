@@ -13,7 +13,7 @@ public class CachedTypePropertiesTests
 {
     private readonly ReflectionCache _cache;
 
-    public CachedTypePropertiesTests( output)
+    public CachedTypePropertiesTests()
     {
         _cache = new ReflectionCache();
     }

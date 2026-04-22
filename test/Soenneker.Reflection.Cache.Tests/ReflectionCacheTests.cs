@@ -7,7 +7,7 @@ public sealed class ReflectionCacheTests
 {
     private readonly ReflectionCache _cache;
 
-    public ReflectionCacheTests( output)
+    public ReflectionCacheTests()
     {
         _cache = new ReflectionCache();
     }

@@ -14,7 +14,7 @@ public class GetMembersTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetMembersTests( output)
+    public GetMembersTests()
     {
         _cache = new ReflectionCache();
     }

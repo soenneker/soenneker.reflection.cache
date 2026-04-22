@@ -11,7 +11,7 @@ public class GetPropertiesTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetPropertiesTests( output)
+    public GetPropertiesTests()
     {
         _cache = new ReflectionCache();
     }

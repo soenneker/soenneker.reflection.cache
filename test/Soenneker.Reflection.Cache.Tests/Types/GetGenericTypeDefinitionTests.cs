@@ -10,7 +10,7 @@ public class GetGenericTypeDefinitionTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetGenericTypeDefinitionTests( output)
+    public GetGenericTypeDefinitionTests()
     {
         _cache = new ReflectionCache();
     }
