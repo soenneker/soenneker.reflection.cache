@@ -1,7 +1,6 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Methods;
-using Xunit;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
 
@@ -11,7 +10,7 @@ public class GetMethodTests
 {
     private readonly ReflectionCache _cache = new();
 
-    [Fact]
+    [Test]
     public void GetMethod_Cache_should_return_methodInfo()
     {
         CachedType result = _cache.GetCachedType(TestType.Locator);
@@ -20,7 +19,7 @@ public class GetMethodTests
         methodInfo.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void MakeCachedGenericMethod_should_result()
     {
         CachedType result = _cache.GetCachedType(typeof(ClassWithGenericMethod));

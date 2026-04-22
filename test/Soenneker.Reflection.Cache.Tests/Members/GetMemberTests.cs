@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using AwesomeAssertions;
-using Xunit;
 using Soenneker.Reflection.Cache.Tests.Objects;
 
 namespace Soenneker.Reflection.Cache.Tests.Members;
@@ -10,7 +9,7 @@ public class GetMemberTests
 {
     private readonly ReflectionCache _cache = new();
 
-    [Fact]
+    [Test]
     public void GetMember_NoCache_should_return_memberInfo()
     {
         Type? type = typeof(TestType);
@@ -19,7 +18,7 @@ public class GetMemberTests
         memberInfo.Should().NotBeNull();
     }
 
-    //[Fact]
+    //[Test]
     //public void GetMember_Cache_should_return_memberInfo()
     //{
     //    ICachedType result = _cache.GetCachedType(TestType.Locator);

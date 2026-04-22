@@ -4,20 +4,19 @@ using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Manual;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Attributes;
 
-[Collection("Collection")]
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class AttributesRunner : BenchmarkTest
 {
-    public AttributesRunner(ITestOutputHelper outputHelper) : base(outputHelper)
+    public AttributesRunner() : base()
     {
     }
 
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task GetAttributes()
     {
         Summary summary = BenchmarkRunner.Run<GetAttributesBenchmarks>(DefaultConf);
@@ -26,7 +25,7 @@ public class AttributesRunner : BenchmarkTest
     }
 
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task CachedAttributesExtension()
     {
         Summary summary = BenchmarkRunner.Run<CachedAttributesExtensionBenchmarks>(DefaultConf);

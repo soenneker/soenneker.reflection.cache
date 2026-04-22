@@ -1,14 +1,13 @@
-﻿using System;
+using System;
 using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Constructors;
 
 public class ConstructorInvokeTests
 {
-    [Fact]
+    [Test]
     public void Activator_Create_ShouldCreateInstance()
     {
         Type type = typeof(TestType);
@@ -16,7 +15,7 @@ public class ConstructorInvokeTests
         result.Should().NotBeNull().And.BeOfType<TestType>();
     }
 
-    [Fact]
+    [Test]
     public void CreateInstance_ShouldCreateInstance()
     {
         var cache = new ReflectionCache();
@@ -26,7 +25,7 @@ public class ConstructorInvokeTests
         result.Should().NotBeNull().And.BeOfType<TestType>();
     }
 
-    [Fact]
+    [Test]
     public void Activator_Create_with_parameters_ShouldCreateInstanceWithParameters()
     {
         Type type = typeof(TestType);
@@ -34,7 +33,7 @@ public class ConstructorInvokeTests
         result.Should().NotBeNull().And.BeOfType<TestType>();
     }
 
-    [Fact]
+    [Test]
     public void CreateInstance_with_parameters_ShouldCreateInstanceWithParameters()
     {
         var cache = new ReflectionCache();

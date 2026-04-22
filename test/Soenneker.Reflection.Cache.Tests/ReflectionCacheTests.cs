@@ -1,6 +1,5 @@
 using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Types.Abstract;
-using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests;
 
@@ -8,12 +7,12 @@ public sealed class ReflectionCacheTests
 {
     private readonly ReflectionCache _cache;
 
-    public ReflectionCacheTests(ITestOutputHelper output)
+    public ReflectionCacheTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void Cache_CreateInstance()
     {
         ICachedType result = _cache.GetCachedType("System.String, mscorlib");

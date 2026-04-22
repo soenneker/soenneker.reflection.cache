@@ -4,20 +4,19 @@ using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
 using Soenneker.Facts.Manual;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Constructors;
 
-[Collection("Collection")]
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class ConstructorsRunner : BenchmarkTest
 {
-    public ConstructorsRunner(ITestOutputHelper outputHelper) : base(outputHelper)
+    public ConstructorsRunner() : base()
     {
     }
 
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task GetConstructor()
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorBenchmarks>(DefaultConf);
@@ -26,7 +25,7 @@ public class ConstructorsRunner : BenchmarkTest
     }
 
     [ManualFact]
-   // [LocalFact]
+   // [LocalOnly]
     public async Task CachedConstructors()
     {
         Summary summary = BenchmarkRunner.Run<CachedConstructorBenchmarks>(DefaultConf);
@@ -35,7 +34,7 @@ public class ConstructorsRunner : BenchmarkTest
     }
 
     [ManualFact]
-   // [LocalFact]
+   // [LocalOnly]
     public async Task GetConstructors()
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorsBenchmarks>(DefaultConf);
@@ -44,7 +43,7 @@ public class ConstructorsRunner : BenchmarkTest
     }
 
      [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task ConstructorInvoke()
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeBenchmarks>(DefaultConf);
@@ -53,7 +52,7 @@ public class ConstructorsRunner : BenchmarkTest
     }
 
     [ManualFact]
-   // [LocalFact]
+   // [LocalOnly]
     public async Task CreateInstanceParameters()
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeParametersBenchmarks>(DefaultConf);

@@ -3,7 +3,6 @@ using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Fields;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Fields;
@@ -12,12 +11,12 @@ public class GetFieldTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetFieldTests(ITestOutputHelper output)
+    public GetFieldTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetField_should_return_fieldInfo()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
@@ -25,7 +24,7 @@ public class GetFieldTests
         fieldInfo.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedField_should_return_CachedField()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
@@ -33,7 +32,7 @@ public class GetFieldTests
         cachedField.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedField_should_return_internal_CachedField()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));

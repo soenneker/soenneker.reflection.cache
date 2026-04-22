@@ -4,20 +4,19 @@ using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Manual;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Interfaces;
 
-[Collection("Collection")]
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class InterfacesRunner : BenchmarkTest
 {
-    public InterfacesRunner(ITestOutputHelper outputHelper) : base(outputHelper)
+    public InterfacesRunner() : base()
     {
     }
     
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task GetInterface()
     {
         Summary summary = BenchmarkRunner.Run<GetInterfaceBenchmarks>(DefaultConf);
@@ -26,7 +25,7 @@ public class InterfacesRunner : BenchmarkTest
     }
 
     [ManualFact]
-   // [LocalFact]
+   // [LocalOnly]
     public async Task GetInterfaces()
     {
         Summary summary = BenchmarkRunner.Run<GetInterfacesBenchmarks>(DefaultConf);

@@ -3,7 +3,6 @@ using System.Reflection;
 using Soenneker.Reflection.Cache.Properties;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Properties;
@@ -12,12 +11,12 @@ public class GetPropertiesTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetPropertiesTests(ITestOutputHelper output)
+    public GetPropertiesTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetProperties_should_return_propertyInfos()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
@@ -25,7 +24,7 @@ public class GetPropertiesTests
         propertyInfos.Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedProperties_should_return_CachedProperties()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));

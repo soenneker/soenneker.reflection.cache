@@ -2,7 +2,6 @@ using System;
 using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Types;
 
-using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
@@ -10,26 +9,26 @@ public class GetTypeTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetTypeTests(ITestOutputHelper output)
+    public GetTypeTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedType_should_return_cached_type()
     {
         CachedType result = _cache.GetCachedType(typeof(string));
         result.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void GetType_NoCache_should_return()
     {
         var type = Type.GetType("System.String, mscorlib");
         type.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedType_with_string_should_return_cached_type()
     {
         CachedType result = _cache.GetCachedType("System.String, mscorlib");

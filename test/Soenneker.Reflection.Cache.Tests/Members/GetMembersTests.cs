@@ -2,7 +2,6 @@ using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Constants;
 using System.Reflection;
 using System;
-using Xunit;
 
 using Soenneker.Reflection.Cache.Members;
 using System.Linq;
@@ -15,12 +14,12 @@ public class GetMembersTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetMembersTests(ITestOutputHelper output)
+    public GetMembersTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetMembers_NoCache()
     {
         var type = Type.GetType(TestType.Locator);
@@ -29,21 +28,21 @@ public class GetMembersTests
         result.Length.Should().BeGreaterThan(0);
     }
 
-    [Fact]
+    [Test]
     public void GetMembers_NoCache_should_get_MemberInfo()
     {
         MemberInfo[] memberInfo = Type.GetType(TestType.Locator)!.GetMembers();
         memberInfo.Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GetMembers_Cache_should_get_MemberInfo()
     {
         CachedType result = _cache.GetCachedType(TestType.Locator);
         result.GetCachedMembers()!.ToList().Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GetMembers_should_return_memberInfos()
     {
         CachedType result = _cache.GetCachedType(typeof(string));

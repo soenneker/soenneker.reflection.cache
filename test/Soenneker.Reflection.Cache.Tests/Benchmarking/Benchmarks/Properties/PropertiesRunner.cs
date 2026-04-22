@@ -4,20 +4,19 @@ using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Manual;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Properties;
 
-[Collection("Collection")]
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class PropertiesRunner : BenchmarkTest
 {
-    public PropertiesRunner(ITestOutputHelper outputHelper) : base(outputHelper)
+    public PropertiesRunner() : base()
     {
     }
 
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task GetProperty()
     {
         Summary summary = BenchmarkRunner.Run<GetPropertyBenchmarks>(DefaultConf);
@@ -26,7 +25,7 @@ public class PropertiesRunner : BenchmarkTest
     }
 
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task GetProperties()
     {
         Summary summary = BenchmarkRunner.Run<GetPropertiesBenchmarks>(DefaultConf);

@@ -4,7 +4,6 @@ using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Constants;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Constructors;
@@ -13,12 +12,12 @@ public class GetConstructorsTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetConstructorsTests(ITestOutputHelper output)
+    public GetConstructorsTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetConstructors_Cache()
     {
         CachedType type = _cache.GetCachedType(typeof(TestType));
@@ -27,7 +26,7 @@ public class GetConstructorsTests
         result.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void GetConstructors_NoCache()
     {
         Type type = typeof(TestType);

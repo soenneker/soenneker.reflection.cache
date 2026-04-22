@@ -1,8 +1,7 @@
-﻿using AwesomeAssertions;
+using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using System;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Types;
 
@@ -16,7 +15,7 @@ public class IsAssignableFromTests
         _cachedType = cache.GetCachedType(typeof(BaseType));
     }
 
-    [Fact]
+    [Test]
     public void IsAssignableFrom_should_be_true()
     {
         Type derivedType = typeof(DerivedType);

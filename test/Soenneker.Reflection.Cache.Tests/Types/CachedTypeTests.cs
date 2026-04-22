@@ -1,6 +1,5 @@
 using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 using System.Collections.Generic;
 using System;
 
@@ -10,12 +9,12 @@ public class CachedTypeTests
 {
     private readonly ReflectionCache _cache;
 
-    public CachedTypeTests(ITestOutputHelper output)
+    public CachedTypeTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void MakeCachedGenericType_should_return_GenericType()
     {
         Type genericTypeDefinition = typeof(List<>);
@@ -29,7 +28,7 @@ public class CachedTypeTests
         genericTypeInstance.Should().Be(typeof(List<int>));
     }
 
-    [Fact]
+    [Test]
     public void MakeCachedGenericType_with_CachedType_should_return_GenericType()
     {
         Type genericTypeDefinition = typeof(List<>);

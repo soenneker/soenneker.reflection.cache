@@ -1,13 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
-        <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,10 +11,10 @@
         <PackageReference Include="AwesomeAssertions" Version="9.4.0" />
         <PackageReference Include="Intellenum" Version="2.0.1" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
-        <PackageReference Include="Soenneker.Facts.Local" Version="4.0.616" />
+        <PackageReference Include="Soenneker.Tests.Attributes.Local" Version="4.0.0" />
         <PackageReference Include="Soenneker.Facts.Manual" Version="4.0.174" />
         <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.81" />
-        <PackageReference Include="xUnit.v3" Version="3.2.2" />
+        <PackageReference Include="TUnit" Version="1.37.24" />
         <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.217" />
     </ItemGroup>
 
@@ -31,5 +27,4 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
-
 </Project>

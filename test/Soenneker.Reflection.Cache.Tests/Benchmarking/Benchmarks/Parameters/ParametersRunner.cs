@@ -4,20 +4,19 @@ using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Facts.Manual;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Parameters;
 
-[Collection("Collection")]
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class ParametersRunner : BenchmarkTest
 {
-    public ParametersRunner(ITestOutputHelper outputHelper) : base(outputHelper)
+    public ParametersRunner() : base()
     {
     }
 
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task GetParameters()
     {
         Summary summary = BenchmarkRunner.Run<GetParametersBenchmarks>(DefaultConf);

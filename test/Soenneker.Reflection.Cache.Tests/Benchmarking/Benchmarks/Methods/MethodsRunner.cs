@@ -4,19 +4,18 @@ using Soenneker.Benchmarking.Extensions.Summary;
 using Soenneker.Tests.Benchmark;
 using System.Threading.Tasks;
 using Soenneker.Facts.Manual;
-using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Methods;
 
-[Collection("Collection")]
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public class MethodsRunner : BenchmarkTest
 {
-    public MethodsRunner(ITestOutputHelper outputHelper) : base(outputHelper)
+    public MethodsRunner() : base()
     {
     }
 
     [ManualFact]
-    //[LocalFact]
+    //[LocalOnly]
     public async Task GetMethod()
     {
         Summary summary = BenchmarkRunner.Run<GetMethodBenchmarks>(DefaultConf);
@@ -25,7 +24,7 @@ public class MethodsRunner : BenchmarkTest
     }
 
     [ManualFact]
-   // [LocalFact]
+   // [LocalOnly]
     public async Task GetMethods()
     {
         Summary summary = BenchmarkRunner.Run<GetMethodsBenchmarks>(DefaultConf);

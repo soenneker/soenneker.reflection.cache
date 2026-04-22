@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Interfaces;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Tests.Objects.Abstract;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 namespace Soenneker.Reflection.Cache.Tests.Interfaces;
 
 public class CachedInterfacesTests
 {
-    [Fact]
+    [Test]
     public void GetCachedInterface_ShouldReturnCachedType()
     {
         var cachedTypes = new CachedTypes();
@@ -21,7 +20,7 @@ public class CachedInterfacesTests
         result.Type.Should().Be(typeof(ITestType));
     }
 
-    [Fact]
+    [Test]
     public void GetInterface_ShouldReturnInterfaceType()
     {
         var cachedTypes = new CachedTypes();
@@ -31,7 +30,7 @@ public class CachedInterfacesTests
         result.Should().Be(typeof(ITestType));
     }
 
-    [Fact]
+    [Test]
     public void GetCachedInterfaces_ShouldReturnCachedTypeArray()
     {
         var cachedTypes = new CachedTypes();
@@ -42,7 +41,7 @@ public class CachedInterfacesTests
         result.Should().ContainSingle().Which.Type.Should().Be(typeof(ITestType));
     }
 
-    [Fact]
+    [Test]
     public void GetInterfaces_ShouldReturnInterfaceArray()
     {
         var cachedTypes = new CachedTypes();

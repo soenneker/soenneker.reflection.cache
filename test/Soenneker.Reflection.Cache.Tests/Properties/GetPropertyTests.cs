@@ -4,7 +4,6 @@ using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Properties;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Properties;
@@ -13,12 +12,12 @@ public class GetPropertyTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetPropertyTests(ITestOutputHelper output)
+    public GetPropertyTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetProperty_should_return_propertyInfo()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
@@ -26,7 +25,7 @@ public class GetPropertyTests
         propertyInfo.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedProperty_should_return_CachedProperty()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
@@ -34,7 +33,7 @@ public class GetPropertyTests
         cachedProperty.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedProperty_should_return_internal_CachedProperty()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
@@ -42,7 +41,7 @@ public class GetPropertyTests
         cachedProperty.Should().NotBeNull();
     }
 
-    [Fact]
+    [Test]
     public void IsDelegate_ShouldReturnTrue_WhenPropertyTypeIsDelegate()
     {
         CachedType result = _cache.GetCachedType(typeof(ClassWithDelegateProperty));
@@ -50,7 +49,7 @@ public class GetPropertyTests
         cachedProperty!.IsDelegate.Should().BeTrue();
     }
 
-    [Fact]
+    [Test]
     public void IsDelegate_ShouldReturnFalse_WhenPropertyTypeIsNotDelegate()
     {
         CachedType result = _cache.GetCachedType(typeof(ClassWithDelegateProperty));
@@ -58,7 +57,7 @@ public class GetPropertyTests
         cachedProperty!.IsDelegate.Should().BeFalse();
     }
 
-    [Fact]
+    [Test]
     public void IsEqualityContract_should_be_true()
     {
         CachedType result = _cache.GetCachedType(typeof(TestRecord));

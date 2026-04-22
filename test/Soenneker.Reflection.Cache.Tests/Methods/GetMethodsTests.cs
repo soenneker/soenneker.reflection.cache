@@ -2,7 +2,6 @@ using AwesomeAssertions;
 using Soenneker.Reflection.Cache.Constants;
 using System.Reflection;
 using System;
-using Xunit;
 
 using Soenneker.Reflection.Cache.Methods;
 using System.Linq;
@@ -15,12 +14,12 @@ public class GetMethodsTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetMethodsTests(ITestOutputHelper output)
+    public GetMethodsTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetMethods_NoCache()
     {
         var type = Type.GetType(TestType.Locator);
@@ -29,21 +28,21 @@ public class GetMethodsTests
         result.Length.Should().BeGreaterThan(0);
     }
 
-    [Fact]
+    [Test]
     public void GetMethods_NoCache_should_get_MethodInfo()
     {
         MethodInfo[] methodInfo = Type.GetType(TestType.Locator)!.GetMethods();
         methodInfo.Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GetMethods_Cache_should_get_MethodInfo()
     {
         CachedType result = _cache.GetCachedType(TestType.Locator);
         result.GetCachedMethods()!.ToList().Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GetMethods_should_return_methodInfos()
     {
         CachedType result = _cache.GetCachedType(typeof(string));

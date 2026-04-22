@@ -5,9 +5,9 @@ using Serilog;
 
 namespace Soenneker.Reflection.Cache.Tests;
 
-public sealed class Fixture : UnitFixture
+public sealed class Host : UnitTestHost
 {
-    public override ValueTask InitializeAsync()
+    public override Task InitializeAsync()
     {
         SetupIoC(Services);
 

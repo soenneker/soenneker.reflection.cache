@@ -3,7 +3,6 @@ using System.Reflection;
 using Soenneker.Reflection.Cache.Fields;
 using Soenneker.Reflection.Cache.Tests.Objects;
 using Soenneker.Reflection.Cache.Types;
-using Xunit;
 
 
 namespace Soenneker.Reflection.Cache.Tests.Fields;
@@ -12,12 +11,12 @@ public class GetFieldsTests
 {
     private readonly ReflectionCache _cache;
 
-    public GetFieldsTests(ITestOutputHelper output)
+    public GetFieldsTests( output)
     {
         _cache = new ReflectionCache();
     }
 
-    [Fact]
+    [Test]
     public void GetFields_should_return_fieldInfos()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
@@ -25,7 +24,7 @@ public class GetFieldsTests
         fieldInfos.Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
+    [Test]
     public void GetCachedFields_should_return_CachedFields()
     {
         CachedType result = _cache.GetCachedType(typeof(TestType));
