@@ -22,3 +22,6 @@ public class ParametersRunner : BenchmarkTest
         await summary.OutputSummaryToLog();
     }
 }
+
+
+

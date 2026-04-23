@@ -1,9 +1,3 @@
-using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Running;
-using Soenneker.Benchmarking.Extensions.Summary;
-using Soenneker.Tests.Benchmark;
-using System.Threading.Tasks;
-
 namespace Soenneker.Reflection.Cache.Tests.Benchmarking.Benchmarks.Methods;
 
 public class MethodsRunner : BenchmarkTest
@@ -30,3 +24,6 @@ public class MethodsRunner : BenchmarkTest
         await summary.OutputSummaryToLog();
     }
 }
+
+
+

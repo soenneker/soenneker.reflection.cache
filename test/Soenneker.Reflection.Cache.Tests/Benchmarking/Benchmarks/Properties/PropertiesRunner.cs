@@ -31,3 +31,6 @@ public class PropertiesRunner : BenchmarkTest
         await summary.OutputSummaryToLog();
     }
 }
+
+
+

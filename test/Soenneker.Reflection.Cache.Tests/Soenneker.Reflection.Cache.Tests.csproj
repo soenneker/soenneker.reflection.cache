@@ -20,5 +20,11 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\Soenneker.Reflection.Cache\Soenneker.Reflection.Cache.csproj" />
     </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Benchmarks\**\*.cs" />
+    <Compile Remove="Benchmarking\**\*.cs" />
+  </ItemGroup>
 </Project>
+
+
 
