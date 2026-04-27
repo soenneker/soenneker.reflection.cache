@@ -12,7 +12,7 @@
         <PackageReference Include="Intellenum" Version="2.0.1" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Soenneker.Tests.Attributes.Local" Version="4.0.8" />
-        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.91" />
+        <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.92" />
         <PackageReference Include="TUnit" Version="1.40.0" />
         <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.222" />
     </ItemGroup>
