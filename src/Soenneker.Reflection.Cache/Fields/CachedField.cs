@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Soenneker.Reflection.Cache.Fields;
 
+///<inheritdoc cref="ICachedField"/>
 public sealed class CachedField : ICachedField
 {
     public FieldInfo FieldInfo { get; }
