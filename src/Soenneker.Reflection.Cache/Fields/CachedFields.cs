@@ -13,6 +13,7 @@ public sealed class CachedFields : ICachedFields
 {
     private readonly CachedType _cachedType;
     private readonly CachedTypes _cachedTypes;
+    private readonly bool _threadSafe;
 
     private readonly Lazy<CachedFieldsCache> _built; // single source of truth
 
@@ -20,6 +21,7 @@ public sealed class CachedFields : ICachedFields
     {
         _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
         _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
+        _threadSafe = threadSafe;
 
         _built = new Lazy<CachedFieldsCache>(BuildAll, threadSafe);
     }
@@ -36,7 +38,7 @@ public sealed class CachedFields : ICachedFields
         for (var i = 0; i < len; i++)
         {
             FieldInfo fi = fields[i];
-            var cf = new CachedField(fi, _cachedTypes, threadSafe: true); // thread safety here matches previous behavior
+            var cf = new CachedField(fi, _cachedTypes, _threadSafe);
             cached[i] = cf;
             dict[fi.Name] = cf; // field names are unique per type for given BindingFlags
         }

@@ -30,6 +30,15 @@ public class FieldsRunner : BenchmarkTest
 
         await summary.OutputSummaryToLog();
     }
+
+    [Skip("Manual")]
+    //[LocalOnly]
+    public async Task FieldAccessors()
+    {
+        Summary summary = BenchmarkRunner.Run<FieldAccessorBenchmarks>(DefaultConf);
+
+        await summary.OutputSummaryToLog();
+    }
 }
 
 
