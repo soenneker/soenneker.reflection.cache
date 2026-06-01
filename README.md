@@ -73,6 +73,22 @@ CachedType type = cache.GetCachedType("System.String"); // <-- caches, continues
 ```
 
 
+#### Scenario: Reading and assigning properties
+
+`CachedProperty` can cache object-based getter and setter delegates, so repeat property access stays out of `PropertyInfo.GetValue()` and `PropertyInfo.SetValue()` after the accessor is initialized:
+
+```csharp
+CachedType cachedType = cache.GetCachedType(typeof(Person));
+CachedProperty? property = cachedType.GetCachedProperty(nameof(Person.Name));
+
+if (property?.TrySetValue(person, "Jane") == true)
+{
+    object? value = property.GetValue(person);
+}
+```
+
+Only public instance, non-indexer accessors are supported. Static properties, indexers, non-public accessors, init-only setters, and setters on value-type declaring types do not produce delegates.
+
 #### Scenario: Retrieving parameters from a method
 
 ✅ Good:

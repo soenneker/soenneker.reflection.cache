@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Properties.Abstract;
 
@@ -58,4 +59,62 @@ public interface ICachedProperty
     /// Gets a value indicating whether the property has both private getter and setter.
     /// </summary>
     bool IsPrivate { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether this property has a supported cached public instance getter.
+    /// </summary>
+    bool CanGetValue { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether this property has a supported cached public instance setter.
+    /// </summary>
+    bool CanSetValue { get; }
+
+    /// <summary>
+    /// Gets the cached object-based getter delegate for this property when it has a supported public instance getter.
+    /// </summary>
+    /// <returns>A cached getter delegate, or <c>null</c> when the property shape is unsupported.</returns>
+    Func<object, object?>? GetGetter();
+
+    /// <summary>
+    /// Gets the cached object-based setter delegate for this property when it has a supported public instance setter.
+    /// </summary>
+    /// <returns>A cached setter delegate, or <c>null</c> when the property shape is unsupported.</returns>
+    Action<object, object?>? GetSetter();
+
+    /// <summary>
+    /// Tries to read the property value from the supplied instance using the cached getter delegate.
+    /// </summary>
+    /// <param name="instance">The object instance that owns the property.</param>
+    /// <param name="value">The property value when reading succeeds.</param>
+    /// <returns><c>true</c> when the property was read; otherwise, <c>false</c>.</returns>
+    bool TryGetValue(object instance, out object? value);
+
+    /// <summary>
+    /// Tries to assign a property value to the supplied instance using the cached setter delegate.
+    /// </summary>
+    /// <param name="instance">The object instance that owns the property.</param>
+    /// <param name="value">The value to assign. The value must already be assignable to the property type.</param>
+    /// <returns><c>true</c> when the property was assigned; otherwise, <c>false</c>.</returns>
+    bool TrySetValue(object instance, object? value);
+
+    /// <summary>
+    /// Reads the property value from the supplied instance using the cached getter delegate.
+    /// </summary>
+    /// <param name="instance">The object instance that owns the property.</param>
+    /// <returns>The property value.</returns>
+    /// <exception cref="NotSupportedException">Thrown when the property does not have a supported public instance getter.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="instance"/> is not assignable to the declaring type.</exception>
+    object? GetValue(object instance);
+
+    /// <summary>
+    /// Assigns the property value on the supplied instance using the cached setter delegate.
+    /// </summary>
+    /// <param name="instance">The object instance that owns the property.</param>
+    /// <param name="value">The value to assign. The value must already be assignable to the property type.</param>
+    /// <exception cref="NotSupportedException">Thrown when the property does not have a supported public instance setter.</exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="instance"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="instance"/> or <paramref name="value"/> is not assignable.</exception>
+    void SetValue(object instance, object? value);
 }

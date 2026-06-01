@@ -13,6 +13,7 @@ public sealed class CachedProperties : ICachedProperties
 {
     private readonly CachedType _cachedType;
     private readonly CachedTypes _cachedTypes;
+    private readonly bool _threadSafe;
 
     // Build once; immutable after warmup
     private readonly Lazy<CachedPropertiesCache> _built;
@@ -21,6 +22,7 @@ public sealed class CachedProperties : ICachedProperties
     {
         _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
         _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
+        _threadSafe = threadSafe;
 
         _built = new Lazy<CachedPropertiesCache>(BuildAll, threadSafe);
     }
@@ -37,7 +39,7 @@ public sealed class CachedProperties : ICachedProperties
         for (var i = 0; i < len; i++)
         {
             PropertyInfo pi = props[i];
-            var cp = new CachedProperty(pi, _cachedTypes, threadSafe: true);
+            var cp = new CachedProperty(pi, _cachedTypes, _threadSafe);
             cached[i] = cp;
 
             // Property names are unique per declaring type for given flags; using name matches original behavior.

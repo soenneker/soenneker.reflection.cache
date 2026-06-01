@@ -30,6 +30,15 @@ public class PropertiesRunner : BenchmarkTest
 
         await summary.OutputSummaryToLog();
     }
+
+    [Skip("Manual")]
+    //[LocalOnly]
+    public async Task PropertyAccessors()
+    {
+        Summary summary = BenchmarkRunner.Run<PropertyAccessorBenchmarks>(DefaultConf);
+
+        await summary.OutputSummaryToLog();
+    }
 }
 
 
