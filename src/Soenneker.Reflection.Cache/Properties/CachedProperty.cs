@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Soenneker.Reflection.Cache.Properties;
 
+/// <inheritdoc cref="ICachedProperty"/>
 public sealed class CachedProperty : ICachedProperty
 {
     public PropertyInfo PropertyInfo { get; }

@@ -147,7 +147,12 @@ public partial interface ICachedType
     [Pure]
     object[]? GetCustomAttributes();
 
-    /// <inheritdoc cref="ICachedCustomAttributes.GetCachedCustomAttribute{T}(bool)" />
+    /// <summary>
+    /// Gets cached custom attribute.
+    /// </summary>
+    /// <typeparam name="T">The T type.</typeparam>
+    /// <param name="inherit">The inherit.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 

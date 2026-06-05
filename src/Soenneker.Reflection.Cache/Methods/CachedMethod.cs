@@ -223,6 +223,11 @@ public sealed class CachedMethod : ICachedMethod
 
     // ---- allocation-reducing overloads (avoid CachedType wrapper/params allocations) ----
 
+    /// <summary>
+    /// Executes the make cached generic method operation.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? MakeCachedGenericMethod(Type t0)
     {

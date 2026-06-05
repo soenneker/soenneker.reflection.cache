@@ -30,18 +30,41 @@ public interface ICachedMember
     /// </summary>
     string? Name { get; }
 
+    /// <summary>
+    /// Gets a value indicating whether the instance is property.
+    /// </summary>
     bool IsProperty { get; }
 
+    /// <summary>
+    /// Gets a value indicating whether the instance is field.
+    /// </summary>
     bool IsField { get; }
 
    // int CacheKey { get; }
 
+    /// <summary>
+    /// Gets member type.
+    /// </summary>
     MemberTypes MemberType { get; }
 
+    /// <summary>
+    /// Gets cached custom attributes.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     CachedCustomAttributes? GetCachedCustomAttributes();
 
+    /// <summary>
+    /// Gets custom attributes.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     object[] GetCustomAttributes();
 
+    /// <summary>
+    /// Gets cached custom attribute.
+    /// </summary>
+    /// <typeparam name="T">The T type.</typeparam>
+    /// <param name="inherit">The inherit.</param>
+    /// <returns>The result of the operation.</returns>
     T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 }
 

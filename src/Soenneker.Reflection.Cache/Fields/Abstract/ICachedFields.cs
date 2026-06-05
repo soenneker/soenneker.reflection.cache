@@ -16,6 +16,11 @@ public interface ICachedFields
     [Pure]
     FieldInfo? GetField(string name);
 
+    /// <summary>
+    /// Gets cached field.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedField? GetCachedField(string name);
 
@@ -26,6 +31,10 @@ public interface ICachedFields
     [Pure]
     FieldInfo[] GetFields();
 
+    /// <summary>
+    /// Gets cached fields.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedField[] GetCachedFields();
 }

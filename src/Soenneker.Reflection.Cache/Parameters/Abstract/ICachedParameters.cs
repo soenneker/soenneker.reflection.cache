@@ -9,6 +9,10 @@ namespace Soenneker.Reflection.Cache.Parameters.Abstract;
 /// </summary>
 public interface ICachedParameters
 {
+    /// <summary>
+    /// Gets cached parameters.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedParameter[] GetCachedParameters();
 

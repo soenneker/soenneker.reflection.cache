@@ -2,8 +2,17 @@
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
+/// <summary>
+/// Represents the cached type extension.
+/// </summary>
 public static class CachedTypeExtension
 {
+    /// <summary>
+    /// Executes the is derived from type operation.
+    /// </summary>
+    /// <param name="sourceCachedType">The source cached type.</param>
+    /// <param name="targetCachedType">The target cached type.</param>
+    /// <returns>A value indicating whether the operation succeeded.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType targetCachedType)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -27,6 +36,13 @@ public static class CachedTypeExtension
         return false;
     }
 
+    /// <summary>
+    /// Executes the is derived from type operation.
+    /// </summary>
+    /// <param name="sourceCachedType">The source cached type.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <returns>A value indicating whether the operation succeeded.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -52,6 +68,14 @@ public static class CachedTypeExtension
         return false;
     }
 
+    /// <summary>
+    /// Executes the is derived from type operation.
+    /// </summary>
+    /// <param name="sourceCachedType">The source cached type.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <returns>A value indicating whether the operation succeeded.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1, CachedType t2)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -77,6 +101,15 @@ public static class CachedTypeExtension
         return false;
     }
 
+    /// <summary>
+    /// Executes the is derived from type operation.
+    /// </summary>
+    /// <param name="sourceCachedType">The source cached type.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <param name="t3">The t3.</param>
+    /// <returns>A value indicating whether the operation succeeded.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1, CachedType t2, CachedType t3)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -102,6 +135,12 @@ public static class CachedTypeExtension
         return false;
     }
 
+    /// <summary>
+    /// Executes the is derived from type operation.
+    /// </summary>
+    /// <param name="sourceCachedType">The source cached type.</param>
+    /// <param name="targetCachedTypes">The target cached types.</param>
+    /// <returns>A value indicating whether the operation succeeded.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, params CachedType[] targetCachedTypes)
     {
         CachedType? tempCachedType = sourceCachedType;

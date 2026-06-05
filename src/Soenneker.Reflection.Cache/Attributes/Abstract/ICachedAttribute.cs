@@ -18,7 +18,13 @@ public interface ICachedAttribute
     /// </summary>
     Type Type { get; }
 
+    /// <summary>
+    /// Gets cached type.
+    /// </summary>
     CachedType CachedType { get; }
 
+    /// <summary>
+    /// Gets name.
+    /// </summary>
     string Name { get; }
 }

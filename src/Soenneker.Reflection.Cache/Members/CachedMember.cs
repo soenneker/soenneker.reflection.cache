@@ -23,6 +23,9 @@ public sealed class CachedMember : ICachedMember
 
     public Type Type => CachedType.Type!;
 
+    /// <summary>
+    /// Gets cache key.
+    /// </summary>
     public int CacheKey { get; }
 
     public MemberTypes MemberType { get; }

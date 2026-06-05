@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Fields.Abstract;
 
+/// <summary>
+/// Defines the cached field contract.
+/// </summary>
 public interface ICachedField
 {
     /// <summary>

@@ -7,6 +7,10 @@ namespace Soenneker.Reflection.Cache.Members.Abstract;
 /// </summary>
 public interface ICachedMembers
 {
+    /// <summary>
+    /// Gets cached members.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     CachedMember[] GetCachedMembers();
 
     /// <summary>

@@ -68,6 +68,11 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
 
     // ---- allocation-reducing overloads (avoid params Type[] allocations) ----
 
+    /// <summary>
+    /// Executes the make generic cached type operation.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0)
     {
@@ -216,10 +221,6 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
-    /// <summary>
-    /// CachedType overload. Avoids string building and other intermediate work, but still requires a Type[]
-    /// for MakeGenericType.
-    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(params CachedType[] cachedTypeArguments)
     {
@@ -416,12 +417,33 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0) => MakeGenericCachedType(t0)?.Type;
 
+    /// <summary>
+    /// Executes the make generic type operation.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0, Type t1) => MakeGenericCachedType(t0, t1)?.Type;
 
+    /// <summary>
+    /// Executes the make generic type operation.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0, Type t1, Type t2) => MakeGenericCachedType(t0, t1, t2)?.Type;
 
+    /// <summary>
+    /// Executes the make generic type operation.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <param name="t3">The t3.</param>
+    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0, Type t1, Type t2, Type t3) => MakeGenericCachedType(t0, t1, t2, t3)?.Type;
 }

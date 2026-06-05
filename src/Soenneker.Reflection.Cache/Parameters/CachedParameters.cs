@@ -83,6 +83,10 @@ public sealed class CachedParameters : ICachedParameters
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type[] GetParameterTypes() => _built.Value.Types;
 
+    /// <summary>
+    /// Gets cached parameter types.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType[] GetCachedParameterTypes() => _built.Value.CachedTypes;
 }

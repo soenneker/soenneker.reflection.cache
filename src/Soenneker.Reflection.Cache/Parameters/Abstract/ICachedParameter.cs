@@ -24,5 +24,8 @@ public interface ICachedParameter
     /// </summary>
     Type ParameterType { get; }
 
+    /// <summary>
+    /// Gets cached parameter type.
+    /// </summary>
     CachedType CachedParameterType { get; }
 }

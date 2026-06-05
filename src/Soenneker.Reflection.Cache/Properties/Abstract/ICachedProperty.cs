@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Properties.Abstract;
 
+/// <summary>
+/// Defines the cached property contract.
+/// </summary>
 public interface ICachedProperty
 {
     /// <summary>

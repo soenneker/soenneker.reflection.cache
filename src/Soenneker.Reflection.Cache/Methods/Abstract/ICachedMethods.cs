@@ -35,18 +35,54 @@ public interface ICachedMethods
     [Pure]
     CachedMethod? GetCachedMethod(string name, Type[] parameterTypes);
 
+    /// <summary>
+    /// Gets cached method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedMethod? GetCachedMethod(string name, Type t0);
 
+    /// <summary>
+    /// Gets cached method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedMethod? GetCachedMethod(string name, Type t0, Type t1);
 
+    /// <summary>
+    /// Gets cached method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedMethod? GetCachedMethod(string name, Type t0, Type t1, Type t2);
 
+    /// <summary>
+    /// Gets cached method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <param name="t3">The t3.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedMethod? GetCachedMethod(string name, Type t0, Type t1, Type t2, Type t3);
 
+    /// <summary>
+    /// Gets cached method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="cachedParameterTypes">The cached parameter types.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedMethod? GetCachedMethod(string name, CachedType[] cachedParameterTypes);
 
@@ -59,15 +95,45 @@ public interface ICachedMethods
     [Pure]
     MethodInfo? GetMethod(string name, Type[] types);
 
+    /// <summary>
+    /// Gets method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     MethodInfo? GetMethod(string name, Type t0);
 
+    /// <summary>
+    /// Gets method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     MethodInfo? GetMethod(string name, Type t0, Type t1);
 
+    /// <summary>
+    /// Gets method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     MethodInfo? GetMethod(string name, Type t0, Type t1, Type t2);
 
+    /// <summary>
+    /// Gets method.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <param name="t3">The t3.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     MethodInfo? GetMethod(string name, Type t0, Type t1, Type t2, Type t3);
 

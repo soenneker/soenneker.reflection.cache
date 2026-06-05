@@ -4,8 +4,16 @@ using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
+/// <summary>
+/// Represents the cached parameter array extension.
+/// </summary>
 public static class CachedParameterArrayExtension
 {
+    /// <summary>
+    /// Executes the to parameter infos operation.
+    /// </summary>
+    /// <param name="cachedParameters">The cached parameters.</param>
+    /// <returns>The result of the operation.</returns>
     public static ParameterInfo[] ToParameterInfos(this CachedParameter[] cachedParameters)
     {
         int length = cachedParameters.Length;
@@ -23,6 +31,11 @@ public static class CachedParameterArrayExtension
         return parameterInfosArray;
     }
 
+    /// <summary>
+    /// Executes the to parameters types operation.
+    /// </summary>
+    /// <param name="cachedParameters">The cached parameters.</param>
+    /// <returns>The result of the operation.</returns>
     public static Type[] ToParametersTypes(this CachedParameter[] cachedParameters)
     {
         int length = cachedParameters.Length;

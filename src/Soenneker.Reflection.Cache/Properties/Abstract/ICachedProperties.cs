@@ -16,6 +16,11 @@ public interface ICachedProperties
     [Pure]
     PropertyInfo? GetProperty(string name);
 
+    /// <summary>
+    /// Gets cached property.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedProperty? GetCachedProperty(string name);
 
@@ -26,6 +31,10 @@ public interface ICachedProperties
     [Pure]
     PropertyInfo[] GetProperties();
 
+    /// <summary>
+    /// Gets cached properties.
+    /// </summary>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedProperty[] GetCachedProperties();
 }

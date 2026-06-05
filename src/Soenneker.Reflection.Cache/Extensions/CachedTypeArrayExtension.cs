@@ -3,8 +3,16 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
+/// <summary>
+/// Represents the cached type array extension.
+/// </summary>
 public static class CachedTypeArrayExtension
 {
+    /// <summary>
+    /// Executes the to hash key operation.
+    /// </summary>
+    /// <param name="cachedTypes">The cached types.</param>
+    /// <returns>The result of the operation.</returns>
     public static int ToHashKey(this CachedType[]? cachedTypes)
     {
         if (cachedTypes == null)
@@ -26,6 +34,11 @@ public static class CachedTypeArrayExtension
         return hash.ToHashCode();
     }
 
+    /// <summary>
+    /// Executes the to types operation.
+    /// </summary>
+    /// <param name="cachedTypes">The cached types.</param>
+    /// <returns>The result of the operation.</returns>
     public static Type[] ToTypes(this CachedType[] cachedTypes)
     {
         int length = cachedTypes.Length;

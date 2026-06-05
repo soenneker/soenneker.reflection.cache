@@ -17,15 +17,41 @@ public interface ICachedConstructors
     [Pure]
     CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null);
 
+    /// <summary>
+    /// Gets cached constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0);
 
+    /// <summary>
+    /// Gets cached constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1);
 
+    /// <summary>
+    /// Gets cached constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2);
 
+    /// <summary>
+    /// Gets cached constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <param name="t3">The t3.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3);
 
@@ -37,15 +63,41 @@ public interface ICachedConstructors
     [Pure]
     ConstructorInfo? GetConstructor(Type[]? parameterTypes = null);
 
+    /// <summary>
+    /// Gets constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0);
 
+    /// <summary>
+    /// Gets constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1);
 
+    /// <summary>
+    /// Gets constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2);
 
+    /// <summary>
+    /// Gets constructor.
+    /// </summary>
+    /// <param name="t0">The t0.</param>
+    /// <param name="t1">The t1.</param>
+    /// <param name="t2">The t2.</param>
+    /// <param name="t3">The t3.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3);
 
@@ -85,15 +137,41 @@ public interface ICachedConstructors
     [Pure]
     object? CreateInstance(params object[] parameters);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <param name="arg0">The arg0.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     object? CreateInstance(object? arg0);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <param name="arg0">The arg0.</param>
+    /// <param name="arg1">The arg1.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     object? CreateInstance(object? arg0, object? arg1);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <param name="arg0">The arg0.</param>
+    /// <param name="arg1">The arg1.</param>
+    /// <param name="arg2">The arg2.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <param name="arg0">The arg0.</param>
+    /// <param name="arg1">The arg1.</param>
+    /// <param name="arg2">The arg2.</param>
+    /// <param name="arg3">The arg3.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3);
 
@@ -106,15 +184,45 @@ public interface ICachedConstructors
     [Pure]
     T? CreateInstance<T>(params object[] parameters);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <typeparam name="T">The T type.</typeparam>
+    /// <param name="arg0">The arg0.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <typeparam name="T">The T type.</typeparam>
+    /// <param name="arg0">The arg0.</param>
+    /// <param name="arg1">The arg1.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <typeparam name="T">The T type.</typeparam>
+    /// <param name="arg0">The arg0.</param>
+    /// <param name="arg1">The arg1.</param>
+    /// <param name="arg2">The arg2.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2);
 
+    /// <summary>
+    /// Creates instance.
+    /// </summary>
+    /// <typeparam name="T">The T type.</typeparam>
+    /// <param name="arg0">The arg0.</param>
+    /// <param name="arg1">The arg1.</param>
+    /// <param name="arg2">The arg2.</param>
+    /// <param name="arg3">The arg3.</param>
+    /// <returns>The result of the operation.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 }
