@@ -46,7 +46,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="4.0.368" />
         <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="4.0.15" />
-        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.Types" Version="4.0.15" />
+        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.Types" Version="4.0.16" />
         <PackageReference Include="Soenneker.Utils.LazyBools" Version="4.0.14" />
     </ItemGroup>
 </Project>
