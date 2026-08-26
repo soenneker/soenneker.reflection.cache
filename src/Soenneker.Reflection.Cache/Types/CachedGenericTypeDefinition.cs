@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Types;
@@ -6,27 +6,21 @@ namespace Soenneker.Reflection.Cache.Types;
 ///<inheritdoc cref="ICachedGenericTypeDefinition"/>
 public sealed class CachedGenericTypeDefinition : ICachedGenericTypeDefinition
 {
-    private readonly Lazy<CachedType> _cachedGenericTypeDefinition;
+    private readonly CachedType _cachedGenericTypeDefinition;
 
     public CachedGenericTypeDefinition(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedGenericTypeDefinition = new Lazy<CachedType>(() =>
-        {
-            Type definitionType = cachedType.Type!.GetGenericTypeDefinition();
-
-            CachedType genericCachedTyped = cachedTypes.GetCachedType(definitionType);
-
-            return genericCachedTyped;
-        }, threadSafe);
+        Type definitionType = cachedType.Type!.GetGenericTypeDefinition();
+        _cachedGenericTypeDefinition = cachedTypes.GetCachedType(definitionType);
     }
     
     public CachedType GetCachedGenericTypeDefinition()
     {
-        return _cachedGenericTypeDefinition.Value;
+        return _cachedGenericTypeDefinition;
     }
 
     public Type? GetGenericTypeDefinition()
     {
-        return _cachedGenericTypeDefinition.Value.Type;
+        return _cachedGenericTypeDefinition.Type;
     }
 }

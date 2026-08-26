@@ -15,8 +15,7 @@ public sealed class CachedProperties : ICachedProperties
     private readonly CachedTypes _cachedTypes;
     private readonly bool _threadSafe;
 
-    // Build once; immutable after warmup
-    private readonly Lazy<CachedPropertiesCache> _built;
+    private readonly CachedPropertiesCache _built;
 
     public CachedProperties(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
@@ -24,7 +23,7 @@ public sealed class CachedProperties : ICachedProperties
         _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
         _threadSafe = threadSafe;
 
-        _built = new Lazy<CachedPropertiesCache>(BuildAll, threadSafe);
+        _built = BuildAll();
     }
 
     private CachedPropertiesCache BuildAll()
@@ -54,11 +53,11 @@ public sealed class CachedProperties : ICachedProperties
     public PropertyInfo? GetProperty(string name) => GetCachedProperty(name)?.PropertyInfo;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public CachedProperty? GetCachedProperty(string name) => _built.Value.MapByName.GetValueOrDefault(name);
+    public CachedProperty? GetCachedProperty(string name) => _built.MapByName.GetValueOrDefault(name);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public PropertyInfo[] GetProperties() => _built.Value.PropertyInfos;
+    public PropertyInfo[] GetProperties() => _built.PropertyInfos;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public CachedProperty[] GetCachedProperties() => _built.Value.CachedArray;
+    public CachedProperty[] GetCachedProperties() => _built.CachedArray;
 }

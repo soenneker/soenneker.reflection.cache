@@ -1,105 +1,76 @@
-﻿using Soenneker.Reflection.Cache.Constructors.Abstract;
-using Soenneker.Reflection.Cache.Extensions;
+using Soenneker.Reflection.Cache.Constructors.Abstract;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Utils;
 using System;
 using System.Buffers;
-using System.Collections.Frozen;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace Soenneker.Reflection.Cache.Constructors;
 
 /// <inheritdoc cref="ICachedConstructors"/>
 public sealed class CachedConstructors : ICachedConstructors
 {
-    private readonly Lazy<CachedConstructor[]> _cachedArray;
-    private readonly Lazy<FrozenDictionary<string, CachedConstructor[]>> _byName;
-    private readonly Lazy<ConstructorInfo?[]> _cachedConstructorInfos;
+    private readonly CachedType _cachedType;
+    private readonly CachedTypes _cachedTypes;
+    private readonly bool _threadSafe;
+    private ValueAtomicLock _sync;
+
+    private ValueLazy<ConstructorInfo[]> _constructorInfos;
+    private ValueLazy<CachedConstructor[]> _cachedArray;
 
     // Fast path for parameterless construction (if available)
-    private readonly Lazy<Func<object?>> _parameterlessActivator;
+    private ValueLazy<Func<object?>> _parameterlessActivator;
 
     public CachedConstructors(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        CachedType cachedType1 = cachedType;
-        CachedTypes cachedTypes1 = cachedTypes;
+        _cachedType = cachedType;
+        _cachedTypes = cachedTypes;
+        _threadSafe = threadSafe;
+    }
 
-        LazyThreadSafetyMode mode = threadSafe ? LazyThreadSafetyMode.ExecutionAndPublication : LazyThreadSafetyMode.None;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private ConstructorInfo[] GetConstructorInfos() =>
+        _constructorInfos.GetOrCreate(_threadSafe, ref _sync, this,
+            static self => self._cachedType.Type!.GetConstructors(self._cachedTypes.Options.ConstructorFlags));
 
-        var constructorInfos = new Lazy<ConstructorInfo[]>(() => cachedType1.Type!.GetConstructors(cachedTypes1.Options.ConstructorFlags), mode);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedConstructor[] GetCachedConstructorArray() =>
+        _cachedArray.GetOrCreate(_threadSafe, ref _sync, this,
+            static self => self.BuildCachedConstructorArray(self.GetConstructorInfos()));
 
-        _cachedArray = new Lazy<CachedConstructor[]>(() =>
+    private CachedConstructor[] BuildCachedConstructorArray(ConstructorInfo[] infos)
+    {
+        var result = new CachedConstructor[infos.Length];
+
+        for (var i = 0; i < infos.Length; i++)
+            result[i] = new CachedConstructor(infos[i], _cachedTypes, _threadSafe);
+
+        return result;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?> GetParameterlessActivator() =>
+        _parameterlessActivator.GetOrCreate(_threadSafe, ref _sync, this, static self => self.BuildParameterlessActivator());
+
+    private Func<object?> BuildParameterlessActivator()
+    {
+        Type type = _cachedType.Type!;
+        ConstructorInfo? ctor = type.GetConstructor(Type.EmptyTypes);
+        if (ctor is null)
+            return static () => null;
+
+        try
         {
-            ConstructorInfo[] infos = constructorInfos.Value;
-            var result = new CachedConstructor[infos.Length];
-            for (var i = 0; i < infos.Length; i++)
-            {
-                result[i] = new CachedConstructor(infos[i], cachedTypes1, threadSafe);
-            }
-
-            return result;
-        }, mode);
-
-        _byName = new Lazy<FrozenDictionary<string, CachedConstructor[]>>(() =>
+            NewExpression newExpr = Expression.New(ctor);
+            Expression<Func<object?>> lambda = Expression.Lambda<Func<object?>>(Expression.Convert(newExpr, typeof(object)));
+            return lambda.Compile();
+        }
+        catch
         {
-            CachedConstructor[] arr = _cachedArray.Value;
-
-            // Count constructors per name first to avoid List<> allocations.
-            var countsByName = new Dictionary<string, int>(StringComparer.Ordinal);
-            var names = new string[arr.Length];
-
-            for (var i = 0; i < arr.Length; i++)
-            {
-                ConstructorInfo? ci = arr[i].ConstructorInfo;
-                string name = ci is null ? string.Empty : ci.Name; // .ctor/.cctor
-                names[i] = name;
-                countsByName[name] = countsByName.TryGetValue(name, out int c) ? c + 1 : 1;
-            }
-
-            var byName = new Dictionary<string, CachedConstructor[]>(countsByName.Count, StringComparer.Ordinal);
-            var fill = new Dictionary<string, int>(countsByName.Count, StringComparer.Ordinal);
-
-            foreach (KeyValuePair<string, int> kvp in countsByName)
-            {
-                byName[kvp.Key] = new CachedConstructor[kvp.Value];
-                fill[kvp.Key] = 0;
-            }
-
-            for (var i = 0; i < arr.Length; i++)
-            {
-                string name = names[i];
-                int idx = fill[name];
-                byName[name][idx] = arr[i];
-                fill[name] = idx + 1;
-            }
-
-            return byName.ToFrozenDictionary(StringComparer.Ordinal);
-        }, mode);
-
-        _cachedConstructorInfos = new Lazy<ConstructorInfo?[]>(() => _cachedArray.Value.ToConstructorInfos(), mode);
-
-        _parameterlessActivator = new Lazy<Func<object?>>(() =>
-        {
-            Type type = cachedType1.Type!;
-            ConstructorInfo? ctor = type.GetConstructor(Type.EmptyTypes);
-            if (ctor is null)
-                return static () => null;
-
-            try
-            {
-                // Build: () => new T()
-                NewExpression newExpr = Expression.New(ctor);
-                Expression<Func<object?>> lambda = Expression.Lambda<Func<object?>>(Expression.Convert(newExpr, typeof(object)));
-                return lambda.Compile();
-            }
-            catch
-            {
-                return () => Activator.CreateInstance(type);
-            }
-        }, mode);
+            return () => Activator.CreateInstance(type);
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,24 +87,23 @@ public sealed class CachedConstructors : ICachedConstructors
     {
         if (length == 0)
         {
-            // Prefer parameterless .ctor if present
-            if (_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? ctors))
+            CachedConstructor[] ctors = GetCachedConstructorArray();
+            for (var i = 0; i < ctors.Length; i++)
             {
-                for (var i = 0; i < ctors.Length; i++)
-                {
-                    if (ctors[i].GetParameters().Length == 0)
-                        return ctors[i];
-                }
+                if (ctors[i].ConstructorInfo?.IsStatic == false && ctors[i].GetParameters().Length == 0)
+                    return ctors[i];
             }
 
             return null;
         }
 
-        if (!_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? candidates) || candidates.Length == 0)
-            return null;
+        CachedConstructor[] candidates = GetCachedConstructorArray();
 
         for (var i = 0; i < candidates.Length; i++)
         {
+            if (candidates[i].ConstructorInfo?.IsStatic != false)
+                continue;
+
             ParameterInfo[] ps = candidates[i].GetParameters();
             if (ps.Length != length)
                 continue;
@@ -161,11 +131,13 @@ public sealed class CachedConstructors : ICachedConstructors
         if (t0 is null)
             throw new ArgumentNullException(nameof(t0));
 
-        if (!_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? candidates) || candidates.Length == 0)
-            return null;
+        CachedConstructor[] candidates = GetCachedConstructorArray();
 
         for (var i = 0; i < candidates.Length; i++)
         {
+            if (candidates[i].ConstructorInfo?.IsStatic != false)
+                continue;
+
             ParameterInfo[] ps = candidates[i].GetParameters();
             if (ps.Length != 1)
                 continue;
@@ -185,11 +157,13 @@ public sealed class CachedConstructors : ICachedConstructors
         if (t1 is null)
             throw new ArgumentNullException(nameof(t1));
 
-        if (!_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? candidates) || candidates.Length == 0)
-            return null;
+        CachedConstructor[] candidates = GetCachedConstructorArray();
 
         for (var i = 0; i < candidates.Length; i++)
         {
+            if (candidates[i].ConstructorInfo?.IsStatic != false)
+                continue;
+
             ParameterInfo[] ps = candidates[i].GetParameters();
             if (ps.Length != 2)
                 continue;
@@ -211,11 +185,13 @@ public sealed class CachedConstructors : ICachedConstructors
         if (t2 is null)
             throw new ArgumentNullException(nameof(t2));
 
-        if (!_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? candidates) || candidates.Length == 0)
-            return null;
+        CachedConstructor[] candidates = GetCachedConstructorArray();
 
         for (var i = 0; i < candidates.Length; i++)
         {
+            if (candidates[i].ConstructorInfo?.IsStatic != false)
+                continue;
+
             ParameterInfo[] ps = candidates[i].GetParameters();
             if (ps.Length != 3)
                 continue;
@@ -239,11 +215,13 @@ public sealed class CachedConstructors : ICachedConstructors
         if (t3 is null)
             throw new ArgumentNullException(nameof(t3));
 
-        if (!_byName.Value.TryGetValue(".ctor", out CachedConstructor[]? candidates) || candidates.Length == 0)
-            return null;
+        CachedConstructor[] candidates = GetCachedConstructorArray();
 
         for (var i = 0; i < candidates.Length; i++)
         {
+            if (candidates[i].ConstructorInfo?.IsStatic != false)
+                continue;
+
             ParameterInfo[] ps = candidates[i].GetParameters();
             if (ps.Length != 4)
                 continue;
@@ -271,14 +249,14 @@ public sealed class CachedConstructors : ICachedConstructors
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3) => GetCachedConstructor(t0, t1, t2, t3)?.ConstructorInfo;
 
-    public CachedConstructor[] GetCachedConstructors() => _cachedArray.Value;
+    public CachedConstructor[] GetCachedConstructors() => GetCachedConstructorArray();
 
-    public ConstructorInfo?[] GetConstructors() => _cachedConstructorInfos.Value;
+    public ConstructorInfo?[] GetConstructors() => GetConstructorInfos();
 
     public object? CreateInstance()
     {
         // Use the cached parameterless activator if present; otherwise null if no default ctor.
-        Func<object?> f = _parameterlessActivator.Value;
+        Func<object?> f = GetParameterlessActivator();
         return f();
     }
 

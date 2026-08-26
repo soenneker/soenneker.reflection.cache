@@ -12,7 +12,7 @@ using Soenneker.Reflection.Cache.Properties;
 namespace Soenneker.Reflection.Cache.Types.Abstract;
 
 /// <summary>
-/// Interface for CachedType providing reflection-related functionalities.
+/// Provides cached metadata, lookup, construction, and invocation for a reflection type.
 /// </summary>
 public partial interface ICachedType
 {
@@ -24,7 +24,7 @@ public partial interface ICachedType
     CachedField[]? GetCachedFields();
 
     /// <summary>
-    /// Gets information about all fields using reflection.
+    /// Gets the reflection metadata for all fields in the configured scope.
     /// </summary>
     /// <returns>An array of FieldInfo objects representing all fields.</returns>
     [Pure]
@@ -39,7 +39,7 @@ public partial interface ICachedType
     CachedField? GetCachedField(string fieldName);
 
     /// <summary>
-    /// Gets information about a specific field using reflection.
+    /// Gets the reflection metadata for the field with the specified name.
     /// </summary>
     /// <param name="fieldName">The name of the field.</param>
     /// <returns>FieldInfo for the specified field, or null if not found.</returns>
@@ -74,14 +74,14 @@ public partial interface ICachedType
     CachedMethod? GetCachedMethod(string methodName, CachedType[] parameters);
 
     /// <summary>
-    /// Gets information about all methods.
+    /// Gets all cached methods in the configured reflection scope.
     /// </summary>
     /// <returns>An array of CachedMethod objects representing all methods.</returns>
     [Pure]
     CachedMethod[]? GetCachedMethods();
 
     /// <summary>
-    /// Gets information about a specific method using reflection.
+    /// Gets the reflection metadata for the first method with the specified name.
     /// </summary>
     /// <param name="methodName">The name of the method.</param>
     /// <returns>MethodInfo object representing the specified method.</returns>
@@ -89,7 +89,7 @@ public partial interface ICachedType
     MethodInfo? GetMethod(string methodName);
 
     /// <summary>
-    /// Gets information about a specific method with the given parameter types using reflection.
+    /// Gets the reflection metadata for the method whose name and parameter types match the supplied signature.
     /// </summary>
     /// <param name="methodName">The name of the method.</param>
     /// <param name="parameterTypes">The parameter types of the method.</param>
@@ -98,7 +98,7 @@ public partial interface ICachedType
     MethodInfo? GetMethod(string methodName, Type[] parameterTypes);
 
     /// <summary>
-    /// Gets information about all methods using reflection.
+    /// Gets the reflection metadata for all methods in the configured scope.
     /// </summary>
     /// <returns>An array of MethodInfo objects representing all methods.</returns>
     [Pure]
@@ -121,38 +121,38 @@ public partial interface ICachedType
     Type? GetInterface(string typeName);
 
     /// <summary>
-    /// Gets information about cached interfaces.
+    /// Gets all cached interfaces implemented by the type.
     /// </summary>
     /// <returns>An array of CachedType objects representing cached interfaces.</returns>
     [Pure]
     CachedType[]? GetCachedInterfaces();
 
     /// <summary>
-    /// Gets information about interfaces using reflection.
+    /// Gets all interfaces implemented by the type.
     /// </summary>
     [Pure]
     Type[]? GetInterfaces();
 
     /// <summary>
-    /// Gets information about cached custom attributes.
+    /// Gets the cached custom attributes applied to the type.
     /// </summary>
     /// <returns>An array of CachedAttribute objects representing cached custom attributes.</returns>
     [Pure]
     CachedAttribute[]? GetCachedCustomAttributes();
 
     /// <summary>
-    /// Gets information about custom attributes using reflection.
+    /// Gets the custom attributes applied to the type.
     /// </summary>
     /// <returns>An array of object representing custom attributes.</returns>
     [Pure]
     object[]? GetCustomAttributes();
 
     /// <summary>
-    /// Gets cached custom attribute.
+    /// Gets the first custom attribute of the specified type applied to the type.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="inherit">The inherit.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The attribute type to retrieve.</typeparam>
+    /// <param name="inherit">Whether to search the type inheritance chain.</param>
+    /// <returns>The matching attribute, or <c>null</c> when none is present.</returns>
     [Pure]
     T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 
@@ -203,14 +203,14 @@ public partial interface ICachedType
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3);
 
     /// <summary>
-    /// Gets information about all constructors.
+    /// Gets all cached constructors in the configured reflection scope.
     /// </summary>
     /// <returns>An array of CachedConstructor objects representing all constructors.</returns>
     [Pure]
     CachedConstructor[]? GetCachedConstructors();
 
     /// <summary>
-    /// Gets information about a specific constructor using reflection.
+    /// Gets the reflection metadata for the constructor whose parameter types match the supplied signature.
     /// </summary>
     /// <param name="parameterTypes">The parameter types of the constructor.</param>
     /// <returns>ConstructorInfo object representing the specified constructor.</returns>
@@ -256,7 +256,7 @@ public partial interface ICachedType
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3);
 
     /// <summary>
-    /// Gets information about all constructors using reflection.
+    /// Gets the reflection metadata for all constructors in the configured scope.
     /// </summary>
     /// <returns>An array of ConstructorInfo objects representing all constructors.</returns>
     [Pure]
@@ -374,28 +374,28 @@ public partial interface ICachedType
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 
     /// <summary>
-    /// Gets information about the cached generic type definition.
+    /// Gets the cached generic type definition for the type.
     /// </summary>
     /// <returns>Information about the cached generic type definition.</returns>
     [Pure]
     CachedType? GetCachedGenericTypeDefinition();
 
     /// <summary>
-    /// Gets information about the generic type definition using reflection.
+    /// Gets the generic type definition for the type.
     /// </summary>
     /// <returns>Type object representing the generic type definition.</returns>
     [Pure]
     Type? GetGenericTypeDefinition();
 
     /// <summary>
-    /// Gets information about the cached generic arguments.
+    /// Gets the cached generic arguments for the type.
     /// </summary>
     /// <returns>An array of CachedType objects representing cached generic arguments.</returns>
     [Pure]
     CachedType[]? GetCachedGenericArguments();
 
     /// <summary>
-    /// Gets information about the generic arguments using reflection.
+    /// Gets the generic arguments for the type.
     /// </summary>
     /// <returns>An array of Type objects representing generic arguments.</returns>
     [Pure]
@@ -405,7 +405,7 @@ public partial interface ICachedType
     //CachedMember? GetCachedMember(string name);
 
     ///// <summary>
-    ///// Gets information about a specific member.
+    ///// Gets the reflection metadata for a specific member.
     ///// </summary>
     ///// <param name="name">The name of the member.</param>
     ///// <returns>Information about the specified member.</returns>
@@ -420,7 +420,7 @@ public partial interface ICachedType
     CachedMember[]? GetCachedMembers();
 
     /// <summary>
-    /// Gets information about all members.
+    /// Gets the reflection metadata for all members in the configured scope.
     /// </summary>
     /// <returns>An array of MemberInfo objects representing all members.</returns>
     [Pure]
@@ -443,7 +443,7 @@ public partial interface ICachedType
     bool IsAssignableFrom(CachedType cachedDerivedType);
 
     /// <summary>
-    /// Constructs a cached generic type from the current generic type definition with the specified type arguments. This is the fastest of all the MakeGenericType methods.
+    /// Constructs or retrieves a cached closed generic type using reflection type arguments.
     /// </summary>
     /// <param name="typeArguments">The type arguments for the generic type.</param>
     /// <returns>The constructed cached generic type, or null.</returns>

@@ -20,7 +20,7 @@ public interface ICachedFields
     /// Gets cached field.
     /// </summary>
     /// <param name="name">The name.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The matching cached field, or <c>null</c> when no field has that name.</returns>
     [Pure]
     CachedField? GetCachedField(string name);
 
@@ -34,7 +34,7 @@ public interface ICachedFields
     /// <summary>
     /// Gets cached fields.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The cached fields in the configured reflection scope.</returns>
     [Pure]
     CachedField[] GetCachedFields();
 }

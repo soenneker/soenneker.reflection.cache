@@ -6,17 +6,17 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Members.Abstract;
 
 /// <summary>
-/// Represents a cached member for a type.
+/// Provides cached reflection metadata and attributes for a member.
 /// </summary>
 public interface ICachedMember
 {
     /// <summary>
-    /// Declaring Type
+    /// Gets the cached declaring type.
     /// </summary>
     CachedType CachedType { get; }
 
     /// <summary>
-    /// Declaring Type
+    /// Gets the declaring reflection type.
     /// </summary>
     Type Type { get; }
 
@@ -31,40 +31,39 @@ public interface ICachedMember
     string? Name { get; }
 
     /// <summary>
-    /// Gets a value indicating whether the instance is property.
+    /// Gets a value indicating whether the member is a property.
     /// </summary>
     bool IsProperty { get; }
 
     /// <summary>
-    /// Gets a value indicating whether the instance is field.
+    /// Gets a value indicating whether the member is a field.
     /// </summary>
     bool IsField { get; }
 
    // int CacheKey { get; }
 
     /// <summary>
-    /// Gets member type.
+    /// Gets the reflection member category.
     /// </summary>
     MemberTypes MemberType { get; }
 
     /// <summary>
-    /// Gets cached custom attributes.
+    /// Gets the cached custom attributes applied to the member.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The cached attribute collection, or <c>null</c> when no member metadata is available.</returns>
     CachedCustomAttributes? GetCachedCustomAttributes();
 
     /// <summary>
-    /// Gets custom attributes.
+    /// Gets the custom attributes applied to the member.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The instantiated custom attributes.</returns>
     object[] GetCustomAttributes();
 
     /// <summary>
-    /// Gets cached custom attribute.
+    /// Gets the first custom attribute of the specified type applied to the member.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="inherit">The inherit.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The attribute type to retrieve.</typeparam>
+    /// <param name="inherit">Whether to search the member inheritance chain.</param>
+    /// <returns>The matching attribute, or <c>null</c> when none is present.</returns>
     T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 }
-

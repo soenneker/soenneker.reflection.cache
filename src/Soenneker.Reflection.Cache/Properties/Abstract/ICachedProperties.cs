@@ -20,7 +20,7 @@ public interface ICachedProperties
     /// Gets cached property.
     /// </summary>
     /// <param name="name">The name.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The matching cached property, or <c>null</c> when no property has that name.</returns>
     [Pure]
     CachedProperty? GetCachedProperty(string name);
 
@@ -34,7 +34,7 @@ public interface ICachedProperties
     /// <summary>
     /// Gets cached properties.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The cached properties in the configured reflection scope.</returns>
     [Pure]
     CachedProperty[] GetCachedProperties();
 }

@@ -4,15 +4,15 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached type array extension.
+/// Provides hashing and conversion helpers for arrays of cached types.
 /// </summary>
 public static class CachedTypeArrayExtension
 {
     /// <summary>
-    /// Executes the to hash key operation.
+    /// Computes an order-sensitive hash for the cached type sequence.
     /// </summary>
     /// <param name="cachedTypes">The cached types.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The sequence hash, or <c>0</c> for a null or empty array.</returns>
     public static int ToHashKey(this CachedType[]? cachedTypes)
     {
         if (cachedTypes == null)
@@ -35,10 +35,10 @@ public static class CachedTypeArrayExtension
     }
 
     /// <summary>
-    /// Executes the to types operation.
+    /// Extracts the underlying reflection types.
     /// </summary>
     /// <param name="cachedTypes">The cached types.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The reflection types in the original order.</returns>
     public static Type[] ToTypes(this CachedType[] cachedTypes)
     {
         int length = cachedTypes.Length;

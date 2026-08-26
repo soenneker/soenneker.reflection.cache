@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Parameters.Abstract;
 using Soenneker.Reflection.Cache.Types;
@@ -12,17 +12,19 @@ public sealed class CachedParameter : ICachedParameter
 
     public string? Name => ParameterInfo.Name;
 
-    public Type ParameterType => _parameterTypeLazy.Value;
-    private readonly Lazy<Type> _parameterTypeLazy;
+    public Type ParameterType => ParameterInfo.ParameterType;
 
-    public CachedType CachedParameterType => _lazyCachedParameterType.Value;
-    private readonly Lazy<CachedType> _lazyCachedParameterType;
+    public CachedType CachedParameterType { get; }
 
     public CachedParameter(ParameterInfo parameterInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         ParameterInfo = parameterInfo;
-        
-        _lazyCachedParameterType = new Lazy<CachedType>(() => cachedTypes.GetCachedType(parameterInfo.ParameterType), threadSafe);
-        _parameterTypeLazy = new Lazy<Type>(() => _lazyCachedParameterType.Value.Type!, threadSafe);
+        CachedParameterType = cachedTypes.GetCachedType(parameterInfo.ParameterType);
+    }
+
+    internal CachedParameter(ParameterInfo parameterInfo, CachedType cachedParameterType)
+    {
+        ParameterInfo = parameterInfo;
+        CachedParameterType = cachedParameterType;
     }
 }

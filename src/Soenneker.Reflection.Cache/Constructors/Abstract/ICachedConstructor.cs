@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Constructors.Abstract;
 
 /// <summary>
-/// Represents a cached constructor for a type.
+/// Provides cached metadata and optimized invocation for a constructor.
 /// </summary>
 public interface ICachedConstructor
 {
@@ -19,53 +19,53 @@ public interface ICachedConstructor
     ConstructorInfo? ConstructorInfo { get; }
 
     /// <summary>
-    /// Gets cached parameters.
+    /// Gets the cached parameter metadata for the constructor.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     CachedParameter[] GetCachedParameters();
 
     /// <summary>
-    /// Gets parameters.
+    /// Gets the reflection parameter metadata for the constructor.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     ParameterInfo[] GetParameters();
 
     /// <summary>
-    /// Gets cached custom attributes.
+    /// Gets the cached custom attributes applied to the constructor.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     CachedAttribute[] GetCachedCustomAttributes();
 
     /// <summary>
-    /// Gets custom attributes.
+    /// Gets the custom attributes applied to the constructor.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     object[] GetCustomAttributes();
 
     /// <summary>
-    /// Gets cached custom attribute.
+    /// Gets the first custom attribute of the specified type applied to the constructor.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="inherit">The inherit.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="inherit">Whether to search inherited attribute definitions.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 
     /// <summary>
-    /// Gets parameters types.
+    /// Gets the constructor parameter types.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     Type[] GetParametersTypes();
 
     /// <summary>
-    /// Gets cached parameter types.
+    /// Gets the cached constructor parameter types.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     CachedType[] GetCachedParameterTypes();
 
@@ -85,40 +85,40 @@ public interface ICachedConstructor
     object? Invoke(params object[] param);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     object? Invoke(object? arg0);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     object? Invoke(object? arg0, object? arg1);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     object? Invoke(object? arg0, object? arg1, object? arg2);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <param name="arg3">The arg3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <param name="arg3">The fourth constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     object? Invoke(object? arg0, object? arg1, object? arg2, object? arg3);
 
@@ -140,44 +140,44 @@ public interface ICachedConstructor
     T? Invoke<T>(params object[] param);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     T? Invoke<T>(object? arg0);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     T? Invoke<T>(object? arg0, object? arg1);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     T? Invoke<T>(object? arg0, object? arg1, object? arg2);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the constructor.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <param name="arg3">The arg3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <param name="arg3">The fourth constructor argument.</param>
+    /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
     [Pure]
     T? Invoke<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 }

@@ -1,11 +1,12 @@
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Soenneker.Reflection.Cache.Attributes.Abstract;
 using Soenneker.Reflection.Cache.Constructors;
-using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Members;
 using Soenneker.Reflection.Cache.Methods;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Attributes;
 
@@ -17,98 +18,72 @@ public sealed class CachedCustomAttributes : ICachedCustomAttributes
     private readonly CachedConstructor? _cachedConstructor;
     private readonly CachedMember? _cachedMember;
 
-    private readonly Lazy<CachedAttribute[]> _cachedCustomAttributes;
-
-    private readonly Lazy<object[]> _cachedObjects;
+    private ValueLazy<CachedAttribute[]> _cachedCustomAttributes;
+    private ValueLazy<object[]> _cachedObjects;
+    private ValueAtomicLock _sync;
     private readonly CachedTypes _cachedTypes;
+    private readonly bool _threadSafe;
 
     public CachedCustomAttributes(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedTypes = cachedTypes;
         _cachedType = cachedType;
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForType(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _threadSafe = threadSafe;
     }
 
     public CachedCustomAttributes(CachedMethod cachedMethod, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedTypes = cachedTypes;
         _cachedMethod = cachedMethod;
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForMethod(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _threadSafe = threadSafe;
     }
 
     public CachedCustomAttributes(CachedConstructor cachedConstructor, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedTypes = cachedTypes;
         _cachedConstructor = cachedConstructor;
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForConstructor(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _threadSafe = threadSafe;
     }
 
     public CachedCustomAttributes(CachedMember cachedMember, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedTypes = cachedTypes;
         _cachedMember = cachedMember;
-        _cachedCustomAttributes = new Lazy<CachedAttribute[]>(() => SetArrayForMember(threadSafe), threadSafe);
-        _cachedObjects = new Lazy<object[]>(_cachedCustomAttributes.Value.ToObjects, threadSafe);
+        _threadSafe = threadSafe;
     }
 
-    private CachedAttribute[] SetArrayForType(bool threadSafe)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private object[] GetObjectsCache() =>
+        _cachedObjects.GetOrCreate(_threadSafe, ref _sync, this, static self => self.LoadObjects());
+
+    private object[] LoadObjects()
     {
-        object[] attributes = _cachedType!.Type!.GetCustomAttributes(true);
-        int length = attributes.Length;
-        var result = new CachedAttribute[length];
+        if (_cachedType?.Type is { } type)
+            return type.GetCustomAttributes(inherit: true);
 
-        for (var i = 0; i < length; i++)
-        {
-            result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
-        }
+        if (_cachedMethod?.MethodInfo is { } method)
+            return method.GetCustomAttributes(inherit: true);
 
-        return result;
+        if (_cachedConstructor?.ConstructorInfo is { } constructor)
+            return constructor.GetCustomAttributes(inherit: true);
+
+        if (_cachedMember?.MemberInfo is { } member)
+            return member.GetCustomAttributes(inherit: true);
+
+        return [];
     }
 
-    private CachedAttribute[] SetArrayForMethod(bool threadSafe)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedAttribute[] GetCachedAttributesCache() =>
+        _cachedCustomAttributes.GetOrCreate(_threadSafe, ref _sync, this,
+            static self => self.BuildCachedAttributes(self.GetObjectsCache()));
+
+    private CachedAttribute[] BuildCachedAttributes(object[] attributes)
     {
-        object[] attributes = _cachedMethod!.MethodInfo!.GetCustomAttributes(true);
-        int length = attributes.Length;
+        var result = new CachedAttribute[attributes.Length];
 
-        var result = new CachedAttribute[length];
-
-        for (var i = 0; i < length; i++)
-        {
-            result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
-        }
-
-        return result;
-    }
-
-    private CachedAttribute[] SetArrayForConstructor(bool threadSafe)
-    {
-        object[] attributes = _cachedConstructor!.ConstructorInfo!.GetCustomAttributes(true);
-        int length = attributes.Length;
-
-        var result = new CachedAttribute[length];
-
-        for (var i = 0; i < length; i++)
-        {
-            result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
-        }
-
-        return result;
-    }
-
-    private CachedAttribute[] SetArrayForMember(bool threadSafe)
-    {
-        object[] attributes = _cachedMember!.MemberInfo!.GetCustomAttributes(true);
-        int length = attributes.Length;
-
-        var result = new CachedAttribute[length];
-
-        for (var i = 0; i < length; i++)
-        {
-            result[i] = new CachedAttribute(attributes[i], _cachedTypes, threadSafe);
-        }
+        for (var i = 0; i < attributes.Length; i++)
+            result[i] = new CachedAttribute(attributes[i], _cachedTypes, _threadSafe);
 
         return result;
     }
@@ -117,11 +92,11 @@ public sealed class CachedCustomAttributes : ICachedCustomAttributes
     {
         if (inherit)
         {
-            CachedAttribute[] attrs = _cachedCustomAttributes.Value;
+            object[] attrs = GetObjectsCache();
 
             for (var i = 0; i < attrs.Length; i++)
             {
-                if (attrs[i].Attribute is T match)
+                if (attrs[i] is T match)
                     return match;
             }
 
@@ -145,11 +120,11 @@ public sealed class CachedCustomAttributes : ICachedCustomAttributes
 
     public CachedAttribute[] GetCachedCustomAttributes()
     {
-        return _cachedCustomAttributes.Value;
+        return GetCachedAttributesCache();
     }
 
     public object[] GetCustomAttributes()
     {
-        return _cachedObjects.Value;
+        return GetObjectsCache();
     }
 }

@@ -4,15 +4,15 @@ using Soenneker.Reflection.Cache.Fields;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached fields extension.
+/// Provides conversions for arrays of cached fields.
 /// </summary>
 public static class CachedFieldsExtension
 {
     /// <summary>
-    /// Executes the to field infos operation.
+    /// Extracts the underlying field metadata.
     /// </summary>
     /// <param name="cachedFields">The cached fields.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The <see cref="FieldInfo"/> values in the original order.</returns>
     public static FieldInfo[] ToFieldInfos(this CachedField[] cachedFields)
     {
         int length = cachedFields.Length;

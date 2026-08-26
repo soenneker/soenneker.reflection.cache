@@ -15,7 +15,7 @@ public sealed class CachedFields : ICachedFields
     private readonly CachedTypes _cachedTypes;
     private readonly bool _threadSafe;
 
-    private readonly Lazy<CachedFieldsCache> _built; // single source of truth
+    private readonly CachedFieldsCache _built;
 
     public CachedFields(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
@@ -23,7 +23,7 @@ public sealed class CachedFields : ICachedFields
         _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
         _threadSafe = threadSafe;
 
-        _built = new Lazy<CachedFieldsCache>(BuildAll, threadSafe);
+        _built = BuildAll();
     }
 
     private CachedFieldsCache BuildAll()
@@ -58,14 +58,14 @@ public sealed class CachedFields : ICachedFields
     public CachedField? GetCachedField(string name)
     {
         // Fast, allocation-free lookup
-        return _built.Value.MapByName.GetValueOrDefault(name);
+        return _built.MapByName.GetValueOrDefault(name);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public FieldInfo[] GetFields()
-        => _built.Value.FieldInfos;
+        => _built.FieldInfos;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedField[] GetCachedFields()
-        => _built.Value.CachedArray;
+        => _built.CachedArray;
 }

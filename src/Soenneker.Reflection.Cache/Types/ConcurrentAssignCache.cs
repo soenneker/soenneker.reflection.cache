@@ -7,7 +7,8 @@ namespace Soenneker.Reflection.Cache.Types;
 
 internal sealed class ConcurrentAssignCache : IAssignCache
 {
-    private readonly ConcurrentDictionary<RuntimeTypeHandle, bool> _map = new(concurrencyLevel: Environment.ProcessorCount, capacity: 8);
+    // Reads are lock-free and writes are rare; one lock avoids a processor-count-sized lock table per cached base type.
+    private readonly ConcurrentDictionary<RuntimeTypeHandle, bool> _map = new(concurrencyLevel: 1, capacity: 8);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGet(RuntimeTypeHandle key, out bool value) => _map.TryGetValue(key, out value);

@@ -6,16 +6,16 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Utils;
 
 /// <summary>
-/// Represents the reflection cache util.
+/// Provides deterministic-in-process keys for cached method signatures.
 /// </summary>
 public static class ReflectionCacheUtil
 {
     /// <summary>
-    /// Gets cache key for method.
+    /// Computes a cache key from a method name and reflection parameter types.
     /// </summary>
-    /// <param name="methodName">The method name.</param>
-    /// <param name="parameterTypes">The parameter types.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="methodName">The method name included in the signature.</param>
+    /// <param name="parameterTypes">The ordered parameter types, or <c>null</c> for a parameterless signature.</param>
+    /// <returns>The combined in-process hash of the method name and parameter sequence.</returns>
     public static int GetCacheKeyForMethod(string methodName, Type[]? parameterTypes = null)
     {
         int methodNameKey = methodName.GetHashCode();
@@ -29,11 +29,11 @@ public static class ReflectionCacheUtil
     }
 
     /// <summary>
-    /// Gets cache key for method with cached parameter types.
+    /// Computes a cache key from a method name and cached parameter types.
     /// </summary>
-    /// <param name="methodName">The method name.</param>
-    /// <param name="parameterTypes">The parameter types.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="methodName">The method name included in the signature.</param>
+    /// <param name="parameterTypes">The ordered cached parameter types, or <c>null</c> for a parameterless signature.</param>
+    /// <returns>The combined in-process hash of the method name and parameter sequence.</returns>
     public static int GetCacheKeyForMethodWithCachedParameterTypes(string methodName, CachedType[]? parameterTypes = null)
     {
         int methodNameKey = methodName.GetHashCode();

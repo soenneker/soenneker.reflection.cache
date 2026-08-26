@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -20,9 +20,6 @@ public sealed class CachedTypes : ICachedTypes
     private readonly ConcurrentDictionary<string, CachedType>? _concurrentByName;
     private readonly Dictionary<string, CachedType>? _byName;
 
-    /// <summary>
-    /// Gets options.
-    /// </summary>
     public ReflectionCacheOptions Options { get; private set; }
 
     public CachedTypes(ReflectionCacheOptions? options = null, bool threadSafe = true)

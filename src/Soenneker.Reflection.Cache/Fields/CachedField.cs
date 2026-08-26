@@ -1,5 +1,6 @@
-﻿using Soenneker.Reflection.Cache.Fields.Abstract;
+using Soenneker.Reflection.Cache.Fields.Abstract;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Utils;
 using Soenneker.Utils.LazyBools;
 using System;
 using System.Linq.Expressions;
@@ -18,8 +19,9 @@ public sealed class CachedField : ICachedField
 
     private int _isDelegate;
 
-    private readonly Lazy<Func<object, object?>?> _getter;
-    private readonly Lazy<Action<object, object?>?> _setter;
+    private ValueNullableLazy<Func<object, object?>> _getter;
+    private ValueNullableLazy<Action<object, object?>> _setter;
+    private ValueAtomicLock _initializationLock;
 
     public bool IsDelegate =>
         LazyBoolUtil.GetOrInit(
@@ -40,21 +42,15 @@ public sealed class CachedField : ICachedField
         FieldInfo = fieldInfo;
         _cachedTypes = cachedTypes;
         _threadSafe = threadSafe;
-        _getter = new Lazy<Func<object, object?>?>(() => BuildGetter(FieldInfo), threadSafe);
-        _setter = new Lazy<Action<object, object?>?>(() => BuildSetter(FieldInfo), threadSafe);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Func<object, object?>? GetGetter()
-    {
-        return _getter.Value;
-    }
+    public Func<object, object?>? GetGetter() =>
+        _getter.GetOrCreate(_threadSafe, ref _initializationLock, FieldInfo, static fieldInfo => BuildGetter(fieldInfo));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Action<object, object?>? GetSetter()
-    {
-        return _setter.Value;
-    }
+    public Action<object, object?>? GetSetter() =>
+        _setter.GetOrCreate(_threadSafe, ref _initializationLock, FieldInfo, static fieldInfo => BuildSetter(fieldInfo));
 
     public bool TryGetValue(object instance, out object? value)
     {

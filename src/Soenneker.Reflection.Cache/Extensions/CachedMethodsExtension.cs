@@ -4,15 +4,15 @@ using System.Reflection;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached methods extension.
+/// Provides conversions for arrays of cached methods.
 /// </summary>
 public static class CachedMethodsExtension
 {
     /// <summary>
-    /// Executes the to methods operation.
+    /// Extracts the underlying method metadata.
     /// </summary>
     /// <param name="cachedMethods">The cached methods.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The method metadata in the original order; entries may be <c>null</c>.</returns>
     public static MethodInfo?[] ToMethods(this CachedMethod[] cachedMethods)
     {
         int length = cachedMethods.Length;

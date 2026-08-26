@@ -5,15 +5,15 @@ using Soenneker.Reflection.Cache.Utils;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached method extension.
+/// Provides signature helpers for cached methods.
 /// </summary>
 public static class CachedMethodExtension
 {
     /// <summary>
-    /// Executes the to hash key operation.
+    /// Computes a hash key from the method name and parameter types.
     /// </summary>
     /// <param name="cachedMethod">The cached method.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>A hash representing the method signature.</returns>
     public static int ToHashKey(this CachedMethod cachedMethod)
     {
         Type[] parameterTypes = cachedMethod.GetCachedParameters().GetParameterTypes();

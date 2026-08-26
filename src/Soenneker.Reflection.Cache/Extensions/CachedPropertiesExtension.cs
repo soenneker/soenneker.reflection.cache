@@ -4,15 +4,15 @@ using Soenneker.Reflection.Cache.Properties;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached properties extension.
+/// Provides conversions for arrays of cached properties.
 /// </summary>
 public static class CachedPropertiesExtension
 {
     /// <summary>
-    /// Executes the to property infos operation.
+    /// Extracts the underlying property metadata.
     /// </summary>
     /// <param name="cachedProperties">The cached properties.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The property metadata in the original order.</returns>
     public static PropertyInfo[] ToPropertyInfos(this CachedProperty[] cachedProperties)
     {
         int length = cachedProperties.Length;

@@ -2,9 +2,10 @@ using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Members.Abstract;
 using Soenneker.Reflection.Cache.Types;
-using Soenneker.Utils.LazyBools;
+using Soenneker.Reflection.Cache.Utils;
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Soenneker.Reflection.Cache.Members;
 
@@ -15,48 +16,47 @@ public sealed class CachedMember : ICachedMember
 
     public string? Name => MemberInfo?.Name;
 
-    private readonly Lazy<CachedCustomAttributes>? _attributes;
+    private ValueLazy<CachedCustomAttributes> _attributes;
 
+    private readonly CachedTypes _cachedTypes;
     private readonly bool _threadSafe;
 
     public CachedType CachedType { get; }
 
     public Type Type => CachedType.Type!;
 
-    /// <summary>
-    /// Gets cache key.
-    /// </summary>
     public int CacheKey { get; }
 
     public MemberTypes MemberType { get; }
 
-    private int _isProperty;
-    public bool IsProperty =>
-        LazyBoolUtil.GetOrInit(ref _isProperty, _threadSafe, this, static self => self.MemberType == MemberTypes.Property);
+    public bool IsProperty => MemberType == MemberTypes.Property;
 
-    private int _isField;
-    public bool IsField =>
-        LazyBoolUtil.GetOrInit(ref _isField, _threadSafe, this, static self => self.MemberType == MemberTypes.Field);
+    public bool IsField => MemberType == MemberTypes.Field;
 
     public CachedMember(MemberInfo memberInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MemberType = memberInfo.MemberType;
+        _cachedTypes = cachedTypes;
         _threadSafe = threadSafe;
 
         CacheKey = memberInfo.ToHashKey();
 
-        CachedType = cachedTypes.GetCachedType(memberInfo.DeclaringType);
+        CachedType = cachedTypes.GetCachedType(memberInfo.DeclaringType!);
         MemberInfo = memberInfo;
 
-        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedCustomAttributes GetAttributesCache() =>
+        _attributes.GetOrCreatePublicationOnly(_threadSafe, this,
+            static self => new CachedCustomAttributes(self, self._cachedTypes, self._threadSafe));
 
     public CachedCustomAttributes? GetCachedCustomAttributes()
     {
         if (MemberInfo == null)
             return null;
 
-        return _attributes!.Value;
+        return GetAttributesCache();
     }
 
     public object[] GetCustomAttributes()
@@ -64,7 +64,7 @@ public sealed class CachedMember : ICachedMember
         if (MemberInfo == null)
             return [];
 
-        return _attributes!.Value.GetCustomAttributes();
+        return GetAttributesCache().GetCustomAttributes();
     }
 
     public T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute
@@ -72,7 +72,6 @@ public sealed class CachedMember : ICachedMember
         if (MemberInfo == null)
             return null;
 
-        return _attributes!.Value.GetCachedCustomAttribute<T>(inherit);
+        return GetAttributesCache().GetCachedCustomAttribute<T>(inherit);
     }
 }
-

@@ -5,15 +5,15 @@ using System.Reflection;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached parameter array extension.
+/// Provides conversions for arrays of cached parameters.
 /// </summary>
 public static class CachedParameterArrayExtension
 {
     /// <summary>
-    /// Executes the to parameter infos operation.
+    /// Extracts the underlying parameter metadata.
     /// </summary>
     /// <param name="cachedParameters">The cached parameters.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The parameter metadata in declaration order.</returns>
     public static ParameterInfo[] ToParameterInfos(this CachedParameter[] cachedParameters)
     {
         int length = cachedParameters.Length;
@@ -32,10 +32,10 @@ public static class CachedParameterArrayExtension
     }
 
     /// <summary>
-    /// Executes the to parameters types operation.
+    /// Extracts each parameter's declared type.
     /// </summary>
     /// <param name="cachedParameters">The cached parameters.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The parameter types in declaration order.</returns>
     public static Type[] ToParametersTypes(this CachedParameter[] cachedParameters)
     {
         int length = cachedParameters.Length;

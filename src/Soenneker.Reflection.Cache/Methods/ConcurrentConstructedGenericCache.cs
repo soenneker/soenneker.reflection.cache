@@ -8,8 +8,8 @@ namespace Soenneker.Reflection.Cache.Methods;
 
 internal sealed class ConcurrentConstructedGenericCache : IConstructedGenericCache
 {
-    private readonly ConcurrentDictionary<TypeHandleSequenceKey, CachedMethod> _map =
-        new(concurrencyLevel: Environment.ProcessorCount, capacity: 4);
+    // Constructed generic variants are normally few and reads dominate after warmup.
+    private readonly ConcurrentDictionary<TypeHandleSequenceKey, CachedMethod> _map = new(concurrencyLevel: 1, capacity: 4);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGet(TypeHandleSequenceKey key, out CachedMethod? value) => _map.TryGetValue(key, out value);

@@ -1,4 +1,4 @@
-﻿using Soenneker.Reflection.Cache.Methods.Abstract;
+using Soenneker.Reflection.Cache.Methods.Abstract;
 using Soenneker.Reflection.Cache.Types;
 using System;
 using System.Collections.Frozen;
@@ -14,8 +14,7 @@ public sealed class CachedMethods : ICachedMethods
     private readonly CachedType _cachedType;
     private readonly CachedTypes _cachedTypes;
 
-    // Build all artifacts in one go, once.
-    private readonly Lazy<CachedMethodsCache> _built;
+    private readonly CachedMethodsCache _built;
 
     private readonly bool _threadSafe;
 
@@ -25,7 +24,7 @@ public sealed class CachedMethods : ICachedMethods
         _cachedTypes = cachedTypes ?? throw new ArgumentNullException(nameof(cachedTypes));
         _threadSafe = threadSafe;
 
-        _built = new Lazy<CachedMethodsCache>(BuildAll, isThreadSafe: threadSafe);
+        _built = BuildAll();
     }
 
     private CachedMethodsCache BuildAll()
@@ -68,21 +67,14 @@ public sealed class CachedMethods : ICachedMethods
 
         FrozenDictionary<string, CachedMethod[]> methodsByName = byName.ToFrozenDictionary(StringComparer.Ordinal);
 
-        // MethodInfos array without extra enumerations
-        var infos = new MethodInfo?[count];
-        for (var i = 0; i < count; i++)
-        {
-            infos[i] = methods[i].MethodInfo;
-        }
-
-        return new CachedMethodsCache(methods, methodsByName, infos);
+        return new CachedMethodsCache(methods, methodsByName, methodInfos);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public CachedMethod[] GetCachedMethods() => _built.Value.Methods;
+    public CachedMethod[] GetCachedMethods() => _built.Methods;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public MethodInfo?[] GetMethods() => _built.Value.MethodInfos;
+    public MethodInfo?[] GetMethods() => _built.MethodInfos;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public MethodInfo? GetMethod(string name) => GetCachedMethod(name)?.MethodInfo;
@@ -105,7 +97,7 @@ public sealed class CachedMethods : ICachedMethods
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? GetCachedMethod(string name)
     {
-        if (!_built.Value.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
+        if (!_built.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
             return null;
 
         // If there is a single candidate, return it; otherwise prefer parameterless
@@ -126,7 +118,7 @@ public sealed class CachedMethods : ICachedMethods
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? GetCachedMethod(string name, Type[] parameterTypes)
     {
-        if (!_built.Value.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
+        if (!_built.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
             return null;
 
         for (var i = 0; i < candidates.Length; i++)
@@ -155,7 +147,7 @@ public sealed class CachedMethods : ICachedMethods
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? GetCachedMethod(string name, Type t0)
     {
-        if (!_built.Value.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
+        if (!_built.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
             return null;
 
         for (var i = 0; i < candidates.Length; i++)
@@ -174,7 +166,7 @@ public sealed class CachedMethods : ICachedMethods
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? GetCachedMethod(string name, Type t0, Type t1)
     {
-        if (!_built.Value.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
+        if (!_built.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
             return null;
 
         for (var i = 0; i < candidates.Length; i++)
@@ -193,7 +185,7 @@ public sealed class CachedMethods : ICachedMethods
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? GetCachedMethod(string name, Type t0, Type t1, Type t2)
     {
-        if (!_built.Value.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
+        if (!_built.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
             return null;
 
         for (var i = 0; i < candidates.Length; i++)
@@ -212,7 +204,7 @@ public sealed class CachedMethods : ICachedMethods
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? GetCachedMethod(string name, Type t0, Type t1, Type t2, Type t3)
     {
-        if (!_built.Value.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
+        if (!_built.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
             return null;
 
         for (var i = 0; i < candidates.Length; i++)
@@ -232,7 +224,7 @@ public sealed class CachedMethods : ICachedMethods
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? GetCachedMethod(string name, CachedType[] cachedParameterTypes)
     {
-        if (!_built.Value.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
+        if (!_built.MethodsByName.TryGetValue(name, out CachedMethod[]? candidates) || candidates.Length == 0)
             return null;
 
         int len = cachedParameterTypes?.Length ?? 0;
@@ -246,7 +238,7 @@ public sealed class CachedMethods : ICachedMethods
             var match = true;
             for (var j = 0; j < len; j++)
             {
-                Type? t = cachedParameterTypes[j].Type;
+                Type? t = cachedParameterTypes![j].Type;
                 if (!ReferenceEquals(ps[j].ParameterType, t))
                 {
                     match = false;

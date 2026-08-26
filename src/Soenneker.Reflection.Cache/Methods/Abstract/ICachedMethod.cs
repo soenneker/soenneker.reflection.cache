@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Parameters;
@@ -7,7 +7,7 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Methods.Abstract;
 
 /// <summary>
-/// Represents a cached method for a type.
+/// Provides cached metadata, attributes, generic construction, and invocation for a method.
 /// </summary>
 public interface ICachedMethod
 {
@@ -27,186 +27,186 @@ public interface ICachedMethod
     Type? ReturnType { get; }
 
     /// <summary>
-    /// Gets cached parameters.
+    /// Gets the cached parameter metadata for the method.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     CachedParameters? GetCachedParameters();
 
     /// <summary>
-    /// Gets parameters.
+    /// Gets the reflection parameter metadata for the method.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     ParameterInfo[] GetParameters();
 
     /// <summary>
-    /// Gets cached custom attributes.
+    /// Gets the cached custom attributes applied to the method.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     CachedCustomAttributes? GetCachedCustomAttributes();
 
     /// <summary>
-    /// Gets cached custom attribute.
+    /// Gets the first custom attribute of the specified type applied to the method.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="inherit">The inherit.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the invocation result is cast.</typeparam>
+    /// <param name="inherit">Whether to search the method inheritance chain.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 
     /// <summary>
-    /// Executes the make cached generic method operation.
+    /// Constructs and caches a closed generic method using the specified generic type arguments.
     /// </summary>
-    /// <param name="cachedTypes">The cached types.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="cachedTypes">The cached generic type arguments.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes);
 
     /// <summary>
-    /// Executes the make cached generic method operation.
+    /// Constructs and caches a closed generic method using the specified generic type arguments.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     CachedMethod? MakeCachedGenericMethod(CachedType t0);
 
     /// <summary>
-    /// Executes the make cached generic method operation.
+    /// Constructs and caches a closed generic method using the specified generic type arguments.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <param name="t1">The second generic type argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1);
 
     /// <summary>
-    /// Executes the make cached generic method operation.
+    /// Constructs and caches a closed generic method using the specified generic type arguments.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <param name="t1">The second generic type argument.</param>
+    /// <param name="t2">The third generic type argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2);
 
     /// <summary>
-    /// Executes the make cached generic method operation.
+    /// Constructs and caches a closed generic method using the specified generic type arguments.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <param name="t3">The t3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <param name="t1">The second generic type argument.</param>
+    /// <param name="t2">The third generic type argument.</param>
+    /// <param name="t3">The fourth generic type argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
 
     /// <summary>
-    /// Gets custom attributes.
+    /// Gets the custom attributes applied to the method.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     object[] GetCustomAttributes();
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <param name="instance">The instance.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     object? Invoke(object instance);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <param name="instance">The instance.</param>
-    /// <param name="param">The param.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="param">The arguments to pass to the method.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     object? Invoke(object instance, params object[] param);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     object? Invoke(object instance, object? arg0);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <param name="arg1">The second method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     object? Invoke(object instance, object? arg0, object? arg1);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <param name="arg1">The second method argument.</param>
+    /// <param name="arg2">The third method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     object? Invoke(object instance, object? arg0, object? arg1, object? arg2);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <param name="arg3">The arg3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <param name="arg1">The second method argument.</param>
+    /// <param name="arg2">The third method argument.</param>
+    /// <param name="arg3">The fourth method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     object? Invoke(object instance, object? arg0, object? arg1, object? arg2, object? arg3);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="instance">The instance.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the invocation result is cast.</typeparam>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     T? Invoke<T>(object instance);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="param">The param.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the invocation result is cast.</typeparam>
+    /// <param name="param">The arguments to pass to the method.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     T? Invoke<T>(params object[] param);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the invocation result is cast.</typeparam>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     T? Invoke<T>(object instance, object? arg0);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the invocation result is cast.</typeparam>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <param name="arg1">The second method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     T? Invoke<T>(object instance, object? arg0, object? arg1);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the invocation result is cast.</typeparam>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <param name="arg1">The second method argument.</param>
+    /// <param name="arg2">The third method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     T? Invoke<T>(object instance, object? arg0, object? arg1, object? arg2);
 
     /// <summary>
-    /// Executes the invoke operation.
+    /// Invokes the cached method.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="instance">The instance.</param>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <param name="arg3">The arg3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the invocation result is cast.</typeparam>
+    /// <param name="instance">The target instance, or <c>null</c> for a static method.</param>
+    /// <param name="arg0">The first method argument.</param>
+    /// <param name="arg1">The second method argument.</param>
+    /// <param name="arg2">The third method argument.</param>
+    /// <param name="arg3">The fourth method argument.</param>
+    /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
     T? Invoke<T>(object instance, object? arg0, object? arg1, object? arg2, object? arg3);
 }

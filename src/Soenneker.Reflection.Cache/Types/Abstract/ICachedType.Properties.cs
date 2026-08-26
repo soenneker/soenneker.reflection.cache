@@ -212,7 +212,7 @@ public partial interface ICachedType
     CachedProperty? GetCachedProperty(string property);
 
     /// <summary>
-    /// Gets information about a specific property using reflection.
+    /// Gets the reflection metadata for the property with the specified name.
     /// </summary>
     /// <param name="property">The name of the property.</param>
     /// <returns>PropertyInfo for the specified property, or null if not found.</returns>
@@ -227,7 +227,7 @@ public partial interface ICachedType
     CachedProperty[]? GetCachedProperties();
 
     /// <summary>
-    /// Gets information about all properties using reflection.
+    /// Gets the reflection metadata for all properties in the configured scope.
     /// </summary>
     /// <returns>An array of PropertyInfo objects representing all properties.</returns>
     [Pure]

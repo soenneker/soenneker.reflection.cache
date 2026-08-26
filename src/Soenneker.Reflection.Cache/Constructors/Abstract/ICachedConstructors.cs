@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Constructors.Abstract;
 
 /// <summary>
-/// Represents a cached set of constructors for a specific type.
+/// Provides cached constructor lookup and optimized instance creation for a type.
 /// </summary>
 public interface ICachedConstructors
 {
@@ -18,40 +18,40 @@ public interface ICachedConstructors
     CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null);
 
     /// <summary>
-    /// Gets cached constructor.
+    /// Gets the cached constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0);
 
     /// <summary>
-    /// Gets cached constructor.
+    /// Gets the cached constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <param name="t1">The second parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1);
 
     /// <summary>
-    /// Gets cached constructor.
+    /// Gets the cached constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <param name="t1">The second parameter type.</param>
+    /// <param name="t2">The third parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2);
 
     /// <summary>
-    /// Gets cached constructor.
+    /// Gets the cached constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <param name="t3">The t3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <param name="t1">The second parameter type.</param>
+    /// <param name="t2">The third parameter type.</param>
+    /// <param name="t3">The fourth parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3);
 
@@ -64,54 +64,54 @@ public interface ICachedConstructors
     ConstructorInfo? GetConstructor(Type[]? parameterTypes = null);
 
     /// <summary>
-    /// Gets constructor.
+    /// Gets the reflection metadata for the constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0);
 
     /// <summary>
-    /// Gets constructor.
+    /// Gets the reflection metadata for the constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <param name="t1">The second parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1);
 
     /// <summary>
-    /// Gets constructor.
+    /// Gets the reflection metadata for the constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <param name="t1">The second parameter type.</param>
+    /// <param name="t2">The third parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2);
 
     /// <summary>
-    /// Gets constructor.
+    /// Gets the reflection metadata for the constructor whose parameter types match the supplied signature.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <param name="t3">The t3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first parameter type.</param>
+    /// <param name="t1">The second parameter type.</param>
+    /// <param name="t2">The third parameter type.</param>
+    /// <param name="t3">The fourth parameter type.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3);
 
     /// <summary>
-    /// Gets an array of cached constructors.
+    /// Gets all cached constructors in the configured reflection scope.
     /// </summary>
-    /// <returns>An array of cached constructors.</returns>
+    /// <returns>The cached constructors.</returns>
     [Pure]
     CachedConstructor[] GetCachedConstructors();
 
     /// <summary>
-    /// Gets an array of constructors.
+    /// Gets the reflection metadata for all constructors in the configured reflection scope.
     /// </summary>
-    /// <returns>An array of constructors.</returns>
+    /// <returns>The constructor metadata.</returns>
     [Pure]
     ConstructorInfo?[] GetConstructors();
 
@@ -138,40 +138,40 @@ public interface ICachedConstructors
     object? CreateInstance(params object[] parameters);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     object? CreateInstance(object? arg0);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     object? CreateInstance(object? arg0, object? arg1);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <param name="arg3">The arg3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <param name="arg3">The fourth constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3);
 
@@ -185,44 +185,44 @@ public interface ICachedConstructors
     T? CreateInstance<T>(params object[] parameters);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2);
 
     /// <summary>
-    /// Creates instance.
+    /// Creates an instance using the constructor that matches the supplied arguments.
     /// </summary>
-    /// <typeparam name="T">The T type.</typeparam>
-    /// <param name="arg0">The arg0.</param>
-    /// <param name="arg1">The arg1.</param>
-    /// <param name="arg2">The arg2.</param>
-    /// <param name="arg3">The arg3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
+    /// <param name="arg0">The first constructor argument.</param>
+    /// <param name="arg1">The second constructor argument.</param>
+    /// <param name="arg2">The third constructor argument.</param>
+    /// <param name="arg3">The fourth constructor argument.</param>
+    /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 }

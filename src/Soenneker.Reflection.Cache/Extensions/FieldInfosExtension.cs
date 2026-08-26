@@ -5,17 +5,17 @@ using Soenneker.Reflection.Cache.Types;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the field infos extension.
+/// Provides conversion helpers for field metadata.
 /// </summary>
 public static class FieldInfosExtension
 {
     /// <summary>
-    /// Executes the to cached fields operation.
+    /// Creates cached field wrappers for the supplied metadata.
     /// </summary>
-    /// <param name="fields">The fields.</param>
-    /// <param name="cachedTypes">The cached types.</param>
-    /// <param name="threadSafe">The thread safe.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="fields">The field metadata to wrap.</param>
+    /// <param name="cachedTypes">The type cache shared by the wrappers.</param>
+    /// <param name="threadSafe">Whether lazily initialized wrapper state must be thread-safe.</param>
+    /// <returns>The cached field wrappers in the original order.</returns>
     public static CachedField[] ToCachedFields(this FieldInfo[] fields, CachedTypes cachedTypes, bool threadSafe)
     {
         int length = fields.Length;

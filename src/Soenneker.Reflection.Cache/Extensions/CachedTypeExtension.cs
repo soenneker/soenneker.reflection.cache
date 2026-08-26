@@ -1,18 +1,18 @@
-﻿using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached type extension.
+/// Provides inheritance and assignability helpers for cached types.
 /// </summary>
 public static class CachedTypeExtension
 {
     /// <summary>
-    /// Executes the is derived from type operation.
+    /// Determines whether the source type derives from, implements, or closes any supplied target type.
     /// </summary>
-    /// <param name="sourceCachedType">The source cached type.</param>
-    /// <param name="targetCachedType">The target cached type.</param>
-    /// <returns>A value indicating whether the operation succeeded.</returns>
+    /// <param name="sourceCachedType">The type whose inheritance chain is inspected.</param>
+    /// <param name="targetCachedType">The target base type, interface, or generic type definition.</param>
+    /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType targetCachedType)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -37,12 +37,12 @@ public static class CachedTypeExtension
     }
 
     /// <summary>
-    /// Executes the is derived from type operation.
+    /// Determines whether the source type derives from, implements, or closes any supplied target type.
     /// </summary>
-    /// <param name="sourceCachedType">The source cached type.</param>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <returns>A value indicating whether the operation succeeded.</returns>
+    /// <param name="sourceCachedType">The type whose inheritance chain is inspected.</param>
+    /// <param name="t0">The first target type.</param>
+    /// <param name="t1">The second target type.</param>
+    /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -69,13 +69,13 @@ public static class CachedTypeExtension
     }
 
     /// <summary>
-    /// Executes the is derived from type operation.
+    /// Determines whether the source type derives from, implements, or closes any supplied target type.
     /// </summary>
-    /// <param name="sourceCachedType">The source cached type.</param>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <returns>A value indicating whether the operation succeeded.</returns>
+    /// <param name="sourceCachedType">The type whose inheritance chain is inspected.</param>
+    /// <param name="t0">The first target type.</param>
+    /// <param name="t1">The second target type.</param>
+    /// <param name="t2">The third target type.</param>
+    /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1, CachedType t2)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -102,14 +102,14 @@ public static class CachedTypeExtension
     }
 
     /// <summary>
-    /// Executes the is derived from type operation.
+    /// Determines whether the source type derives from, implements, or closes any supplied target type.
     /// </summary>
-    /// <param name="sourceCachedType">The source cached type.</param>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <param name="t3">The t3.</param>
-    /// <returns>A value indicating whether the operation succeeded.</returns>
+    /// <param name="sourceCachedType">The type whose inheritance chain is inspected.</param>
+    /// <param name="t0">The first target type.</param>
+    /// <param name="t1">The second target type.</param>
+    /// <param name="t2">The third target type.</param>
+    /// <param name="t3">The fourth target type.</param>
+    /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1, CachedType t2, CachedType t3)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -136,11 +136,11 @@ public static class CachedTypeExtension
     }
 
     /// <summary>
-    /// Executes the is derived from type operation.
+    /// Determines whether the source type derives from, implements, or closes any supplied target type.
     /// </summary>
-    /// <param name="sourceCachedType">The source cached type.</param>
-    /// <param name="targetCachedTypes">The target cached types.</param>
-    /// <returns>A value indicating whether the operation succeeded.</returns>
+    /// <param name="sourceCachedType">The type whose inheritance chain is inspected.</param>
+    /// <param name="targetCachedTypes">The target base types, interfaces, or generic type definitions.</param>
+    /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
     public static bool IsDerivedFromType(this CachedType sourceCachedType, params CachedType[] targetCachedTypes)
     {
         CachedType? tempCachedType = sourceCachedType;

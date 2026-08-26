@@ -3,13 +3,13 @@
 namespace Soenneker.Reflection.Cache.Constants;
 
 /// <summary>
-/// Represents the reflection cache constants.
+/// Defines default values used by the reflection cache.
 /// </summary>
 public static class ReflectionCacheConstants
 {
     // ReSharper disable once ConvertToConstant.Global
     /// <summary>
-    /// The binding flags.
+    /// Gets the default reflection scope: public and non-public, instance and static members.
     /// </summary>
     public static readonly BindingFlags BindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic;
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Linq.Expressions;
@@ -19,23 +19,26 @@ public sealed class CachedMethod : ICachedMethod
 
     public Type? ReturnType => MethodInfo?.ReturnType;
 
-    private readonly Lazy<CachedParameters>? _parameters;
-    private readonly Lazy<CachedCustomAttributes>? _attributes;
+    private ValueLazy<CachedParameters> _parameters;
+    private ValueLazy<ParameterInfo[]> _parameterInfos;
+    private ValueLazy<CachedCustomAttributes> _attributes;
 
     // Thread-safe cache for constructed generic methods (only created if needed)
-    private readonly Lazy<IConstructedGenericCache>? _genericMethodCache;
+    private ValueLazy<IConstructedGenericCache> _genericMethodCache;
 
     private readonly CachedTypes _cachedTypes;
     private readonly bool _threadSafe;
 
     // Fast, untyped invoker compiled once per method
-    private readonly Lazy<Func<object?, object?[]?, object?>>? _invoker;
+    private ValueLazy<Func<object?, object?[]?, object?>> _invoker;
 
     // Arity-specialized invokers avoid params object[] allocations for common cases (1..4 args).
-    private readonly Lazy<Func<object?, object?, object?>?>? _invoker1;
-    private readonly Lazy<Func<object?, object?, object?, object?>?>? _invoker2;
-    private readonly Lazy<Func<object?, object?, object?, object?, object?>?>? _invoker3;
-    private readonly Lazy<Func<object?, object?, object?, object?, object?, object?>?>? _invoker4;
+    private static readonly object _unsupportedInvoker = new();
+    private ValueLazy<object> _invoker1;
+    private ValueLazy<object> _invoker2;
+    private ValueLazy<object> _invoker3;
+    private ValueLazy<object> _invoker4;
+    private ValueAtomicLock _initializationLock;
 
     // Thread-static exact-length arrays for fallback invocations (reflection requires exact parameter count).
     [ThreadStatic] private static object?[]? _tsArgs1;
@@ -46,25 +49,63 @@ public sealed class CachedMethod : ICachedMethod
     public CachedMethod(MethodInfo? methodInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MethodInfo = methodInfo;
-        _threadSafe = threadSafe;
-
-        if (methodInfo == null)
-            return;
-
         _cachedTypes = cachedTypes;
+        _threadSafe = threadSafe;
+    }
 
-        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, cachedTypes, threadSafe), threadSafe);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedParameters GetParametersCache() =>
+        _parameters.GetOrCreate(_threadSafe, ref _initializationLock, this,
+            static self => new CachedParameters(self.GetParameterInfos(), self._cachedTypes));
 
-        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private ParameterInfo[] GetParameterInfos() =>
+        _parameterInfos.GetOrCreate(_threadSafe, ref _initializationLock, MethodInfo, static methodInfo => methodInfo?.GetParameters() ?? []);
 
-        _genericMethodCache = new Lazy<IConstructedGenericCache>(
-            () => threadSafe ? new ConcurrentConstructedGenericCache() : new NonConcurrentConstructedGenericCache(), threadSafe);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedCustomAttributes GetAttributesCache() =>
+        _attributes.GetOrCreate(_threadSafe, ref _initializationLock, this,
+            static self => new CachedCustomAttributes(self, self._cachedTypes, self._threadSafe));
 
-        _invoker = new Lazy<Func<object?, object?[]?, object?>>(() => BuildSafeInvoker(methodInfo), threadSafe);
-        _invoker1 = new Lazy<Func<object?, object?, object?>?>(() => BuildSafeInvoker1(methodInfo), threadSafe);
-        _invoker2 = new Lazy<Func<object?, object?, object?, object?>?>(() => BuildSafeInvoker2(methodInfo), threadSafe);
-        _invoker3 = new Lazy<Func<object?, object?, object?, object?, object?>?>(() => BuildSafeInvoker3(methodInfo), threadSafe);
-        _invoker4 = new Lazy<Func<object?, object?, object?, object?, object?, object?>?>(() => BuildSafeInvoker4(methodInfo), threadSafe);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private IConstructedGenericCache GetGenericMethodCache() =>
+        _genericMethodCache.GetOrCreate(_threadSafe, ref _initializationLock, _threadSafe,
+            static threadSafe => threadSafe ? new ConcurrentConstructedGenericCache() : new NonConcurrentConstructedGenericCache());
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?[]?, object?> GetInvoker() =>
+        _invoker.GetOrCreate(_threadSafe, ref _initializationLock, MethodInfo!, static methodInfo => BuildSafeInvoker(methodInfo));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?, object?>? GetInvoker1()
+    {
+        object value = _invoker1.GetOrCreate(_threadSafe, ref _initializationLock, MethodInfo!,
+            static methodInfo => BuildSafeInvoker1(methodInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?>)value;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?, object?, object?>? GetInvoker2()
+    {
+        object value = _invoker2.GetOrCreate(_threadSafe, ref _initializationLock, MethodInfo!,
+            static methodInfo => BuildSafeInvoker2(methodInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?, object?>)value;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?, object?, object?, object?>? GetInvoker3()
+    {
+        object value = _invoker3.GetOrCreate(_threadSafe, ref _initializationLock, MethodInfo!,
+            static methodInfo => BuildSafeInvoker3(methodInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?, object?, object?>)value;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?, object?, object?, object?, object?>? GetInvoker4()
+    {
+        object value = _invoker4.GetOrCreate(_threadSafe, ref _initializationLock, MethodInfo!,
+            static methodInfo => BuildSafeInvoker4(methodInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?, object?, object?, object?>)value;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -73,7 +114,7 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        return _parameters!.Value;
+        return GetParametersCache();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -82,7 +123,7 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return [];
 
-        return _parameters!.Value.GetParameters();
+        return GetParameterInfos();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,7 +132,7 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        return _attributes!.Value;
+        return GetAttributesCache();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +141,7 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        return _attributes!.Value.GetCachedCustomAttribute<T>(inherit);
+        return GetAttributesCache().GetCachedCustomAttribute<T>(inherit);
     }
 
     public CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes)
@@ -119,7 +160,7 @@ public sealed class CachedMethod : ICachedMethod
         // Probe cache without allocating/filling a Type[] (allocate only on miss)
         TypeHandleSequenceKey key = TypeHandleSequenceKey.FromCachedTypes(cachedTypes);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
 
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
@@ -148,7 +189,7 @@ public sealed class CachedMethod : ICachedMethod
         Type type0 = t0.Type!;
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From1(type0.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -168,7 +209,7 @@ public sealed class CachedMethod : ICachedMethod
         Type type1 = t1.Type!;
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From2(type0.TypeHandle, type1.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -189,7 +230,7 @@ public sealed class CachedMethod : ICachedMethod
         Type type2 = t2.Type!;
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From3(type0.TypeHandle, type1.TypeHandle, type2.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -211,7 +252,7 @@ public sealed class CachedMethod : ICachedMethod
         Type type3 = t3.Type!;
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From4(type0.TypeHandle, type1.TypeHandle, type2.TypeHandle, type3.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -223,11 +264,6 @@ public sealed class CachedMethod : ICachedMethod
 
     // ---- allocation-reducing overloads (avoid CachedType wrapper/params allocations) ----
 
-    /// <summary>
-    /// Executes the make cached generic method operation.
-    /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <returns>The result of the operation.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? MakeCachedGenericMethod(Type t0)
     {
@@ -239,7 +275,7 @@ public sealed class CachedMethod : ICachedMethod
 
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From1(t0.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -262,7 +298,7 @@ public sealed class CachedMethod : ICachedMethod
 
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From2(t0.TypeHandle, t1.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -287,7 +323,7 @@ public sealed class CachedMethod : ICachedMethod
 
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From3(t0.TypeHandle, t1.TypeHandle, t2.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -314,7 +350,7 @@ public sealed class CachedMethod : ICachedMethod
 
         TypeHandleSequenceKey key = TypeHandleSequenceKey.From4(t0.TypeHandle, t1.TypeHandle, t2.TypeHandle, t3.TypeHandle);
 
-        IConstructedGenericCache cache = _genericMethodCache!.Value;
+        IConstructedGenericCache cache = GetGenericMethodCache();
         if (cache.TryGet(key, out CachedMethod? found))
             return found;
 
@@ -329,7 +365,7 @@ public sealed class CachedMethod : ICachedMethod
     {
         if (MethodInfo is null)
             return [];
-        return _attributes!.Value.GetCustomAttributes();
+        return GetAttributesCache().GetCustomAttributes();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -338,7 +374,7 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
         // Use compiled invoker; pass null args to avoid allocating empty array.
-        return _invoker!.Value(instance, null);
+        return GetInvoker()(instance, null);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -347,8 +383,8 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
         if (param.Length == 0)
-            return _invoker!.Value(instance, null);
-        return _invoker!.Value(instance, param);
+            return GetInvoker()(instance, null);
+        return GetInvoker()(instance, param);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -437,11 +473,11 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        Func<object?, object?, object?>? f = _invoker1!.Value;
+        Func<object?, object?, object?>? f = GetInvoker1();
         if (f is not null)
             return f(instance, arg0);
 
-        return InvokeThreadStatic(_invoker!.Value, instance, arg0);
+        return InvokeThreadStatic(GetInvoker(), instance, arg0);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -450,11 +486,11 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        Func<object?, object?, object?, object?>? f = _invoker2!.Value;
+        Func<object?, object?, object?, object?>? f = GetInvoker2();
         if (f is not null)
             return f(instance, arg0, arg1);
 
-        return InvokeThreadStatic(_invoker!.Value, instance, arg0, arg1);
+        return InvokeThreadStatic(GetInvoker(), instance, arg0, arg1);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -463,11 +499,11 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        Func<object?, object?, object?, object?, object?>? f = _invoker3!.Value;
+        Func<object?, object?, object?, object?, object?>? f = GetInvoker3();
         if (f is not null)
             return f(instance, arg0, arg1, arg2);
 
-        return InvokeThreadStatic(_invoker!.Value, instance, arg0, arg1, arg2);
+        return InvokeThreadStatic(GetInvoker(), instance, arg0, arg1, arg2);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -476,11 +512,11 @@ public sealed class CachedMethod : ICachedMethod
         if (MethodInfo is null)
             return null;
 
-        Func<object?, object?, object?, object?, object?, object?>? f = _invoker4!.Value;
+        Func<object?, object?, object?, object?, object?, object?>? f = GetInvoker4();
         if (f is not null)
             return f(instance, arg0, arg1, arg2, arg3);
 
-        return InvokeThreadStatic(_invoker!.Value, instance, arg0, arg1, arg2, arg3);
+        return InvokeThreadStatic(GetInvoker(), instance, arg0, arg1, arg2, arg3);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using Soenneker.Reflection.Cache.Attributes.Abstract;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Utils;
+using System.Runtime.CompilerServices;
 
 namespace Soenneker.Reflection.Cache.Attributes;
 
@@ -9,23 +11,24 @@ public sealed class CachedAttribute : ICachedAttribute
 {
     public object Attribute { get; }
 
-    public CachedType CachedType => _lazyCachedType.Value;
-    private readonly Lazy<CachedType> _lazyCachedType;
+    public CachedType CachedType => GetCachedType();
+    private ValueLazy<CachedType> _cachedType;
+    private readonly CachedTypes _cachedTypes;
+    private readonly bool _threadSafe;
 
-    public Type Type => _typeLazy.Value;
-    private readonly Lazy<Type> _typeLazy;
+    public Type Type { get; }
 
-    public string Name => _lazyName.Value;
-    private readonly Lazy<string> _lazyName;
+    public string Name => Type.Name;
 
     public CachedAttribute(object attribute, CachedTypes cachedTypes, bool threadSafe = true)
     {
         Attribute = attribute;
-
-        _lazyCachedType = new Lazy<CachedType>(() => cachedTypes.GetCachedType(Attribute.GetType()), threadSafe);
-
-        _typeLazy = new Lazy<Type>(() => _lazyCachedType.Value.Type!, threadSafe);
-
-        _lazyName = new Lazy<string>(() => _typeLazy.Value.Name, threadSafe);
+        _cachedTypes = cachedTypes;
+        _threadSafe = threadSafe;
+        Type = attribute.GetType();
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedType GetCachedType() =>
+        _cachedType.GetOrCreatePublicationOnly(_threadSafe, this, static self => self._cachedTypes.GetCachedType(self.Type));
 }

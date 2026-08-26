@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Soenneker.Reflection.Cache.Abstract;
 using Soenneker.Reflection.Cache.Options;
 using Soenneker.Reflection.Cache.Types;

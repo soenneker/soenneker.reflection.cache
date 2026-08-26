@@ -5,15 +5,15 @@ using Soenneker.Reflection.Cache.Constructors;
 namespace Soenneker.Reflection.Cache.Extensions;
 
 /// <summary>
-/// Represents the cached constructor extension.
+/// Provides signature helpers for cached constructors.
 /// </summary>
 public static class CachedConstructorExtension
 {
     /// <summary>
-    /// Executes the to hash key operation.
+    /// Computes a hash key from the constructor parameter types.
     /// </summary>
     /// <param name="cachedConstructor">The cached constructor.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>A hash representing the constructor signature.</returns>
     public static int ToHashKey(this CachedConstructor cachedConstructor)
     {
         Type[] parameterTypes = cachedConstructor.GetParametersTypes();

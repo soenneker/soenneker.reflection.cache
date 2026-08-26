@@ -4,68 +4,69 @@ using System.Diagnostics.Contracts;
 namespace Soenneker.Reflection.Cache.Types.Abstract;
 
 /// <summary>
-/// Defines the cached make generic type contract.
+/// Provides cached construction of closed generic types from a generic type definition.
 /// </summary>
 public interface ICachedMakeGenericType
 {
     /// <summary>
-    /// Executes the make generic cached type operation.
+    /// Constructs or retrieves a cached closed generic type using reflection type arguments.
     /// </summary>
     /// <param name="typeArguments">The type arguments.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The cached closed generic type, or <c>null</c> when the source is not a generic type definition.</returns>
     [Pure]
     CachedType? MakeGenericCachedType(params Type[] typeArguments);
 
     /// <summary>
-    /// CachedType overload. Avoids string building and other intermediate work, but still requires a Type[]
-    /// for MakeGenericType.
+    /// Constructs or retrieves a cached closed generic type using cached type arguments.
     /// </summary>
+    /// <param name="cachedTypeArguments">The cached generic type arguments.</param>
+    /// <returns>The cached closed generic type, or <c>null</c> when the source is not a generic type definition.</returns>
     [Pure]
     CachedType? MakeGenericCachedType(params CachedType[] cachedTypeArguments);
 
     /// <summary>
-    /// Executes the make generic cached type operation.
+    /// Constructs or retrieves a cached closed generic type with one generic argument.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0);
 
     /// <summary>
-    /// Executes the make generic cached type operation.
+    /// Constructs or retrieves a cached closed generic type with two generic arguments.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <param name="t1">The second generic type argument.</param>
+    /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0, CachedType t1);
 
     /// <summary>
-    /// Executes the make generic cached type operation.
+    /// Constructs or retrieves a cached closed generic type with three generic arguments.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <param name="t1">The second generic type argument.</param>
+    /// <param name="t2">The third generic type argument.</param>
+    /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0, CachedType t1, CachedType t2);
 
     /// <summary>
-    /// Executes the make generic cached type operation.
+    /// Constructs or retrieves a cached closed generic type with four generic arguments.
     /// </summary>
-    /// <param name="t0">The t0.</param>
-    /// <param name="t1">The t1.</param>
-    /// <param name="t2">The t2.</param>
-    /// <param name="t3">The t3.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="t0">The first generic type argument.</param>
+    /// <param name="t1">The second generic type argument.</param>
+    /// <param name="t2">The third generic type argument.</param>
+    /// <param name="t3">The fourth generic type argument.</param>
+    /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
 
     /// <summary>
-    /// Executes the make generic type operation.
+    /// Constructs or retrieves a closed generic reflection type.
     /// </summary>
     /// <param name="typeArguments">The type arguments.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The closed generic type, or <c>null</c> when the source is not a generic type definition.</returns>
     [Pure]
     Type? MakeGenericType(params Type[] typeArguments);
 }

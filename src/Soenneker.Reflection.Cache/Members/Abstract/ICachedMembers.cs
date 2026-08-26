@@ -3,19 +3,19 @@
 namespace Soenneker.Reflection.Cache.Members.Abstract;
 
 /// <summary>
-/// Represents a cached set of members for a type.
+/// Provides the cached members discovered for a type.
 /// </summary>
 public interface ICachedMembers
 {
     /// <summary>
-    /// Gets cached members.
+    /// Gets all cached members in the configured reflection scope.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The cached members.</returns>
     CachedMember[] GetCachedMembers();
 
     /// <summary>
-    /// Gets an array of cached members.
+    /// Gets the reflection metadata for all members in the configured reflection scope.
     /// </summary>
-    /// <returns>An array of cached members.</returns>
+    /// <returns>The member metadata.</returns>
     MemberInfo[] GetMembers();
 }

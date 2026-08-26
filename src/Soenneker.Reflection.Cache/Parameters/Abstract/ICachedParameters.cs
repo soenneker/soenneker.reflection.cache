@@ -5,14 +5,14 @@ using System.Reflection;
 namespace Soenneker.Reflection.Cache.Parameters.Abstract;
 
 /// <summary>
-/// Represents a cached set of parameters for a method or constructor.
+/// Provides cached parameter metadata for a method or constructor.
 /// </summary>
 public interface ICachedParameters
 {
     /// <summary>
-    /// Gets cached parameters.
+    /// Gets all cached parameters in declaration order.
     /// </summary>
-    /// <returns>The result of the operation.</returns>
+    /// <returns>The cached parameters.</returns>
     [Pure]
     CachedParameter[] GetCachedParameters();
 

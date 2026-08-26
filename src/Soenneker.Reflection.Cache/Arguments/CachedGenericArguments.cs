@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using Soenneker.Reflection.Cache.Arguments.Abstract;
-using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Arguments;
@@ -8,41 +7,27 @@ namespace Soenneker.Reflection.Cache.Arguments;
 ///<inheritdoc cref="ICachedGenericArguments"/>
 public sealed class CachedGenericArguments : ICachedGenericArguments
 {
-    private readonly CachedType _cachedType;
-    private readonly Lazy<CachedType[]> _cachedGenericArguments;
-
-    private readonly CachedTypes _cachedTypes;
-    private readonly Lazy<Type[]> _cachedGenericArgumentsTypes;
+    private readonly CachedType[] _cachedGenericArguments;
+    private readonly Type[] _genericArguments;
 
     public CachedGenericArguments(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedType = cachedType;
-        _cachedTypes = cachedTypes;
-        _cachedGenericArguments = new Lazy<CachedType[]>(SetArray, threadSafe);
-        _cachedGenericArgumentsTypes = new Lazy<Type[]>(() => _cachedGenericArguments.Value.ToTypes(), threadSafe);
-    }
+        _genericArguments = cachedType.Type!.GetGenericArguments();
+        _cachedGenericArguments = new CachedType[_genericArguments.Length];
 
-    private CachedType[] SetArray()
-    {
-        Type[] types = _cachedType.Type!.GetGenericArguments();
-
-        var result = new CachedType[types.Length];
-
-        for (var i = 0; i < types.Length; i++)
+        for (var i = 0; i < _genericArguments.Length; i++)
         {
-            result[i] = _cachedTypes.GetCachedType(types[i]);
+            _cachedGenericArguments[i] = cachedTypes.GetCachedType(_genericArguments[i]);
         }
-
-        return result;
     }
 
     public CachedType[] GetCachedGenericArguments()
     {
-        return _cachedGenericArguments.Value;
+        return _cachedGenericArguments;
     }
 
     public Type[] GetGenericArguments()
     {
-        return _cachedGenericArgumentsTypes.Value;
+        return _genericArguments;
     }
 }

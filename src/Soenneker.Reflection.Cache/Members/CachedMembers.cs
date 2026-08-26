@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Reflection;
-using Soenneker.Reflection.Cache.Extensions;
 using Soenneker.Reflection.Cache.Members.Abstract;
 using Soenneker.Reflection.Cache.Types;
 
@@ -9,45 +8,29 @@ namespace Soenneker.Reflection.Cache.Members;
 ///<inheritdoc cref="ICachedMembers"/>
 public class CachedMembers : ICachedMembers
 {
-    private readonly Lazy<CachedMember[]> _cachedArray;
-
-    private readonly CachedType _cachedType;
-
-    private readonly Lazy<MemberInfo?[]> _cachedMemberInfos;
-
-    private readonly CachedTypes _cachedTypes;
+    private readonly CachedMember[] _cachedArray;
+    private readonly MemberInfo[] _memberInfos;
 
     public CachedMembers(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
-        _cachedTypes = cachedTypes;
-        _cachedType = cachedType;
-        _cachedArray = new Lazy<CachedMember[]>(() => SetArray(threadSafe), threadSafe);
+        _memberInfos = cachedType.Type!.GetMembers(cachedTypes.Options.MemberFlags);
+        int length = _memberInfos.Length;
 
-        _cachedMemberInfos = new Lazy<MemberInfo?[]>(() => _cachedArray.Value.ToMemberInfos(), threadSafe);
-    }
-
-    private CachedMember[] SetArray(bool threadSafe)
-    {
-        MemberInfo[] memberInfos = _cachedType.Type!.GetMembers(_cachedTypes.Options.MemberFlags);
-        int length = memberInfos.Length;
-
-        var cachedArray = new CachedMember[length];
+        _cachedArray = new CachedMember[length];
 
         for (var i = 0; i < length; i++)
         {
-            cachedArray[i] = new CachedMember(memberInfos[i], _cachedTypes, threadSafe);
+            _cachedArray[i] = new CachedMember(_memberInfos[i], cachedTypes, threadSafe);
         }
-
-        return cachedArray;
     }
 
     public CachedMember[] GetCachedMembers()
     {
-        return _cachedArray.Value;
+        return _cachedArray;
     }
 
     public MemberInfo[] GetMembers()
     {
-        return _cachedMemberInfos.Value;
+        return _memberInfos;
     }
 }

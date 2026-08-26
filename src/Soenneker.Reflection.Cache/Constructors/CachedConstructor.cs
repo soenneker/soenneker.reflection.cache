@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -6,6 +6,7 @@ using Soenneker.Reflection.Cache.Attributes;
 using Soenneker.Reflection.Cache.Constructors.Abstract;
 using Soenneker.Reflection.Cache.Parameters;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Constructors;
 
@@ -14,17 +15,20 @@ public sealed partial class CachedConstructor : ICachedConstructor
 {
     public ConstructorInfo? ConstructorInfo { get; }
 
-    private readonly Lazy<CachedCustomAttributes>? _attributes;
+    private ValueLazy<CachedCustomAttributes> _attributes;
+    private ValueLazy<CachedParameters> _parameters;
+    private ValueLazy<ParameterInfo[]> _parameterInfos;
 
-    private readonly Lazy<CachedParameters>? _parameters;
-
+    private readonly CachedTypes _cachedTypes;
     private readonly bool _threadSafe;
 
     // Arity-specialized invokers avoid params object[] allocations for common cases (1..4 args).
-    private readonly Lazy<Func<object?, object?>?>? _invoke1;
-    private readonly Lazy<Func<object?, object?, object?>?>? _invoke2;
-    private readonly Lazy<Func<object?, object?, object?, object?>?>? _invoke3;
-    private readonly Lazy<Func<object?, object?, object?, object?, object?>?>? _invoke4;
+    private static readonly object _unsupportedInvoker = new();
+    private ValueLazy<object> _invoke1;
+    private ValueLazy<object> _invoke2;
+    private ValueLazy<object> _invoke3;
+    private ValueLazy<object> _invoke4;
+    private ValueAtomicLock _initializationLock;
 
     // Thread-static exact-length arrays for fallback Invoke paths (reflection requires exact parameter count).
     [ThreadStatic] private static object?[]? _tsArgs1;
@@ -35,18 +39,55 @@ public sealed partial class CachedConstructor : ICachedConstructor
     public CachedConstructor(ConstructorInfo? constructorInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         ConstructorInfo = constructorInfo;
+        _cachedTypes = cachedTypes;
         _threadSafe = threadSafe;
+    }
 
-        if (constructorInfo == null)
-            return;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedParameters GetParametersCache() =>
+        _parameters.GetOrCreate(_threadSafe, ref _initializationLock, this,
+            static self => new CachedParameters(self.GetParameterInfos(), self._cachedTypes));
 
-        _attributes = new Lazy<CachedCustomAttributes>(() => new CachedCustomAttributes(this, cachedTypes, threadSafe), threadSafe);
-        _parameters = new Lazy<CachedParameters>(() => new CachedParameters(this, cachedTypes, threadSafe), threadSafe);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private ParameterInfo[] GetParameterInfos() =>
+        _parameterInfos.GetOrCreate(_threadSafe, ref _initializationLock, ConstructorInfo,
+            static constructorInfo => constructorInfo?.GetParameters() ?? []);
 
-        _invoke1 = new Lazy<Func<object?, object?>?>(() => BuildCtorInvoker1(constructorInfo), threadSafe);
-        _invoke2 = new Lazy<Func<object?, object?, object?>?>(() => BuildCtorInvoker2(constructorInfo), threadSafe);
-        _invoke3 = new Lazy<Func<object?, object?, object?, object?>?>(() => BuildCtorInvoker3(constructorInfo), threadSafe);
-        _invoke4 = new Lazy<Func<object?, object?, object?, object?, object?>?>(() => BuildCtorInvoker4(constructorInfo), threadSafe);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private CachedCustomAttributes GetAttributesCache() =>
+        _attributes.GetOrCreate(_threadSafe, ref _initializationLock, this,
+            static self => new CachedCustomAttributes(self, self._cachedTypes, self._threadSafe));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?>? GetInvoker1()
+    {
+        object value = _invoke1.GetOrCreate(_threadSafe, ref _initializationLock, ConstructorInfo!,
+            static constructorInfo => BuildCtorInvoker1(constructorInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?>)value;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?, object?>? GetInvoker2()
+    {
+        object value = _invoke2.GetOrCreate(_threadSafe, ref _initializationLock, ConstructorInfo!,
+            static constructorInfo => BuildCtorInvoker2(constructorInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?>)value;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?, object?, object?>? GetInvoker3()
+    {
+        object value = _invoke3.GetOrCreate(_threadSafe, ref _initializationLock, ConstructorInfo!,
+            static constructorInfo => BuildCtorInvoker3(constructorInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?, object?>)value;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Func<object?, object?, object?, object?, object?>? GetInvoker4()
+    {
+        object value = _invoke4.GetOrCreate(_threadSafe, ref _initializationLock, ConstructorInfo!,
+            static constructorInfo => BuildCtorInvoker4(constructorInfo) ?? _unsupportedInvoker);
+        return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?, object?, object?>)value;
     }
 
     public CachedParameter[] GetCachedParameters()
@@ -54,7 +95,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return [];
 
-        return _parameters!.Value.GetCachedParameters();
+        return GetParametersCache().GetCachedParameters();
     }
 
     public ParameterInfo[] GetParameters()
@@ -62,7 +103,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return [];
 
-        return _parameters!.Value.GetParameters();
+        return GetParameterInfos();
     }
 
     public CachedAttribute[] GetCachedCustomAttributes()
@@ -70,7 +111,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return [];
 
-        return _attributes!.Value.GetCachedCustomAttributes();
+        return GetAttributesCache().GetCachedCustomAttributes();
     }
 
     public object[] GetCustomAttributes()
@@ -78,7 +119,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return [];
 
-        return _attributes!.Value.GetCustomAttributes();
+        return GetAttributesCache().GetCustomAttributes();
     }
 
     public T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute
@@ -86,7 +127,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return null;
 
-        return _attributes!.Value.GetCachedCustomAttribute<T>(inherit);
+        return GetAttributesCache().GetCachedCustomAttribute<T>(inherit);
     }
 
     public Type[] GetParametersTypes()
@@ -94,7 +135,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return [];
 
-        return _parameters!.Value.GetParameterTypes();
+        return GetParametersCache().GetParameterTypes();
     }
 
     public CachedType[] GetCachedParameterTypes()
@@ -102,7 +143,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo == null)
             return [];
 
-        return _parameters!.Value.GetCachedParameterTypes();
+        return GetParametersCache().GetCachedParameterTypes();
     }
 
     public object? Invoke()
@@ -209,7 +250,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo is null)
             return null;
 
-        Func<object?, object?>? f = _invoke1!.Value;
+        Func<object?, object?>? f = GetInvoker1();
         if (f is not null)
             return f(arg0);
 
@@ -222,7 +263,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo is null)
             return null;
 
-        Func<object?, object?, object?>? f = _invoke2!.Value;
+        Func<object?, object?, object?>? f = GetInvoker2();
         if (f is not null)
             return f(arg0, arg1);
 
@@ -235,7 +276,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo is null)
             return null;
 
-        Func<object?, object?, object?, object?>? f = _invoke3!.Value;
+        Func<object?, object?, object?, object?>? f = GetInvoker3();
         if (f is not null)
             return f(arg0, arg1, arg2);
 
@@ -248,7 +289,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         if (ConstructorInfo is null)
             return null;
 
-        Func<object?, object?, object?, object?, object?>? f = _invoke4!.Value;
+        Func<object?, object?, object?, object?, object?>? f = GetInvoker4();
         if (f is not null)
             return f(arg0, arg1, arg2, arg3);
 

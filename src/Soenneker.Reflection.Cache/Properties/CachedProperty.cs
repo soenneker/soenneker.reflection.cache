@@ -1,5 +1,6 @@
 using Soenneker.Reflection.Cache.Properties.Abstract;
 using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Utils;
 using Soenneker.Utils.LazyBools;
 using System;
 using System.Linq.Expressions;
@@ -18,8 +19,9 @@ public sealed class CachedProperty : ICachedProperty
 
     private int _isDelegate;
 
-    private readonly Lazy<Func<object, object?>?> _getter;
-    private readonly Lazy<Action<object, object?>?> _setter;
+    private ValueNullableLazy<Func<object, object?>> _getter;
+    private ValueNullableLazy<Action<object, object?>> _setter;
+    private ValueAtomicLock _initializationLock;
 
     public bool IsDelegate =>
         LazyBoolUtil.GetOrInit(ref _isDelegate, _threadSafe, this, static self => self._cachedTypes.GetCachedType(typeof(Delegate))
@@ -49,8 +51,6 @@ public sealed class CachedProperty : ICachedProperty
         PropertyInfo = propertyInfo;
         _cachedTypes = cachedTypes;
         _threadSafe = threadSafe;
-        _getter = new Lazy<Func<object, object?>?>(() => BuildGetter(PropertyInfo), threadSafe);
-        _setter = new Lazy<Action<object, object?>?>(() => BuildSetter(PropertyInfo), threadSafe);
 
         // Cheap checks are evaluated once during construction.
         MethodInfo? getMethod = PropertyInfo.GetMethod;
@@ -68,16 +68,12 @@ public sealed class CachedProperty : ICachedProperty
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Func<object, object?>? GetGetter()
-    {
-        return _getter.Value;
-    }
+    public Func<object, object?>? GetGetter() =>
+        _getter.GetOrCreate(_threadSafe, ref _initializationLock, PropertyInfo, static propertyInfo => BuildGetter(propertyInfo));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Action<object, object?>? GetSetter()
-    {
-        return _setter.Value;
-    }
+    public Action<object, object?>? GetSetter() =>
+        _setter.GetOrCreate(_threadSafe, ref _initializationLock, PropertyInfo, static propertyInfo => BuildSetter(propertyInfo));
 
     public bool TryGetValue(object instance, out object? value)
     {
