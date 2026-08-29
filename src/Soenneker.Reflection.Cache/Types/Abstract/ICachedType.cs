@@ -130,6 +130,7 @@ public partial interface ICachedType
     /// <summary>
     /// Gets all interfaces implemented by the type.
     /// </summary>
+    /// <returns>The requested type[].</returns>
     [Pure]
     Type[]? GetInterfaces();
 

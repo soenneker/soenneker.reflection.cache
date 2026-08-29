@@ -19,7 +19,7 @@ public interface ICachedFields
     /// <summary>
     /// Gets cached field.
     /// </summary>
-    /// <param name="name">The name.</param>
+    /// <param name="name">Name of the Cached Fields value to target.</param>
     /// <returns>The matching cached field, or <c>null</c> when no field has that name.</returns>
     [Pure]
     CachedField? GetCachedField(string name);

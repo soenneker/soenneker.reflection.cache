@@ -27,6 +27,9 @@ public interface ICachedCustomAttributes
     /// When <paramref name="inherit"/> is <see langword="true"/> (the default), uses the cached attribute list built with <c>GetCustomAttributes(inherit: true)</c> for this member.
     /// When <see langword="false"/>, uses reflection with <c>inherit: false</c> (not cached).
     /// </summary>
+    /// <typeparam name="T">Type of value handled by the Cached Custom Attributes.</typeparam>
+    /// <param name="inherit">Whether inherit.</param>
+    /// <returns>The requested value.</returns>
     [Pure]
     T? GetCachedCustomAttribute<T>(bool inherit = true) where T : Attribute;
 }

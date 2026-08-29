@@ -264,6 +264,11 @@ public sealed class CachedMethod : ICachedMethod
 
     // ---- allocation-reducing overloads (avoid CachedType wrapper/params allocations) ----
 
+    /// <summary>
+    /// Creates cached Generic Method.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <returns>The same builder instance, so additional classes or variants can be chained.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? MakeCachedGenericMethod(Type t0)
     {
@@ -285,6 +290,12 @@ public sealed class CachedMethod : ICachedMethod
         return newCached;
     }
 
+    /// <summary>
+    /// Creates cached Generic Method.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <param name="t1">Second generic type argument.</param>
+    /// <returns>The same builder instance, so additional classes or variants can be chained.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? MakeCachedGenericMethod(Type t0, Type t1)
     {
@@ -308,6 +319,13 @@ public sealed class CachedMethod : ICachedMethod
         return newCached;
     }
 
+    /// <summary>
+    /// Creates cached Generic Method.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <param name="t1">Second generic type argument.</param>
+    /// <param name="t2">Third generic type argument.</param>
+    /// <returns>The same builder instance, so additional classes or variants can be chained.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? MakeCachedGenericMethod(Type t0, Type t1, Type t2)
     {
@@ -333,6 +351,14 @@ public sealed class CachedMethod : ICachedMethod
         return newCached;
     }
 
+    /// <summary>
+    /// Creates cached Generic Method.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <param name="t1">Second generic type argument.</param>
+    /// <param name="t2">Third generic type argument.</param>
+    /// <param name="t3">T for the make cached generic method operation.</param>
+    /// <returns>The same builder instance, so additional classes or variants can be chained.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedMethod? MakeCachedGenericMethod(Type t0, Type t1, Type t2, Type t3)
     {

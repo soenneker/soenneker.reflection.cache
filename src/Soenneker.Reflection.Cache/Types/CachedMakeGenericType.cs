@@ -68,6 +68,11 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
 
     // ---- allocation-reducing overloads (avoid params Type[] allocations) ----
 
+    /// <summary>
+    /// Creates generic Cached Type.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <returns>The resulting cached Type.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0)
     {
@@ -102,6 +107,12 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    /// <summary>
+    /// Creates generic Cached Type.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <param name="t1">Second generic type argument.</param>
+    /// <returns>The resulting cached Type.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0, Type t1)
     {
@@ -138,6 +149,13 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    /// <summary>
+    /// Creates generic Cached Type.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <param name="t1">Second generic type argument.</param>
+    /// <param name="t2">Third generic type argument.</param>
+    /// <returns>The resulting cached Type.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0, Type t1, Type t2)
     {
@@ -176,6 +194,14 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    /// <summary>
+    /// Creates generic Cached Type.
+    /// </summary>
+    /// <param name="t0">First generic type argument.</param>
+    /// <param name="t1">Second generic type argument.</param>
+    /// <param name="t2">Third generic type argument.</param>
+    /// <param name="t3">T for the make generic cached type operation.</param>
+    /// <returns>The resulting cached Type.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0, Type t1, Type t2, Type t3)
     {

@@ -19,7 +19,7 @@ public interface ICachedProperties
     /// <summary>
     /// Gets cached property.
     /// </summary>
-    /// <param name="name">The name.</param>
+    /// <param name="name">Name of the Cached Properties value to target.</param>
     /// <returns>The matching cached property, or <c>null</c> when no property has that name.</returns>
     [Pure]
     CachedProperty? GetCachedProperty(string name);
