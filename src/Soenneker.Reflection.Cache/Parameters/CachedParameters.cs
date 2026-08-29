@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Parameters;
 
-///<inheritdoc cref="ICachedParameters"/>
+/// <inheritdoc cref="ICachedParameters"/>
 public sealed class CachedParameters : ICachedParameters
 {
     private readonly ParameterInfo[] _parameterInfos;

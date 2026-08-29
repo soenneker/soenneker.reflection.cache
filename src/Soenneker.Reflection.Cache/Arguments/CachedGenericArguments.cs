@@ -4,7 +4,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Arguments;
 
-///<inheritdoc cref="ICachedGenericArguments"/>
+/// <inheritdoc cref="ICachedGenericArguments"/>
 public sealed class CachedGenericArguments : ICachedGenericArguments
 {
     private readonly CachedType[] _cachedGenericArguments;

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace Soenneker.Reflection.Cache.Attributes;
 
-///<inheritdoc cref="ICachedAttribute"/>
+/// <inheritdoc cref="ICachedAttribute"/>
 public sealed class CachedAttribute : ICachedAttribute
 {
     public object Attribute { get; }

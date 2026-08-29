@@ -10,7 +10,7 @@ using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Attributes;
 
-///<inheritdoc cref="ICachedCustomAttributes"/>
+/// <inheritdoc cref="ICachedCustomAttributes"/>
 public sealed class CachedCustomAttributes : ICachedCustomAttributes
 {
     private readonly CachedType? _cachedType;

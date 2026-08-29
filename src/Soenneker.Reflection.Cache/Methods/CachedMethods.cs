@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Soenneker.Reflection.Cache.Methods;
 
-///<inheritdoc cref="ICachedMethods"/>
+/// <inheritdoc cref="ICachedMethods"/>
 public sealed class CachedMethods : ICachedMethods
 {
     private readonly CachedType _cachedType;

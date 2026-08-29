@@ -3,7 +3,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Types;
 
-///<inheritdoc cref="ICachedGetElementType"/>
+/// <inheritdoc cref="ICachedGetElementType"/>
 public sealed class CachedGetElementType : ICachedGetElementType
 {
     private readonly CachedType? _cachedElementType;

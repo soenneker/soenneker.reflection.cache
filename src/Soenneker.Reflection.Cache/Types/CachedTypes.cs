@@ -7,7 +7,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Types;
 
-///<inheritdoc cref="ICachedTypes"/>
+/// <inheritdoc cref="ICachedTypes"/>
 public sealed class CachedTypes : ICachedTypes
 {
     private readonly bool _threadSafe;

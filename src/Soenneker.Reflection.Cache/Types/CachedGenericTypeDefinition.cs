@@ -3,7 +3,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Types;
 
-///<inheritdoc cref="ICachedGenericTypeDefinition"/>
+/// <inheritdoc cref="ICachedGenericTypeDefinition"/>
 public sealed class CachedGenericTypeDefinition : ICachedGenericTypeDefinition
 {
     private readonly CachedType _cachedGenericTypeDefinition;

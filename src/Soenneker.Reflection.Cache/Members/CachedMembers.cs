@@ -5,7 +5,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Members;
 
-///<inheritdoc cref="ICachedMembers"/>
+/// <inheritdoc cref="ICachedMembers"/>
 public class CachedMembers : ICachedMembers
 {
     private readonly CachedMember[] _cachedArray;

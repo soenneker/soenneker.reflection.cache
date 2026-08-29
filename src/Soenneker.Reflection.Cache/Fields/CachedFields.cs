@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Fields;
 
-///<inheritdoc cref="ICachedFields"/>
+/// <inheritdoc cref="ICachedFields"/>
 public sealed class CachedFields : ICachedFields
 {
     private readonly CachedType _cachedType;

@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace Soenneker.Reflection.Cache.Members;
 
-///<inheritdoc cref="ICachedMember"/>
+/// <inheritdoc cref="ICachedMember"/>
 public sealed class CachedMember : ICachedMember
 {
     public MemberInfo? MemberInfo { get; }

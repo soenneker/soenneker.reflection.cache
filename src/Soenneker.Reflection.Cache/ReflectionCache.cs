@@ -5,7 +5,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache;
 
-///<inheritdoc cref="IReflectionCache"/>
+/// <inheritdoc cref="IReflectionCache"/>
 public class ReflectionCache : IReflectionCache
 {
     private readonly CachedTypes _cachedTypes;

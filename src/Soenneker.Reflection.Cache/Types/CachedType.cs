@@ -14,7 +14,7 @@ using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Types;
 
-///<inheritdoc cref="ICachedType"/>
+/// <inheritdoc cref="ICachedType"/>
 public partial class CachedType : ICachedType
 {
     public Type? Type { get; }

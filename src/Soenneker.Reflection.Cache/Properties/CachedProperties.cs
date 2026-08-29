@@ -8,7 +8,7 @@ using Soenneker.Reflection.Cache.Types;
 
 namespace Soenneker.Reflection.Cache.Properties;
 
-///<inheritdoc cref="ICachedProperties"/>
+/// <inheritdoc cref="ICachedProperties"/>
 public sealed class CachedProperties : ICachedProperties
 {
     private readonly CachedType _cachedType;

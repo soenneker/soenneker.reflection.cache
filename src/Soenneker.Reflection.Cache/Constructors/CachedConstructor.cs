@@ -10,7 +10,7 @@ using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Constructors;
 
-///<inheritdoc cref="ICachedConstructor"/>
+/// <inheritdoc cref="ICachedConstructor"/>
 public sealed partial class CachedConstructor : ICachedConstructor
 {
     public ConstructorInfo? ConstructorInfo { get; }
