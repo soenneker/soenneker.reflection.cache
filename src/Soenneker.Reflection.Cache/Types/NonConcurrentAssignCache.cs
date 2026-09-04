@@ -5,6 +5,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Types;
 
+/// <inheritdoc cref="IAssignCache" />
 internal sealed class NonConcurrentAssignCache : IAssignCache
 {
     // Initialize with a tiny capacity; grows if this base type is queried a lot

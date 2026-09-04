@@ -5,6 +5,7 @@ using Soenneker.Reflection.Cache.Types.Abstract;
 
 namespace Soenneker.Reflection.Cache.Types;
 
+/// <inheritdoc cref="IAssignCache" />
 internal sealed class ConcurrentAssignCache : IAssignCache
 {
     // Reads are lock-free and writes are rare; one lock avoids a processor-count-sized lock table per cached base type.

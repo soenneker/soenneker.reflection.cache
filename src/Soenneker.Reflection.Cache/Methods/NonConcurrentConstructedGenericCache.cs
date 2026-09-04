@@ -5,6 +5,7 @@ using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Methods;
 
+/// <inheritdoc cref="IConstructedGenericCache" />
 internal sealed class NonConcurrentConstructedGenericCache : IConstructedGenericCache
 {
     private readonly Dictionary<TypeHandleSequenceKey, CachedMethod> _map = new(capacity: 4);

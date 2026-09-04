@@ -6,6 +6,7 @@ using Soenneker.Reflection.Cache.Utils;
 
 namespace Soenneker.Reflection.Cache.Methods;
 
+/// <inheritdoc cref="IConstructedGenericCache" />
 internal sealed class ConcurrentConstructedGenericCache : IConstructedGenericCache
 {
     // Constructed generic variants are normally few and reads dominate after warmup.
