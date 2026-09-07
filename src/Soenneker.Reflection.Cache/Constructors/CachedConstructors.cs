@@ -331,37 +331,25 @@ public sealed class CachedConstructors : ICachedConstructors
 
     public object? CreateInstance(object? arg0)
     {
-        if (arg0 is null)
-            return CreateInstance([arg0!]);
-
-        CachedConstructor? ctor = GetCachedConstructor(arg0.GetType());
+        CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0);
     }
 
     public object? CreateInstance(object? arg0, object? arg1)
     {
-        if (arg0 is null || arg1 is null)
-            return CreateInstance([arg0!, arg1!]);
-
-        CachedConstructor? ctor = GetCachedConstructor(arg0.GetType(), arg1.GetType());
+        CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object), arg1?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0, arg1);
     }
 
     public object? CreateInstance(object? arg0, object? arg1, object? arg2)
     {
-        if (arg0 is null || arg1 is null || arg2 is null)
-            return CreateInstance([arg0!, arg1!, arg2!]);
-
-        CachedConstructor? ctor = GetCachedConstructor(arg0.GetType(), arg1.GetType(), arg2.GetType());
+        CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object), arg1?.GetType() ?? typeof(object), arg2?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0, arg1, arg2);
     }
 
     public object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3)
     {
-        if (arg0 is null || arg1 is null || arg2 is null || arg3 is null)
-            return CreateInstance([arg0!, arg1!, arg2!, arg3!]);
-
-        CachedConstructor? ctor = GetCachedConstructor(arg0.GetType(), arg1.GetType(), arg2.GetType(), arg3.GetType());
+        CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object), arg1?.GetType() ?? typeof(object), arg2?.GetType() ?? typeof(object), arg3?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0, arg1, arg2, arg3);
     }
 
