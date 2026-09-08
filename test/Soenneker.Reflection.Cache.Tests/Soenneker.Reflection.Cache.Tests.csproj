@@ -14,7 +14,7 @@
         <PackageReference Include="Soenneker.Tests.Attributes.Local" Version="4.0.101" />
         <PackageReference Include="Soenneker.Tests.Benchmark" Version="4.0.157" />
         <PackageReference Include="TUnit" Version="1.66.27" />
-        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.256" />
+        <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="4.0.257" />
     </ItemGroup>
 
     <ItemGroup>
