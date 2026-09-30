@@ -15,7 +15,7 @@ public class FieldsRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetField()
+    public async ValueTask GetField()
     {
         Summary summary = BenchmarkRunner.Run<GetFieldBenchmarks>(DefaultConf);
 
@@ -24,7 +24,7 @@ public class FieldsRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetFields()
+    public async ValueTask GetFields()
     {
         Summary summary = BenchmarkRunner.Run<GetFieldsBenchmarks>(DefaultConf);
 
@@ -33,7 +33,7 @@ public class FieldsRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task FieldAccessors()
+    public async ValueTask FieldAccessors()
     {
         Summary summary = BenchmarkRunner.Run<FieldAccessorBenchmarks>(DefaultConf);
 

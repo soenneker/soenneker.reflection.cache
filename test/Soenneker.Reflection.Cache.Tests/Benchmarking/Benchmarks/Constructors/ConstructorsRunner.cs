@@ -15,7 +15,7 @@ public class ConstructorsRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetConstructor()
+    public async ValueTask GetConstructor()
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorBenchmarks>(DefaultConf);
 
@@ -24,7 +24,7 @@ public class ConstructorsRunner : BenchmarkTest
 
     [Skip("Manual")]
    // [LocalOnly]
-    public async Task CachedConstructors()
+    public async ValueTask CachedConstructors()
     {
         Summary summary = BenchmarkRunner.Run<CachedConstructorBenchmarks>(DefaultConf);
 
@@ -33,7 +33,7 @@ public class ConstructorsRunner : BenchmarkTest
 
     [Skip("Manual")]
    // [LocalOnly]
-    public async Task GetConstructors()
+    public async ValueTask GetConstructors()
     {
         Summary summary = BenchmarkRunner.Run<GetConstructorsBenchmarks>(DefaultConf);
 
@@ -42,7 +42,7 @@ public class ConstructorsRunner : BenchmarkTest
 
      [Skip("Manual")]
     //[LocalOnly]
-    public async Task ConstructorInvoke()
+    public async ValueTask ConstructorInvoke()
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeBenchmarks>(DefaultConf);
 
@@ -51,7 +51,7 @@ public class ConstructorsRunner : BenchmarkTest
 
     [Skip("Manual")]
    // [LocalOnly]
-    public async Task CreateInstanceParameters()
+    public async ValueTask CreateInstanceParameters()
     {
         Summary summary = BenchmarkRunner.Run<ConstructorInvokeParametersBenchmarks>(DefaultConf);
 

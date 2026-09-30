@@ -8,7 +8,7 @@ public class MethodsRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetMethod()
+    public async ValueTask GetMethod()
     {
         Summary summary = BenchmarkRunner.Run<GetMethodBenchmarks>(DefaultConf);
 
@@ -17,7 +17,7 @@ public class MethodsRunner : BenchmarkTest
 
     [Skip("Manual")]
    // [LocalOnly]
-    public async Task GetMethods()
+    public async ValueTask GetMethods()
     {
         Summary summary = BenchmarkRunner.Run<GetMethodsBenchmarks>(DefaultConf);
 

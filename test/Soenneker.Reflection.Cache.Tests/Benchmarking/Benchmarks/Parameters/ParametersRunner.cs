@@ -15,7 +15,7 @@ public class ParametersRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetParameters()
+    public async ValueTask GetParameters()
     {
         Summary summary = BenchmarkRunner.Run<GetParametersBenchmarks>(DefaultConf);
 

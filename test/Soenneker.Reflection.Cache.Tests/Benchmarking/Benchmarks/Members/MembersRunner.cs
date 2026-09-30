@@ -15,7 +15,7 @@ public class MembersRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetMember()
+    public async ValueTask GetMember()
     {
         Summary summary = BenchmarkRunner.Run<GetMemberBenchmarks>(DefaultConf);
 
@@ -24,7 +24,7 @@ public class MembersRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetMembers()
+    public async ValueTask GetMembers()
     {
         Summary summary = BenchmarkRunner.Run<GetMembersBenchmarks>(DefaultConf);
 

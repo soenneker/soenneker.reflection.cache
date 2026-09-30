@@ -15,7 +15,7 @@ public class InterfacesRunner : BenchmarkTest
     
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetInterface()
+    public async ValueTask GetInterface()
     {
         Summary summary = BenchmarkRunner.Run<GetInterfaceBenchmarks>(DefaultConf);
 
@@ -24,7 +24,7 @@ public class InterfacesRunner : BenchmarkTest
 
     [Skip("Manual")]
    // [LocalOnly]
-    public async Task GetInterfaces()
+    public async ValueTask GetInterfaces()
     {
         Summary summary = BenchmarkRunner.Run<GetInterfacesBenchmarks>(DefaultConf);
 

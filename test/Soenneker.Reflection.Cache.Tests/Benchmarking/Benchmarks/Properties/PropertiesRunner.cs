@@ -15,7 +15,7 @@ public class PropertiesRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetProperty()
+    public async ValueTask GetProperty()
     {
         Summary summary = BenchmarkRunner.Run<GetPropertyBenchmarks>(DefaultConf);
 
@@ -24,7 +24,7 @@ public class PropertiesRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetProperties()
+    public async ValueTask GetProperties()
     {
         Summary summary = BenchmarkRunner.Run<GetPropertiesBenchmarks>(DefaultConf);
 
@@ -33,7 +33,7 @@ public class PropertiesRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task PropertyAccessors()
+    public async ValueTask PropertyAccessors()
     {
         Summary summary = BenchmarkRunner.Run<PropertyAccessorBenchmarks>(DefaultConf);
 

@@ -11,7 +11,7 @@ public class AttributesRunner : BenchmarkTest
 {
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task GetAttributes()
+    public async ValueTask GetAttributes()
     {
         Summary summary = BenchmarkRunner.Run<GetAttributesBenchmarks>(DefaultConf);
 
@@ -20,7 +20,7 @@ public class AttributesRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async Task CachedAttributesExtension()
+    public async ValueTask CachedAttributesExtension()
     {
         Summary summary = BenchmarkRunner.Run<CachedAttributesExtensionBenchmarks>(DefaultConf);
 
