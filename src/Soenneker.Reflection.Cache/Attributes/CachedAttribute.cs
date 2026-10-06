@@ -11,7 +11,7 @@ public sealed class CachedAttribute : ICachedAttribute
 {
     public object Attribute { get; }
 
-    public CachedType CachedType => GetCachedType();
+    public CachedType CachedType { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get => GetCachedType(); }
     private ValueLazy<CachedType> _cachedType;
     private readonly CachedTypes _cachedTypes;
     private readonly bool _threadSafe;
@@ -28,6 +28,7 @@ public sealed class CachedAttribute : ICachedAttribute
         Type = attribute.GetType();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedType GetCachedType() =>
         _cachedType.GetOrCreatePublicationOnly(_threadSafe, this, static self => self._cachedTypes.GetCachedType(self.Type));

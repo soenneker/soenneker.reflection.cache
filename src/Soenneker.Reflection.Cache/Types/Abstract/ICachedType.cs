@@ -20,6 +20,7 @@ public partial interface ICachedType
     /// Gets all cached fields for this type.
     /// </summary>
     /// <returns>An array of cached fields, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedField[]? GetCachedFields();
 
@@ -27,6 +28,7 @@ public partial interface ICachedType
     /// Gets the reflection metadata for all fields in the configured scope.
     /// </summary>
     /// <returns>An array of FieldInfo objects representing all fields.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     FieldInfo[]? GetFields();
 
@@ -35,6 +37,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="fieldName">The name of the field.</param>
     /// <returns>The cached field, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedField? GetCachedField(string fieldName);
 
@@ -43,6 +46,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="fieldName">The name of the field.</param>
     /// <returns>FieldInfo for the specified field, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     FieldInfo? GetField(string fieldName);
 
@@ -52,6 +56,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="methodName">The name of the method.</param>
     /// <returns>The cached method, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedMethod? GetCachedMethod(string methodName);
 
@@ -61,6 +66,7 @@ public partial interface ICachedType
     /// <param name="methodName">The name of the method.</param>
     /// <param name="parameters">The parameter types of the method.</param>
     /// <returns>The cached method, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedMethod? GetCachedMethod(string methodName, Type[] parameters);
 
@@ -70,6 +76,7 @@ public partial interface ICachedType
     /// <param name="methodName">The name of the method.</param>
     /// <param name="parameters">The cached parameter types of the method.</param>
     /// <returns>The cached method, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedMethod? GetCachedMethod(string methodName, CachedType[] parameters);
 
@@ -77,6 +84,7 @@ public partial interface ICachedType
     /// Gets all cached methods in the configured reflection scope.
     /// </summary>
     /// <returns>An array of CachedMethod objects representing all methods.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedMethod[]? GetCachedMethods();
 
@@ -85,6 +93,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="methodName">The name of the method.</param>
     /// <returns>MethodInfo object representing the specified method.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     MethodInfo? GetMethod(string methodName);
 
@@ -94,6 +103,7 @@ public partial interface ICachedType
     /// <param name="methodName">The name of the method.</param>
     /// <param name="parameterTypes">The parameter types of the method.</param>
     /// <returns>MethodInfo for the specified method, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     MethodInfo? GetMethod(string methodName, Type[] parameterTypes);
 
@@ -101,6 +111,7 @@ public partial interface ICachedType
     /// Gets the reflection metadata for all methods in the configured scope.
     /// </summary>
     /// <returns>An array of MethodInfo objects representing all methods.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     MethodInfo?[]? GetMethods();
 
@@ -109,6 +120,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="typeName">The name of the interface.</param>
     /// <returns>The cached interface type, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? GetCachedInterface(string typeName);
 
@@ -117,6 +129,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="typeName">The name of the interface.</param>
     /// <returns>Type for the specified interface, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? GetInterface(string typeName);
 
@@ -124,6 +137,7 @@ public partial interface ICachedType
     /// Gets all cached interfaces implemented by the type.
     /// </summary>
     /// <returns>An array of CachedType objects representing cached interfaces.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType[]? GetCachedInterfaces();
 
@@ -131,6 +145,7 @@ public partial interface ICachedType
     /// Gets all interfaces implemented by the type.
     /// </summary>
     /// <returns>The requested type[].</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type[]? GetInterfaces();
 
@@ -162,6 +177,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="parameterTypes">The parameter types of the constructor.</param>
     /// <returns>The cached constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type[] parameterTypes);
 
@@ -170,6 +186,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="t0">The first parameter type.</param>
     /// <returns>The cached constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0);
 
@@ -179,6 +196,7 @@ public partial interface ICachedType
     /// <param name="t0">The first parameter type.</param>
     /// <param name="t1">The second parameter type.</param>
     /// <returns>The cached constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1);
 
@@ -189,6 +207,7 @@ public partial interface ICachedType
     /// <param name="t1">The second parameter type.</param>
     /// <param name="t2">The third parameter type.</param>
     /// <returns>The cached constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2);
 
@@ -200,6 +219,7 @@ public partial interface ICachedType
     /// <param name="t2">The third parameter type.</param>
     /// <param name="t3">The fourth parameter type.</param>
     /// <returns>The cached constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3);
 
@@ -207,6 +227,7 @@ public partial interface ICachedType
     /// Gets all cached constructors in the configured reflection scope.
     /// </summary>
     /// <returns>An array of CachedConstructor objects representing all constructors.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor[]? GetCachedConstructors();
 
@@ -215,6 +236,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="parameterTypes">The parameter types of the constructor.</param>
     /// <returns>ConstructorInfo object representing the specified constructor.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type[]? parameterTypes = null);
 
@@ -223,6 +245,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="t0">The first parameter type.</param>
     /// <returns>ConstructorInfo for the constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0);
 
@@ -232,6 +255,7 @@ public partial interface ICachedType
     /// <param name="t0">The first parameter type.</param>
     /// <param name="t1">The second parameter type.</param>
     /// <returns>ConstructorInfo for the constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1);
 
@@ -242,6 +266,7 @@ public partial interface ICachedType
     /// <param name="t1">The second parameter type.</param>
     /// <param name="t2">The third parameter type.</param>
     /// <returns>ConstructorInfo for the constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2);
 
@@ -253,6 +278,7 @@ public partial interface ICachedType
     /// <param name="t2">The third parameter type.</param>
     /// <param name="t3">The fourth parameter type.</param>
     /// <returns>ConstructorInfo for the constructor, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3);
 
@@ -260,6 +286,7 @@ public partial interface ICachedType
     /// Gets the reflection metadata for all constructors in the configured scope.
     /// </summary>
     /// <returns>An array of ConstructorInfo objects representing all constructors.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo?[]? GetConstructors();
 
@@ -267,6 +294,7 @@ public partial interface ICachedType
     /// Creates an instance of the type.
     /// </summary>
     /// <returns>An instance of the type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance();
 
@@ -274,6 +302,7 @@ public partial interface ICachedType
     /// Creates an instance of the type.
     /// </summary>
     /// <returns>An instance of the type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>();
 
@@ -282,6 +311,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="parameters">Parameters for the constructor.</param>
     /// <returns>An instance of the type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(params object[] parameters);
 
@@ -291,6 +321,7 @@ public partial interface ICachedType
     /// <typeparam name="T">The type of the instance to create.</typeparam>
     /// <param name="parameters">Parameters for the constructor.</param>
     /// <returns>An instance of the generic type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(params object[] parameters);
 
@@ -299,6 +330,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="arg0">The first constructor argument.</param>
     /// <returns>An instance of the type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0);
 
@@ -308,6 +340,7 @@ public partial interface ICachedType
     /// <param name="arg0">The first constructor argument.</param>
     /// <param name="arg1">The second constructor argument.</param>
     /// <returns>An instance of the type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0, object? arg1);
 
@@ -318,6 +351,7 @@ public partial interface ICachedType
     /// <param name="arg1">The second constructor argument.</param>
     /// <param name="arg2">The third constructor argument.</param>
     /// <returns>An instance of the type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2);
 
@@ -329,6 +363,7 @@ public partial interface ICachedType
     /// <param name="arg2">The third constructor argument.</param>
     /// <param name="arg3">The fourth constructor argument.</param>
     /// <returns>An instance of the type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3);
 
@@ -338,6 +373,7 @@ public partial interface ICachedType
     /// <typeparam name="T">The type to cast the result to.</typeparam>
     /// <param name="arg0">The first constructor argument.</param>
     /// <returns>An instance of the type as T, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0);
 
@@ -348,6 +384,7 @@ public partial interface ICachedType
     /// <param name="arg0">The first constructor argument.</param>
     /// <param name="arg1">The second constructor argument.</param>
     /// <returns>An instance of the type as T, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1);
 
@@ -359,6 +396,7 @@ public partial interface ICachedType
     /// <param name="arg1">The second constructor argument.</param>
     /// <param name="arg2">The third constructor argument.</param>
     /// <returns>An instance of the type as T, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2);
 
@@ -371,6 +409,7 @@ public partial interface ICachedType
     /// <param name="arg2">The third constructor argument.</param>
     /// <param name="arg3">The fourth constructor argument.</param>
     /// <returns>An instance of the type as T, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 
@@ -378,6 +417,7 @@ public partial interface ICachedType
     /// Gets the cached generic type definition for the type.
     /// </summary>
     /// <returns>Information about the cached generic type definition.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? GetCachedGenericTypeDefinition();
 
@@ -385,6 +425,7 @@ public partial interface ICachedType
     /// Gets the generic type definition for the type.
     /// </summary>
     /// <returns>Type object representing the generic type definition.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? GetGenericTypeDefinition();
 
@@ -392,6 +433,7 @@ public partial interface ICachedType
     /// Gets the cached generic arguments for the type.
     /// </summary>
     /// <returns>An array of CachedType objects representing cached generic arguments.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType[]? GetCachedGenericArguments();
 
@@ -399,6 +441,7 @@ public partial interface ICachedType
     /// Gets the generic arguments for the type.
     /// </summary>
     /// <returns>An array of Type objects representing generic arguments.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type[]? GetGenericArguments();
 
@@ -417,6 +460,7 @@ public partial interface ICachedType
     /// Gets all cached members (fields, properties, methods, etc.) for this type.
     /// </summary>
     /// <returns>An array of cached members, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedMember[]? GetCachedMembers();
 
@@ -424,6 +468,7 @@ public partial interface ICachedType
     /// Gets the reflection metadata for all members in the configured scope.
     /// </summary>
     /// <returns>An array of MemberInfo objects representing all members.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     MemberInfo[]? GetMembers();
 
@@ -448,6 +493,8 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="typeArguments">The type arguments for the generic type.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(params Type[] typeArguments);
 
@@ -456,6 +503,8 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="typeArguments">The cached type arguments for the generic type.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(params CachedType[] typeArguments);
 
@@ -464,6 +513,8 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="t0">The first type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(CachedType t0);
 
@@ -473,6 +524,8 @@ public partial interface ICachedType
     /// <param name="t0">The first type argument.</param>
     /// <param name="t1">The second type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(CachedType t0, CachedType t1);
 
@@ -483,6 +536,8 @@ public partial interface ICachedType
     /// <param name="t1">The second type argument.</param>
     /// <param name="t2">The third type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2);
 
@@ -494,6 +549,8 @@ public partial interface ICachedType
     /// <param name="t2">The third type argument.</param>
     /// <param name="t3">The fourth type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
 
@@ -502,6 +559,8 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="t0">The first type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(Type t0);
 
@@ -511,6 +570,8 @@ public partial interface ICachedType
     /// <param name="t0">The first type argument.</param>
     /// <param name="t1">The second type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(Type t0, Type t1);
 
@@ -521,6 +582,8 @@ public partial interface ICachedType
     /// <param name="t1">The second type argument.</param>
     /// <param name="t2">The third type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2);
 
@@ -532,6 +595,8 @@ public partial interface ICachedType
     /// <param name="t2">The third type argument.</param>
     /// <param name="t3">The fourth type argument.</param>
     /// <returns>The constructed cached generic type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2, Type t3);
 
@@ -540,6 +605,8 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="typeArguments">The type arguments for the generic type.</param>
     /// <returns>The constructed Type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? MakeGenericType(params Type[] typeArguments);
 
@@ -548,6 +615,8 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="t0">The first type argument.</param>
     /// <returns>The constructed Type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? MakeGenericType(Type t0);
 
@@ -557,6 +626,8 @@ public partial interface ICachedType
     /// <param name="t0">The first type argument.</param>
     /// <param name="t1">The second type argument.</param>
     /// <returns>The constructed Type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? MakeGenericType(Type t0, Type t1);
 
@@ -567,6 +638,8 @@ public partial interface ICachedType
     /// <param name="t1">The second type argument.</param>
     /// <param name="t2">The third type argument.</param>
     /// <returns>The constructed Type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? MakeGenericType(Type t0, Type t1, Type t2);
 
@@ -578,6 +651,8 @@ public partial interface ICachedType
     /// <param name="t2">The third type argument.</param>
     /// <param name="t3">The fourth type argument.</param>
     /// <returns>The constructed Type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? MakeGenericType(Type t0, Type t1, Type t2, Type t3);
 
@@ -585,6 +660,7 @@ public partial interface ICachedType
     /// Gets the cached element type when this type represents an array, pointer, or by-ref type.
     /// </summary>
     /// <returns>The cached element type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? GetCachedElementType();
 
@@ -592,6 +668,7 @@ public partial interface ICachedType
     /// Gets the Type of the element when this type represents an array, pointer, or by-ref type.
     /// </summary>
     /// <returns>The element Type, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? GetElementType();
 }

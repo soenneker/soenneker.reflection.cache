@@ -30,11 +30,13 @@ public sealed class CachedConstructors : ICachedConstructors
         _threadSafe = threadSafe;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private ConstructorInfo[] GetConstructorInfos() =>
         _constructorInfos.GetOrCreate(_threadSafe, ref _sync, this,
             static self => self._cachedType.Type!.GetConstructors(self._cachedTypes.Options.ConstructorFlags));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedConstructor[] GetCachedConstructorArray() =>
         _cachedArray.GetOrCreate(_threadSafe, ref _sync, this,
@@ -50,10 +52,12 @@ public sealed class CachedConstructors : ICachedConstructors
         return result;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private Func<object?> GetParameterlessActivator() =>
         _parameterlessActivator.GetOrCreate(_threadSafe, ref _sync, this, static self => self.BuildParameterlessActivator());
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private Func<object?> BuildParameterlessActivator()
     {
         Type type = _cachedType.Type!;
@@ -73,6 +77,7 @@ public sealed class CachedConstructors : ICachedConstructors
         }
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null)
     {
@@ -82,6 +87,7 @@ public sealed class CachedConstructors : ICachedConstructors
         return GetCachedConstructor(parameterTypes, parameterTypes.Length);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedConstructor? GetCachedConstructor(Type[] parameterTypes, int length)
     {
@@ -125,6 +131,7 @@ public sealed class CachedConstructors : ICachedConstructors
         return null;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type t0)
     {
@@ -149,6 +156,7 @@ public sealed class CachedConstructors : ICachedConstructors
         return null;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type t0, Type t1)
     {
@@ -175,6 +183,7 @@ public sealed class CachedConstructors : ICachedConstructors
         return null;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2)
     {
@@ -203,6 +212,7 @@ public sealed class CachedConstructors : ICachedConstructors
         return null;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3)
     {
@@ -234,25 +244,33 @@ public sealed class CachedConstructors : ICachedConstructors
         return null;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ConstructorInfo? GetConstructor(Type[]? parameterTypes = null) => GetCachedConstructor(parameterTypes)?.ConstructorInfo;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ConstructorInfo? GetConstructor(Type t0) => GetCachedConstructor(t0)?.ConstructorInfo;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ConstructorInfo? GetConstructor(Type t0, Type t1) => GetCachedConstructor(t0, t1)?.ConstructorInfo;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2) => GetCachedConstructor(t0, t1, t2)?.ConstructorInfo;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3) => GetCachedConstructor(t0, t1, t2, t3)?.ConstructorInfo;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedConstructor[] GetCachedConstructors() => GetCachedConstructorArray();
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public ConstructorInfo?[] GetConstructors() => GetConstructorInfos();
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance()
     {
         // Use the cached parameterless activator if present; otherwise null if no default ctor.
@@ -260,12 +278,14 @@ public sealed class CachedConstructors : ICachedConstructors
         return f();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>()
     {
         object? obj = CreateInstance();
         return obj is null ? default : (T?) obj;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(params object[] parameters)
     {
         if (parameters.Length == 0)
@@ -329,30 +349,35 @@ public sealed class CachedConstructors : ICachedConstructors
         }
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0)
     {
         CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0, object? arg1)
     {
         CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object), arg1?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0, arg1);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0, object? arg1, object? arg2)
     {
         CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object), arg1?.GetType() ?? typeof(object), arg2?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0, arg1, arg2);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3)
     {
         CachedConstructor? ctor = GetCachedConstructor(arg0?.GetType() ?? typeof(object), arg1?.GetType() ?? typeof(object), arg2?.GetType() ?? typeof(object), arg3?.GetType() ?? typeof(object));
         return ctor?.Invoke(arg0, arg1, arg2, arg3);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(params object[] parameters)
     {
         if (parameters.Length == 0)
@@ -362,11 +387,15 @@ public sealed class CachedConstructors : ICachedConstructors
         return obj is null ? default : (T?) obj;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0) => (T?) CreateInstance(arg0);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0, object? arg1) => (T?) CreateInstance(arg0, arg1);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0, object? arg1, object? arg2) => (T?) CreateInstance(arg0, arg1, arg2);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3) => (T?) CreateInstance(arg0, arg1, arg2, arg3);
 }

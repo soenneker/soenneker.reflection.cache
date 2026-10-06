@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.Contracts;
 
 namespace Soenneker.Reflection.Cache.Types.Abstract;
@@ -13,6 +13,8 @@ public interface ICachedMakeGenericType
     /// </summary>
     /// <param name="typeArguments">The type arguments.</param>
     /// <returns>The cached closed generic type, or <c>null</c> when the source is not a generic type definition.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeGenericCachedType(params Type[] typeArguments);
 
@@ -21,6 +23,8 @@ public interface ICachedMakeGenericType
     /// </summary>
     /// <param name="cachedTypeArguments">The cached generic type arguments.</param>
     /// <returns>The cached closed generic type, or <c>null</c> when the source is not a generic type definition.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeGenericCachedType(params CachedType[] cachedTypeArguments);
 
@@ -29,6 +33,8 @@ public interface ICachedMakeGenericType
     /// </summary>
     /// <param name="t0">The first generic type argument.</param>
     /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0);
 
@@ -38,6 +44,8 @@ public interface ICachedMakeGenericType
     /// <param name="t0">The first generic type argument.</param>
     /// <param name="t1">The second generic type argument.</param>
     /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0, CachedType t1);
 
@@ -48,6 +56,8 @@ public interface ICachedMakeGenericType
     /// <param name="t1">The second generic type argument.</param>
     /// <param name="t2">The third generic type argument.</param>
     /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0, CachedType t1, CachedType t2);
 
@@ -59,6 +69,8 @@ public interface ICachedMakeGenericType
     /// <param name="t2">The third generic type argument.</param>
     /// <param name="t3">The fourth generic type argument.</param>
     /// <returns>The cached closed generic type, or <c>null</c> when construction is unavailable.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType? MakeGenericCachedType(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
 
@@ -67,6 +79,8 @@ public interface ICachedMakeGenericType
     /// </summary>
     /// <param name="typeArguments">The type arguments.</param>
     /// <returns>The closed generic type, or <c>null</c> when the source is not a generic type definition.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? MakeGenericType(params Type[] typeArguments);
 }

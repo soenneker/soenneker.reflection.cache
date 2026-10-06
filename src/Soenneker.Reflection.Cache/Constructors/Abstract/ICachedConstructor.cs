@@ -22,6 +22,7 @@ public interface ICachedConstructor
     /// Gets the cached parameter metadata for the constructor.
     /// </summary>
     /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedParameter[] GetCachedParameters();
 
@@ -59,6 +60,7 @@ public interface ICachedConstructor
     /// Gets the constructor parameter types.
     /// </summary>
     /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type[] GetParametersTypes();
 
@@ -66,6 +68,7 @@ public interface ICachedConstructor
     /// Gets the cached constructor parameter types.
     /// </summary>
     /// <returns>The created instance, or <c>null</c> when no constructor is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType[] GetCachedParameterTypes();
 

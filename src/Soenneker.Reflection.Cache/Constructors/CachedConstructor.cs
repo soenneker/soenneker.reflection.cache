@@ -43,6 +43,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         _threadSafe = threadSafe;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedParameters GetParametersCache() =>
         _parameters.GetOrCreate(_threadSafe, ref _initializationLock, this,
@@ -90,6 +91,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         return ReferenceEquals(value, _unsupportedInvoker) ? null : (Func<object?, object?, object?, object?, object?>)value;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedParameter[] GetCachedParameters()
     {
         if (ConstructorInfo == null)
@@ -130,6 +132,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         return GetAttributesCache().GetCachedCustomAttribute<T>(inherit);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type[] GetParametersTypes()
     {
         if (ConstructorInfo == null)
@@ -138,6 +141,7 @@ public sealed partial class CachedConstructor : ICachedConstructor
         return GetParametersCache().GetParameterTypes();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType[] GetCachedParameterTypes()
     {
         if (ConstructorInfo == null)

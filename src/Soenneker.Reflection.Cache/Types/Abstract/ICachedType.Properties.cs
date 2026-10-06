@@ -111,25 +111,25 @@ public partial interface ICachedType
     /// Gets whether the type implements <see cref="System.Collections.IDictionary"/> or <see cref="System.Collections.Generic.IDictionary{TKey,TValue}"/>.
     /// </summary>
     [Pure]
-    bool IsDictionary { get; }
+    bool IsDictionary { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type implements <see cref="System.Collections.Generic.ICollection{T}"/>.
     /// </summary>
     [Pure]
-    bool IsCollection { get; }
+    bool IsCollection { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type implements <see cref="System.Collections.IEnumerable"/>.
     /// </summary>
     [Pure]
-    bool IsEnumerable { get; }
+    bool IsEnumerable { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type implements <see cref="System.Collections.Generic.IReadOnlyDictionary{TKey,TValue}"/>.
     /// </summary>
     [Pure]
-    bool IsReadOnlyDictionary { get; }
+    bool IsReadOnlyDictionary { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type is <see cref="System.Dynamic.ExpandoObject"/>.
@@ -141,19 +141,19 @@ public partial interface ICachedType
     /// Gets whether the type is a <see cref="Func{TResult}"/> or related delegate type.
     /// </summary>
     [Pure]
-    bool IsFunc { get; }
+    bool IsFunc { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type is a <see cref="ValueTuple"/> or related tuple type.
     /// </summary>
     [Pure]
-    bool IsTuple { get; }
+    bool IsTuple { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type is a delegate (inherits from <see cref="Delegate"/>).
     /// </summary>
     [Pure]
-    bool IsDelegate { get; }
+    bool IsDelegate { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type is an anonymous type (compiler-generated).
@@ -165,7 +165,7 @@ public partial interface ICachedType
     /// Gets whether the type is a C# record (class or struct with compiler-generated members).
     /// </summary>
     [Pure]
-    bool IsRecord { get; }
+    bool IsRecord { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type is a nullable value type (e.g. int?, DateTime?).
@@ -183,7 +183,7 @@ public partial interface ICachedType
     /// Gets whether the type is <see cref="WeakReference"/> or <see cref="WeakReference{T}"/>.
     /// </summary>
     [Pure]
-    bool IsWeakReference { get; }
+    bool IsWeakReference { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets whether the type is an enum value type (e.g. marked with EnumValueAttribute).
@@ -201,13 +201,14 @@ public partial interface ICachedType
     /// Gets whether the type is a smart enum (implements ISmartEnum).
     /// </summary>
     [Pure]
-    bool IsSmartEnum { get; }
+    bool IsSmartEnum { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets the cached property with the specified name.
     /// </summary>
     /// <param name="property">The name of the property.</param>
     /// <returns>The cached property, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedProperty? GetCachedProperty(string property);
 
@@ -216,6 +217,7 @@ public partial interface ICachedType
     /// </summary>
     /// <param name="property">The name of the property.</param>
     /// <returns>PropertyInfo for the specified property, or null if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     PropertyInfo? GetProperty(string property);
 
@@ -223,6 +225,7 @@ public partial interface ICachedType
     /// Gets all cached properties for this type.
     /// </summary>
     /// <returns>An array of cached properties, or null.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedProperty[]? GetCachedProperties();
 
@@ -230,6 +233,7 @@ public partial interface ICachedType
     /// Gets the reflection metadata for all properties in the configured scope.
     /// </summary>
     /// <returns>An array of PropertyInfo objects representing all properties.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     PropertyInfo[]? GetProperties();
 }

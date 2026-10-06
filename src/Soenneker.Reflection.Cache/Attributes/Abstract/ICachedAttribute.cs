@@ -1,4 +1,4 @@
-﻿using Soenneker.Reflection.Cache.Types;
+using Soenneker.Reflection.Cache.Types;
 using System;
 
 namespace Soenneker.Reflection.Cache.Attributes.Abstract;
@@ -21,7 +21,7 @@ public interface ICachedAttribute
     /// <summary>
     /// Gets cached type.
     /// </summary>
-    CachedType CachedType { get; }
+    CachedType CachedType { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets name.

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.Contracts;
+using System.Diagnostics.Contracts;
 using System;
 using Soenneker.Reflection.Cache.Types;
 
@@ -14,6 +14,7 @@ public interface IReflectionCache
     /// </summary>
     /// <param name="typeName">The case-sensitive type name passed to <see cref="Type.GetType(string)"/>.</param>
     /// <returns>The cached wrapper. Its underlying type is <c>null</c> when the name cannot be resolved.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType GetCachedType(string typeName);
 
@@ -22,6 +23,7 @@ public interface IReflectionCache
     /// </summary>
     /// <param name="type">The reflection type to cache.</param>
     /// <returns>The canonical cached wrapper for <paramref name="type"/>.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType GetCachedType(Type type);
 
@@ -30,6 +32,7 @@ public interface IReflectionCache
     /// </summary>
     /// <param name="typeName">The case-sensitive type name passed to <see cref="Type.GetType(string)"/>.</param>
     /// <returns>The resolved type, or <c>null</c> when the name cannot be resolved.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? GetType(string typeName);
 
@@ -38,6 +41,7 @@ public interface IReflectionCache
     /// </summary>
     /// <param name="type">The reflection type to cache.</param>
     /// <returns>The supplied reflection type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? GetType(Type type);
 }

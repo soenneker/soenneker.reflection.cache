@@ -23,9 +23,8 @@ public sealed class CachedProperty : ICachedProperty
     private ValueNullableLazy<Action<object, object?>> _setter;
     private ValueAtomicLock _initializationLock;
 
-    public bool IsDelegate =>
-        LazyBoolUtil.GetOrInit(ref _isDelegate, _threadSafe, this, static self => self._cachedTypes.GetCachedType(typeof(Delegate))
-                                                                                      .IsAssignableFrom(self.PropertyInfo.PropertyType));
+    public bool IsDelegate { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isDelegate, _threadSafe, this, static self => self._cachedTypes.GetCachedType(typeof(Delegate))
+                                                                                      .IsAssignableFrom(self.PropertyInfo.PropertyType)); }
 
     private int _isCompilerGenerated;
 

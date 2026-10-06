@@ -16,12 +16,14 @@ public sealed class CachedParameter : ICachedParameter
 
     public CachedType CachedParameterType { get; }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedParameter(ParameterInfo parameterInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         ParameterInfo = parameterInfo;
         CachedParameterType = cachedTypes.GetCachedType(parameterInfo.ParameterType);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     internal CachedParameter(ParameterInfo parameterInfo, CachedType cachedParameterType)
     {
         ParameterInfo = parameterInfo;

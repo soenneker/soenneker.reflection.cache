@@ -13,6 +13,7 @@ public static class CachedTypeExtension
     /// <param name="sourceCachedType">The type whose inheritance chain is inspected.</param>
     /// <param name="targetCachedType">The target base type, interface, or generic type definition.</param>
     /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType targetCachedType)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -43,6 +44,7 @@ public static class CachedTypeExtension
     /// <param name="t0">The first target type.</param>
     /// <param name="t1">The second target type.</param>
     /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -76,6 +78,7 @@ public static class CachedTypeExtension
     /// <param name="t1">The second target type.</param>
     /// <param name="t2">The third target type.</param>
     /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1, CachedType t2)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -110,6 +113,7 @@ public static class CachedTypeExtension
     /// <param name="t2">The third target type.</param>
     /// <param name="t3">The fourth target type.</param>
     /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public static bool IsDerivedFromType(this CachedType sourceCachedType, CachedType t0, CachedType t1, CachedType t2, CachedType t3)
     {
         CachedType? tempCachedType = sourceCachedType;
@@ -141,6 +145,7 @@ public static class CachedTypeExtension
     /// <param name="sourceCachedType">The type whose inheritance chain is inspected.</param>
     /// <param name="targetCachedTypes">The target base types, interfaces, or generic type definitions.</param>
     /// <returns><c>true</c> when the source matches at least one target through inheritance, interface implementation, or generic type definition; otherwise, <c>false</c>.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public static bool IsDerivedFromType(this CachedType sourceCachedType, params CachedType[] targetCachedTypes)
     {
         CachedType? tempCachedType = sourceCachedType;

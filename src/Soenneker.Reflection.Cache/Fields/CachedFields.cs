@@ -17,6 +17,7 @@ public sealed class CachedFields : ICachedFields
 
     private readonly CachedFieldsCache _built;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedFields(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
@@ -26,6 +27,7 @@ public sealed class CachedFields : ICachedFields
         _built = BuildAll();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private CachedFieldsCache BuildAll()
     {
         // One reflection hit + one allocation of FieldInfo[]

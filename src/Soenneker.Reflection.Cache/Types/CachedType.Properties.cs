@@ -33,20 +33,16 @@ public partial class CachedType
         });
 
     private int _isDictionary;
-    public bool IsDictionary =>
-        LazyBoolUtil.GetOrInit(ref _isDictionary, _threadSafe, this, static self => self.ComputeIsDictionary());
+    public bool IsDictionary { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isDictionary, _threadSafe, this, static self => self.ComputeIsDictionary()); }
 
     private int _isCollection;
-    public bool IsCollection =>
-        LazyBoolUtil.GetOrInit(ref _isCollection, _threadSafe, this, static self => self.ComputeIsCollection());
+    public bool IsCollection { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isCollection, _threadSafe, this, static self => self.ComputeIsCollection()); }
 
     private int _isEnumerable;
-    public bool IsEnumerable =>
-        LazyBoolUtil.GetOrInit(ref _isEnumerable, _threadSafe, this, static self => self.ComputeIsEnumerable());
+    public bool IsEnumerable { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isEnumerable, _threadSafe, this, static self => self.ComputeIsEnumerable()); }
 
     private int _isReadOnlyDictionary;
-    public bool IsReadOnlyDictionary =>
-        LazyBoolUtil.GetOrInit(ref _isReadOnlyDictionary, _threadSafe, this, static self => self.ComputeIsReadOnlyDictionary());
+    public bool IsReadOnlyDictionary { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isReadOnlyDictionary, _threadSafe, this, static self => self.ComputeIsReadOnlyDictionary()); }
 
     private int _isExpandoObject;
     public bool IsExpandoObject =>
@@ -57,17 +53,14 @@ public partial class CachedType
         });
 
     private int _isFunc;
-    public bool IsFunc =>
-        LazyBoolUtil.GetOrInit(ref _isFunc, _threadSafe, this, static self => self.ComputeIsFunc());
+    public bool IsFunc { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isFunc, _threadSafe, this, static self => self.ComputeIsFunc()); }
 
     private int _isTuple;
-    public bool IsTuple =>
-        LazyBoolUtil.GetOrInit(ref _isTuple, _threadSafe, this, static self => self.ComputeIsTuple());
+    public bool IsTuple { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isTuple, _threadSafe, this, static self => self.ComputeIsTuple()); }
 
     private int _isDelegate;
-    public bool IsDelegate =>
-        LazyBoolUtil.GetOrInit(ref _isDelegate, _threadSafe, this, static self =>
-            self._cachedTypes.GetCachedType(typeof(Delegate)).IsAssignableFrom(self));
+    public bool IsDelegate { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isDelegate, _threadSafe, this, static self =>
+            self._cachedTypes.GetCachedType(typeof(Delegate)).IsAssignableFrom(self)); }
 
     private int _isAnonymousType;
     public bool IsAnonymousType =>
@@ -78,8 +71,7 @@ public partial class CachedType
         });
 
     private int _isRecord;
-    public bool IsRecord =>
-        LazyBoolUtil.GetOrInit(ref _isRecord, _threadSafe, this, static self => self.ComputeIsRecord());
+    public bool IsRecord { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isRecord, _threadSafe, this, static self => self.ComputeIsRecord()); }
 
     private int _isNullableValueType;
     public bool IsNullableValueType =>
@@ -95,8 +87,7 @@ public partial class CachedType
             self.Type?.GetCustomAttribute<ObsoleteAttribute>() != null);
 
     private int _isWeakReference;
-    public bool IsWeakReference =>
-        LazyBoolUtil.GetOrInit(ref _isWeakReference, _threadSafe, this, static self => self.ComputeIsWeakReference());
+    public bool IsWeakReference { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isWeakReference, _threadSafe, this, static self => self.ComputeIsWeakReference()); }
 
     private int _isEnumValue;
     public bool IsEnumValue =>
@@ -107,9 +98,9 @@ public partial class CachedType
         LazyBoolUtil.GetOrInit(ref _isIntellenum, _threadSafe, this, static self => self.ComputeIsIntellenum());
 
     private int _isSmartEnum;
-    public bool IsSmartEnum =>
-        LazyBoolUtil.GetOrInit(ref _isSmartEnum, _threadSafe, this, static self => self.ComputeIsSmartEnum());
+    public bool IsSmartEnum { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get =>         LazyBoolUtil.GetOrInit(ref _isSmartEnum, _threadSafe, this, static self => self.ComputeIsSmartEnum()); }
     
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsDictionary()
     {
         if (Type == null)
@@ -127,6 +118,7 @@ public partial class CachedType
         return dictionaryType.IsAssignableFrom(this);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsCollection()
     {
         if (Type == null)
@@ -148,6 +140,7 @@ public partial class CachedType
         return false;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsEnumerable()
     {
         if (Type == null)
@@ -157,6 +150,7 @@ public partial class CachedType
         return enumerableType.IsAssignableFrom(this);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsReadOnlyDictionary()
     {
         // Not fun that ReadOnlyDictionary can't use IsAssignableFrom
@@ -179,6 +173,7 @@ public partial class CachedType
         return false;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsFunc()
     {
         if (Type == null)
@@ -190,12 +185,14 @@ public partial class CachedType
         return false;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsTuple()
     {
         return Type is { IsGenericType: true } &&
                GetCachedGenericTypeDefinition() == _cachedTypes.GetCachedType(typeof(ValueTuple<>));
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsRecord()
     {
         if (Type == null)
@@ -206,6 +203,7 @@ public partial class CachedType
         return Type.IsClass && hasCloneMethod;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsWeakReference()
     {
         if (Type == null)
@@ -263,6 +261,7 @@ public partial class CachedType
         return false;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private bool ComputeIsSmartEnum()
     {
         if (!IsClass)

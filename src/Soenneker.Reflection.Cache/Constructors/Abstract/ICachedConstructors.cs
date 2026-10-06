@@ -14,6 +14,7 @@ public interface ICachedConstructors
     /// </summary>
     /// <param name="parameterTypes">The parameter types.</param>
     /// <returns>The cached constructor, or <c>null</c> if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type[]? parameterTypes = null);
 
@@ -22,6 +23,7 @@ public interface ICachedConstructors
     /// </summary>
     /// <param name="t0">The first parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0);
 
@@ -31,6 +33,7 @@ public interface ICachedConstructors
     /// <param name="t0">The first parameter type.</param>
     /// <param name="t1">The second parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1);
 
@@ -41,6 +44,7 @@ public interface ICachedConstructors
     /// <param name="t1">The second parameter type.</param>
     /// <param name="t2">The third parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2);
 
@@ -52,6 +56,7 @@ public interface ICachedConstructors
     /// <param name="t2">The third parameter type.</param>
     /// <param name="t3">The fourth parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3);
 
@@ -60,6 +65,7 @@ public interface ICachedConstructors
     /// </summary>
     /// <param name="parameterTypes">The parameter types.</param>
     /// <returns>The constructor, or <c>null</c> if not found.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type[]? parameterTypes = null);
 
@@ -68,6 +74,7 @@ public interface ICachedConstructors
     /// </summary>
     /// <param name="t0">The first parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0);
 
@@ -77,6 +84,7 @@ public interface ICachedConstructors
     /// <param name="t0">The first parameter type.</param>
     /// <param name="t1">The second parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1);
 
@@ -87,6 +95,7 @@ public interface ICachedConstructors
     /// <param name="t1">The second parameter type.</param>
     /// <param name="t2">The third parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2);
 
@@ -98,6 +107,7 @@ public interface ICachedConstructors
     /// <param name="t2">The third parameter type.</param>
     /// <param name="t3">The fourth parameter type.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3);
 
@@ -105,6 +115,7 @@ public interface ICachedConstructors
     /// Gets all cached constructors in the configured reflection scope.
     /// </summary>
     /// <returns>The cached constructors.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedConstructor[] GetCachedConstructors();
 
@@ -112,6 +123,7 @@ public interface ICachedConstructors
     /// Gets the reflection metadata for all constructors in the configured reflection scope.
     /// </summary>
     /// <returns>The constructor metadata.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     ConstructorInfo?[] GetConstructors();
 
@@ -119,6 +131,7 @@ public interface ICachedConstructors
     /// Creates an instance of the type with default constructor parameters.
     /// </summary>
     /// <returns>An instance of the type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance();
 
@@ -126,6 +139,7 @@ public interface ICachedConstructors
     /// Creates an instance of the type with default constructor parameters.
     /// </summary>
     /// <returns>An instance of the type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>();
 
@@ -134,6 +148,7 @@ public interface ICachedConstructors
     /// </summary>
     /// <param name="parameters">The parameters for the constructor.</param>
     /// <returns>An instance of the type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(params object[] parameters);
 
@@ -142,6 +157,7 @@ public interface ICachedConstructors
     /// </summary>
     /// <param name="arg0">The first constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0);
 
@@ -151,6 +167,7 @@ public interface ICachedConstructors
     /// <param name="arg0">The first constructor argument.</param>
     /// <param name="arg1">The second constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0, object? arg1);
 
@@ -161,6 +178,7 @@ public interface ICachedConstructors
     /// <param name="arg1">The second constructor argument.</param>
     /// <param name="arg2">The third constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2);
 
@@ -172,6 +190,7 @@ public interface ICachedConstructors
     /// <param name="arg2">The third constructor argument.</param>
     /// <param name="arg3">The fourth constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3);
 
@@ -181,6 +200,7 @@ public interface ICachedConstructors
     /// <typeparam name="T">The type to cast to.</typeparam>
     /// <param name="parameters">The parameters for the constructor.</param>
     /// <returns>An instance of the type <typeparamref name="T"/>.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(params object[] parameters);
 
@@ -190,6 +210,7 @@ public interface ICachedConstructors
     /// <typeparam name="T">The type to which the created instance is cast.</typeparam>
     /// <param name="arg0">The first constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0);
 
@@ -200,6 +221,7 @@ public interface ICachedConstructors
     /// <param name="arg0">The first constructor argument.</param>
     /// <param name="arg1">The second constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1);
 
@@ -211,6 +233,7 @@ public interface ICachedConstructors
     /// <param name="arg1">The second constructor argument.</param>
     /// <param name="arg2">The third constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2);
 
@@ -223,6 +246,7 @@ public interface ICachedConstructors
     /// <param name="arg2">The third constructor argument.</param>
     /// <param name="arg3">The fourth constructor argument.</param>
     /// <returns>The matching constructor or created instance; <c>null</c> when no match is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3);
 }

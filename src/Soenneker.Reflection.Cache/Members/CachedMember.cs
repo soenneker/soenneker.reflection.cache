@@ -33,6 +33,7 @@ public sealed class CachedMember : ICachedMember
 
     public bool IsField => MemberType == MemberTypes.Field;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedMember(MemberInfo memberInfo, CachedTypes cachedTypes, bool threadSafe = true)
     {
         MemberType = memberInfo.MemberType;

@@ -15,21 +15,25 @@ public class ReflectionCache : IReflectionCache
         _cachedTypes = new CachedTypes(options, threadSafe);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType GetCachedType(string typeName)
     {
         return _cachedTypes.GetCachedType(typeName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType GetCachedType(Type type)
     {
         return _cachedTypes.GetCachedType(type);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? GetType(string typeName)
     {
         return _cachedTypes.GetType(typeName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? GetType(Type type)
     {
         return _cachedTypes.GetType(type);

@@ -30,6 +30,7 @@ public interface ICachedMethod
     /// Gets the cached parameter metadata for the method.
     /// </summary>
     /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     CachedParameters? GetCachedParameters();
 
     /// <summary>
@@ -57,6 +58,8 @@ public interface ICachedMethod
     /// </summary>
     /// <param name="cachedTypes">The cached generic type arguments.</param>
     /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     CachedMethod? MakeCachedGenericMethod(params CachedType[] cachedTypes);
 
     /// <summary>
@@ -64,6 +67,8 @@ public interface ICachedMethod
     /// </summary>
     /// <param name="t0">The first generic type argument.</param>
     /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     CachedMethod? MakeCachedGenericMethod(CachedType t0);
 
     /// <summary>
@@ -72,6 +77,8 @@ public interface ICachedMethod
     /// <param name="t0">The first generic type argument.</param>
     /// <param name="t1">The second generic type argument.</param>
     /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1);
 
     /// <summary>
@@ -81,6 +88,8 @@ public interface ICachedMethod
     /// <param name="t1">The second generic type argument.</param>
     /// <param name="t2">The third generic type argument.</param>
     /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2);
 
     /// <summary>
@@ -91,6 +100,8 @@ public interface ICachedMethod
     /// <param name="t2">The third generic type argument.</param>
     /// <param name="t3">The fourth generic type argument.</param>
     /// <returns>The requested cached value or invocation result; <c>null</c> when no value is available.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     CachedMethod? MakeCachedGenericMethod(CachedType t0, CachedType t1, CachedType t2, CachedType t3);
 
     /// <summary>

@@ -16,6 +16,7 @@ public sealed class CachedParameters : ICachedParameters
 
     private readonly CachedParametersCache _built;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedParameters(CachedMethod cachedMethod, CachedTypes cachedTypes, bool threadSafe = true)
     {
         if (cachedMethod is null) throw new ArgumentNullException(nameof(cachedMethod));
@@ -24,6 +25,7 @@ public sealed class CachedParameters : ICachedParameters
         _built = BuildAll();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedParameters(CachedConstructor cachedConstructor, CachedTypes cachedTypes, bool threadSafe = true)
     {
         if (cachedConstructor is null) throw new ArgumentNullException(nameof(cachedConstructor));
@@ -32,6 +34,7 @@ public sealed class CachedParameters : ICachedParameters
         _built = BuildAll();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     internal CachedParameters(ParameterInfo[] parameterInfos, CachedTypes cachedTypes)
     {
         _parameterInfos = parameterInfos;
@@ -39,6 +42,7 @@ public sealed class CachedParameters : ICachedParameters
         _built = BuildAll();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private CachedParametersCache BuildAll()
     {
         ParameterInfo[] paramInfos = _parameterInfos;

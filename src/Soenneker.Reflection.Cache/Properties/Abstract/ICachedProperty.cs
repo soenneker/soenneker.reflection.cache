@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Properties.Abstract;
@@ -16,7 +16,7 @@ public interface ICachedProperty
     /// <summary>
     /// Gets a value indicating whether the property's type is a delegate.
     /// </summary>
-    bool IsDelegate { get; }
+    bool IsDelegate { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets a value indicating whether the property is the equality contract (internal property used by records).

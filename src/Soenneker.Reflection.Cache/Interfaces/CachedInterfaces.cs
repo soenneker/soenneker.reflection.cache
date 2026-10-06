@@ -14,6 +14,7 @@ public sealed class CachedInterfaces : ICachedInterfaces
 
     private readonly CachedInterfacesCache _built;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedInterfaces(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
@@ -22,6 +23,7 @@ public sealed class CachedInterfaces : ICachedInterfaces
         _built = BuildAll();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private CachedInterfacesCache BuildAll()
     {
         Type[] interfaces = _cachedType.Type!.GetInterfaces();
@@ -46,6 +48,7 @@ public sealed class CachedInterfaces : ICachedInterfaces
         );
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType GetCachedInterface(string typeName)
     {
         if (_built.Map.TryGetValue(typeName, out CachedType? cachedType))
@@ -56,6 +59,7 @@ public sealed class CachedInterfaces : ICachedInterfaces
         return interfaceType is null ? null! : _cachedTypes.GetCachedType(interfaceType);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? GetInterface(string typeName) =>
         GetCachedInterface(typeName)?.Type;
 

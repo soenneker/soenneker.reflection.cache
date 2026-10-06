@@ -27,6 +27,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         _cachedTypes = cachedTypes;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(params Type[] typeArguments)
     {
@@ -73,6 +75,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
     /// </summary>
     /// <param name="t0">First generic type argument.</param>
     /// <returns>The resulting cached Type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0)
     {
@@ -113,6 +117,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
     /// <param name="t0">First generic type argument.</param>
     /// <param name="t1">Second generic type argument.</param>
     /// <returns>The resulting cached Type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0, Type t1)
     {
@@ -156,6 +162,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
     /// <param name="t1">Second generic type argument.</param>
     /// <param name="t2">Third generic type argument.</param>
     /// <returns>The resulting cached Type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0, Type t1, Type t2)
     {
@@ -202,6 +210,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
     /// <param name="t2">Third generic type argument.</param>
     /// <param name="t3">T for the make generic cached type operation.</param>
     /// <returns>The resulting cached Type.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(Type t0, Type t1, Type t2, Type t3)
     {
@@ -242,6 +252,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(params CachedType[] cachedTypeArguments)
     {
@@ -297,6 +309,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
 
     // ---- allocation-reducing overloads (avoid params CachedType[] allocations) ----
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(CachedType t0)
     {
@@ -329,6 +343,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(CachedType t0, CachedType t1)
     {
@@ -362,6 +378,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(CachedType t0, CachedType t1, CachedType t2)
     {
@@ -396,6 +414,8 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType? MakeGenericCachedType(CachedType t0, CachedType t1, CachedType t2, CachedType t3)
     {
@@ -431,19 +451,29 @@ public sealed class CachedMakeGenericType : ICachedMakeGenericType
         return wrapped2;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(params Type[] typeArguments)
         => MakeGenericCachedType(typeArguments)?.Type;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0) => MakeGenericCachedType(t0)?.Type;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0, Type t1) => MakeGenericCachedType(t0, t1)?.Type;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0, Type t1, Type t2) => MakeGenericCachedType(t0, t1, t2)?.Type;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? MakeGenericType(Type t0, Type t1, Type t2, Type t3) => MakeGenericCachedType(t0, t1, t2, t3)?.Type;
 }

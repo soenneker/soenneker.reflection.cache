@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 
 namespace Soenneker.Reflection.Cache.Fields.Abstract;
@@ -16,7 +16,7 @@ public interface ICachedField
     /// <summary>
     /// Gets a value indicating whether the field's type is a delegate.
     /// </summary>
-    bool IsDelegate { get; }
+    bool IsDelegate { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")] get; }
 
     /// <summary>
     /// Gets a value indicating whether this field has a supported cached public instance getter.

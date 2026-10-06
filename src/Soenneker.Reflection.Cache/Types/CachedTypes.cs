@@ -39,6 +39,7 @@ public sealed class CachedTypes : ICachedTypes
         }
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType GetCachedType(string typeName)
     {
@@ -75,6 +76,7 @@ public sealed class CachedTypes : ICachedTypes
         }
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CachedType GetCachedType(Type type)
     {
@@ -106,9 +108,11 @@ public sealed class CachedTypes : ICachedTypes
         }
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? GetType(string typeName) => GetCachedType(typeName).Type;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public Type? GetType(Type type) => GetCachedType(type).Type;
 }

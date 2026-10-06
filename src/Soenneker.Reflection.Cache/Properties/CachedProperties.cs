@@ -17,6 +17,7 @@ public sealed class CachedProperties : ICachedProperties
 
     private readonly CachedPropertiesCache _built;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedProperties(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _cachedType = cachedType ?? throw new ArgumentNullException(nameof(cachedType));
@@ -26,6 +27,7 @@ public sealed class CachedProperties : ICachedProperties
         _built = BuildAll();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     private CachedPropertiesCache BuildAll()
     {
         // Single reflection hit; reuse array

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Soenneker.Reflection.Cache.Methods;
 using Soenneker.Reflection.Cache.Utils;
 
@@ -14,6 +14,7 @@ public static class CachedMethodExtension
     /// </summary>
     /// <param name="cachedMethod">The cached method.</param>
     /// <returns>A hash representing the method signature.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public static int ToHashKey(this CachedMethod cachedMethod)
     {
         Type[] parameterTypes = cachedMethod.GetCachedParameters().GetParameterTypes();

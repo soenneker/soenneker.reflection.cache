@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.Contracts;
 using Soenneker.Reflection.Cache.Types;
 
@@ -14,6 +14,7 @@ public interface ICachedInterfaces
     /// </summary>
     /// <param name="typeName">The name of the interface.</param>
     /// <returns>The cached interface with the specified name.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     CachedType GetCachedInterface(string typeName);
 
@@ -22,6 +23,7 @@ public interface ICachedInterfaces
     /// </summary>
     /// <param name="typeName">The name of the interface.</param>
     /// <returns>The interface with the specified name.</returns>
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [Pure]
     Type? GetInterface(string typeName);
 

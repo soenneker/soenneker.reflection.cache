@@ -21,7 +21,7 @@ public partial class CachedType : ICachedType
 
     public Type? BaseType => Type?.BaseType;
 
-    public CachedType? CachedBaseType => GetCachedBaseType();
+    public CachedType? CachedBaseType { [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires preserved members and statically available generic code.")] get => GetCachedBaseType(); }
 
     private ValueNullableLazy<CachedType> _cachedBaseType;
 
@@ -52,21 +52,25 @@ public partial class CachedType : ICachedType
 
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedType? GetCachedBaseType() =>
         _cachedBaseType.GetOrCreatePublicationOnly(_threadSafe, this,
             static self => self.Type?.BaseType is { } baseType ? self._cachedTypes.GetCachedType(baseType) : null);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedProperties GetPropertiesCache() =>
         _cachedProperties.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedProperties(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedMethods GetMethodsCache() =>
         _cachedMethods.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedMethods(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedFields GetFieldsCache() =>
         _cachedFields.GetOrCreate(_threadSafe, ref _initializationLock, this,
@@ -77,6 +81,7 @@ public partial class CachedType : ICachedType
         _cachedAttributes.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedCustomAttributes(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedInterfaces GetInterfacesCache() =>
         _cachedInterfaces.GetOrCreate(_threadSafe, ref _initializationLock, this,
@@ -87,16 +92,19 @@ public partial class CachedType : ICachedType
         _cachedConstructors.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedConstructors(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedMembers GetMembersCache() =>
         _cachedMembers.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedMembers(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedGenericArguments GetGenericArgumentsCache() =>
         _cachedGenericArguments.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedGenericArguments(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedGenericTypeDefinition GetGenericTypeDefinitionCache() =>
         _cachedGenericTypeDefinition.GetOrCreate(_threadSafe, ref _initializationLock, this,
@@ -112,11 +120,13 @@ public partial class CachedType : ICachedType
         _cachedMakeGenericType.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedMakeGenericType(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private CachedGetElementType GetElementTypeCache() =>
         _cachedGetElementType.GetOrCreate(_threadSafe, ref _initializationLock, this,
             static self => new CachedGetElementType(self, self._cachedTypes, self._threadSafe));
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public PropertyInfo? GetProperty(string property)
     {
         if (Type == null)
@@ -125,6 +135,7 @@ public partial class CachedType : ICachedType
         return GetPropertiesCache().GetProperty(property);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedProperty? GetCachedProperty(string property)
     {
         if (Type == null)
@@ -133,6 +144,7 @@ public partial class CachedType : ICachedType
         return GetPropertiesCache().GetCachedProperty(property);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public PropertyInfo[]? GetProperties()
     {
         if (Type == null)
@@ -141,6 +153,7 @@ public partial class CachedType : ICachedType
         return GetPropertiesCache().GetProperties();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedProperty[]? GetCachedProperties()
     {
         if (Type == null)
@@ -149,6 +162,7 @@ public partial class CachedType : ICachedType
         return GetPropertiesCache().GetCachedProperties();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedMethod? GetCachedMethod(string methodName)
     {
         if (Type == null)
@@ -157,6 +171,7 @@ public partial class CachedType : ICachedType
         return GetMethodsCache().GetCachedMethod(methodName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedMethod? GetCachedMethod(string methodName, Type[] parameters)
     {
         if (Type == null)
@@ -165,6 +180,7 @@ public partial class CachedType : ICachedType
         return GetMethodsCache().GetCachedMethod(methodName, parameters);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedMethod? GetCachedMethod(string methodName, CachedType[] parameters)
     {
         if (Type == null)
@@ -173,6 +189,7 @@ public partial class CachedType : ICachedType
         return GetMethodsCache().GetCachedMethod(methodName, parameters);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedField[]? GetCachedFields()
     {
         if (Type == null)
@@ -183,6 +200,7 @@ public partial class CachedType : ICachedType
         return result;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public FieldInfo[]? GetFields()
     {
         if (Type == null)
@@ -193,6 +211,7 @@ public partial class CachedType : ICachedType
         return result;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedField? GetCachedField(string fieldName)
     {
         if (Type == null)
@@ -201,6 +220,7 @@ public partial class CachedType : ICachedType
         return GetFieldsCache().GetCachedField(fieldName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public FieldInfo? GetField(string fieldName)
     {
         if (Type == null)
@@ -209,6 +229,7 @@ public partial class CachedType : ICachedType
         return GetFieldsCache().GetField(fieldName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public MethodInfo? GetMethod(string methodName)
     {
         if (Type == null)
@@ -217,6 +238,7 @@ public partial class CachedType : ICachedType
         return GetMethodsCache().GetMethod(methodName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public MethodInfo? GetMethod(string methodName, Type[] parameterTypes)
     {
         if (Type == null)
@@ -225,6 +247,7 @@ public partial class CachedType : ICachedType
         return GetMethodsCache().GetMethod(methodName, parameterTypes);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedMethod[]? GetCachedMethods()
     {
         if (Type == null)
@@ -233,6 +256,7 @@ public partial class CachedType : ICachedType
         return GetMethodsCache().GetCachedMethods();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public MethodInfo?[]? GetMethods()
     {
         if (Type == null)
@@ -241,6 +265,7 @@ public partial class CachedType : ICachedType
         return GetMethodsCache().GetMethods();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? GetCachedInterface(string typeName)
     {
         if (Type == null)
@@ -249,6 +274,7 @@ public partial class CachedType : ICachedType
         return GetInterfacesCache().GetCachedInterface(typeName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType[]? GetCachedInterfaces()
     {
         if (Type == null)
@@ -257,6 +283,7 @@ public partial class CachedType : ICachedType
         return GetInterfacesCache().GetCachedInterfaces();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? GetInterface(string typeName)
     {
         if (Type == null)
@@ -265,6 +292,7 @@ public partial class CachedType : ICachedType
         return GetInterfacesCache().GetInterface(typeName);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type[]? GetInterfaces()
     {
         if (Type == null)
@@ -297,6 +325,7 @@ public partial class CachedType : ICachedType
         return GetAttributesCache().GetCachedCustomAttribute<T>(inherit);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedConstructor? GetCachedConstructor(Type[] parameterTypes)
     {
         if (Type == null)
@@ -305,6 +334,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetCachedConstructor(parameterTypes);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedConstructor? GetCachedConstructor(Type t0)
     {
         if (Type == null)
@@ -313,6 +343,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetCachedConstructor(t0);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedConstructor? GetCachedConstructor(Type t0, Type t1)
     {
         if (Type == null)
@@ -321,6 +352,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetCachedConstructor(t0, t1);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2)
     {
         if (Type == null)
@@ -329,6 +361,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetCachedConstructor(t0, t1, t2);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedConstructor? GetCachedConstructor(Type t0, Type t1, Type t2, Type t3)
     {
         if (Type == null)
@@ -337,6 +370,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetCachedConstructor(t0, t1, t2, t3);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public ConstructorInfo? GetConstructor(Type[]? parameterTypes = null)
     {
         if (Type == null)
@@ -345,6 +379,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetConstructor(parameterTypes);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public ConstructorInfo? GetConstructor(Type t0)
     {
         if (Type == null)
@@ -353,6 +388,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetConstructor(t0);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public ConstructorInfo? GetConstructor(Type t0, Type t1)
     {
         if (Type == null)
@@ -361,6 +397,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetConstructor(t0, t1);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2)
     {
         if (Type == null)
@@ -369,6 +406,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetConstructor(t0, t1, t2);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public ConstructorInfo? GetConstructor(Type t0, Type t1, Type t2, Type t3)
     {
         if (Type == null)
@@ -377,6 +415,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetConstructor(t0, t1, t2, t3);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedConstructor[]? GetCachedConstructors()
     {
         if (Type == null)
@@ -385,6 +424,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetCachedConstructors();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public ConstructorInfo?[]? GetConstructors()
     {
         if (Type == null)
@@ -393,6 +433,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().GetConstructors();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance()
     {
         if (Type == null)
@@ -401,6 +442,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>()
     {
         if (Type == null)
@@ -409,6 +451,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance<T>();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(params object[] parameters)
     {
         if (Type == null)
@@ -417,6 +460,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance(parameters);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(params object[] parameters)
     {
         if (Type == null)
@@ -425,6 +469,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance<T>(parameters);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0)
     {
         if (Type == null)
@@ -433,6 +478,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance(arg0);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0, object? arg1)
     {
         if (Type == null)
@@ -441,6 +487,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance(arg0, arg1);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0, object? arg1, object? arg2)
     {
         if (Type == null)
@@ -449,6 +496,7 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance(arg0, arg1, arg2);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public object? CreateInstance(object? arg0, object? arg1, object? arg2, object? arg3)
     {
         if (Type == null)
@@ -457,30 +505,35 @@ public partial class CachedType : ICachedType
         return GetConstructorsCache().CreateInstance(arg0, arg1, arg2, arg3);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0)
     {
         object? obj = CreateInstance(arg0);
         return obj is null ? default : (T?) obj;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0, object? arg1)
     {
         object? obj = CreateInstance(arg0, arg1);
         return obj is null ? default : (T?) obj;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0, object? arg1, object? arg2)
     {
         object? obj = CreateInstance(arg0, arg1, arg2);
         return obj is null ? default : (T?) obj;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public T? CreateInstance<T>(object? arg0, object? arg1, object? arg2, object? arg3)
     {
         object? obj = CreateInstance(arg0, arg1, arg2, arg3);
         return obj is null ? default : (T?) obj;
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? GetCachedGenericTypeDefinition()
     {
         if (Type == null)
@@ -489,6 +542,7 @@ public partial class CachedType : ICachedType
         return GetGenericTypeDefinitionCache().GetCachedGenericTypeDefinition();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? GetGenericTypeDefinition()
     {
         if (Type == null)
@@ -497,6 +551,7 @@ public partial class CachedType : ICachedType
         return GetGenericTypeDefinitionCache().GetGenericTypeDefinition();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType[]? GetCachedGenericArguments()
     {
         if (Type == null)
@@ -505,6 +560,7 @@ public partial class CachedType : ICachedType
         return GetGenericArgumentsCache().GetCachedGenericArguments();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type[]? GetGenericArguments()
     {
         if (Type == null)
@@ -529,6 +585,7 @@ public partial class CachedType : ICachedType
     //    return _cachedMembers!.Value.GetMember(name);
     //}
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedMember[]? GetCachedMembers()
     {
         if (Type == null)
@@ -537,6 +594,7 @@ public partial class CachedType : ICachedType
         return GetMembersCache().GetCachedMembers();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public MemberInfo[]? GetMembers()
     {
         if (Type == null)
@@ -561,46 +619,68 @@ public partial class CachedType : ICachedType
         return GetIsAssignableFromCache().IsAssignableFrom(cachedDerivedType);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(params Type[] typeArguments)
     {
         return GetMakeGenericTypeCache().MakeGenericCachedType(typeArguments);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(params CachedType[] typeArguments)
     {
         return GetMakeGenericTypeCache().MakeGenericCachedType(typeArguments);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(Type t0) => GetMakeGenericTypeCache().MakeGenericCachedType(t0);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(Type t0, Type t1) => GetMakeGenericTypeCache().MakeGenericCachedType(t0, t1);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2) => GetMakeGenericTypeCache().MakeGenericCachedType(t0, t1, t2);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(Type t0, Type t1, Type t2, Type t3) => GetMakeGenericTypeCache().MakeGenericCachedType(t0, t1, t2, t3);
 
     // ---- allocation-reducing overloads (avoid params CachedType[] allocations) ----
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(CachedType t0)
     {
         return GetMakeGenericTypeCache().MakeGenericCachedType(t0);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(CachedType t0, CachedType t1)
     {
         return GetMakeGenericTypeCache().MakeGenericCachedType(t0, t1);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2)
     {
         return GetMakeGenericTypeCache().MakeGenericCachedType(t0, t1, t2);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? MakeCachedGenericType(CachedType t0, CachedType t1, CachedType t2, CachedType t3)
     {
         return GetMakeGenericTypeCache().MakeGenericCachedType(t0, t1, t2, t3);
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? MakeGenericType(params Type[] typeArguments)
     {
         return GetMakeGenericTypeCache().MakeGenericType(typeArguments);
@@ -608,19 +688,29 @@ public partial class CachedType : ICachedType
 
     // ---- allocation-reducing overloads (avoid params Type[] allocations) ----
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? MakeGenericType(Type t0) => GetMakeGenericTypeCache().MakeGenericType(t0);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? MakeGenericType(Type t0, Type t1) => GetMakeGenericTypeCache().MakeGenericType(t0, t1);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? MakeGenericType(Type t0, Type t1, Type t2) => GetMakeGenericTypeCache().MakeGenericType(t0, t1, t2);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresDynamicCode("Runtime reflection can require generic instantiations unavailable with Native AOT. Use statically registered types and delegates instead.")]
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? MakeGenericType(Type t0, Type t1, Type t2, Type t3) => GetMakeGenericTypeCache().MakeGenericType(t0, t1, t2, t3);
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedType? GetCachedElementType()
     {
         return GetElementTypeCache().GetCachedElementType();
     }
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public Type? GetElementType()
     {
         return GetElementTypeCache().GetElementType();

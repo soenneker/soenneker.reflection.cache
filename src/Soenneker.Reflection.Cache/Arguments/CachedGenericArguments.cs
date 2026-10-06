@@ -10,6 +10,7 @@ public sealed class CachedGenericArguments : ICachedGenericArguments
     private readonly CachedType[] _cachedGenericArguments;
     private readonly Type[] _genericArguments;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedGenericArguments(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _genericArguments = cachedType.Type!.GetGenericArguments();

@@ -11,6 +11,7 @@ public class CachedMembers : ICachedMembers
     private readonly CachedMember[] _cachedArray;
     private readonly MemberInfo[] _memberInfos;
 
+    [global::System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("Runtime reflection requires members that trimming may remove. Use statically registered metadata instead.")]
     public CachedMembers(CachedType cachedType, CachedTypes cachedTypes, bool threadSafe = true)
     {
         _memberInfos = cachedType.Type!.GetMembers(cachedTypes.Options.MemberFlags);
