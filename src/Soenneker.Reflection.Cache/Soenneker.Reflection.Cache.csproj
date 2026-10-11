@@ -49,6 +49,6 @@
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="4.0.374" />
         <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="4.0.22" />
         <PackageReference Include="Soenneker.Extensions.Spans.Readonly.Types" Version="4.0.26" />
-        <PackageReference Include="Soenneker.Utils.LazyBools" Version="4.0.21" />
+        <PackageReference Include="Soenneker.Utils.LazyBools" Version="4.0.22" />
     </ItemGroup>
 </Project>
