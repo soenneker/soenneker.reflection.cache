@@ -45,9 +45,9 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
         <PackageReference Include="Soenneker.Atomics.ValueLazys" Version="4.0.34" />
-        <PackageReference Include="Soenneker.Atomics.ValueNullableLazys" Version="4.0.34" />
+        <PackageReference Include="Soenneker.Atomics.ValueNullableLazys" Version="4.0.35" />
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="4.0.383" />
-        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="4.0.30" />
+        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="4.0.31" />
         <PackageReference Include="Soenneker.Extensions.Spans.Readonly.Types" Version="4.0.34" />
         <PackageReference Include="Soenneker.Utils.LazyBools" Version="4.0.29" />
     </ItemGroup>
