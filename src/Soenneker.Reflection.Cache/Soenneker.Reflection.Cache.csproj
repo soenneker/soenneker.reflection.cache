@@ -49,7 +49,7 @@
         <PackageReference Include="Soenneker.Atomics.ValueNullableLazys" Version="11.0.37" />
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="4.0.383" />
         <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="4.0.31" />
-        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.Types" Version="4.0.34" />
+        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.Types" Version="11.0.35" />
         <PackageReference Include="Soenneker.Utils.LazyBools" Version="4.0.30" />
     </ItemGroup>
 </Project>
