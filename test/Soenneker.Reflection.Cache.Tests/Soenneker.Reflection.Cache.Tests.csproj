@@ -14,7 +14,7 @@
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Soenneker.Tests.Attributes.Local" Version="11.0.155" />
         <PackageReference Include="Soenneker.Tests.Benchmark" Version="11.0.219" />
-        <PackageReference Include="TUnit" Version="1.76.45" />
+        <PackageReference Include="TUnit" Version="1.77.0" />
         <PackageReference Include="Serilog.Sinks.XUnit.Injectable" Version="11.0.297" />
     </ItemGroup>
 
