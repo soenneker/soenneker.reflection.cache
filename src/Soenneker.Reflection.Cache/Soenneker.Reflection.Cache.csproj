@@ -44,7 +44,7 @@
 
     <ItemGroup>
         <PackageReference Condition="'$(TargetFramework)' != 'net11.0'" Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="11.0.0" />
-        <PackageReference Include="Soenneker.Atomics.ValueLazys" Version="11.0.39" />
+        <PackageReference Include="Soenneker.Atomics.ValueLazys" Version="11.0.40" />
         <PackageReference Include="Soenneker.Atomics.ValueNullableLazys" Version="11.0.40" />
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="11.0.386" />
         <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="11.0.34" />
