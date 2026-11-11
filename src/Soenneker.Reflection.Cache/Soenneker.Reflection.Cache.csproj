@@ -45,10 +45,10 @@
     <ItemGroup>
         <PackageReference Condition="'$(TargetFramework)' != 'net11.0'" Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="11.0.0" />
         <PackageReference Include="Soenneker.Atomics.ValueLazys" Version="11.0.40" />
-        <PackageReference Include="Soenneker.Atomics.ValueNullableLazys" Version="11.0.40" />
+        <PackageReference Include="Soenneker.Atomics.ValueNullableLazys" Version="11.0.42" />
         <PackageReference Include="Soenneker.Extensions.MethodInfo" Version="11.0.387" />
-        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="11.0.34" />
+        <PackageReference Include="Soenneker.Extensions.Spans.Readonly.ParameterInfos" Version="11.0.35" />
         <PackageReference Include="Soenneker.Extensions.Spans.Readonly.Types" Version="11.0.38" />
-        <PackageReference Include="Soenneker.Utils.LazyBools" Version="11.0.32" />
+        <PackageReference Include="Soenneker.Utils.LazyBools" Version="11.0.33" />
     </ItemGroup>
 </Project>
